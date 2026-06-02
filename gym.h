@@ -1,5 +1,5 @@
-#ifndef GYM_INCLUDED
-#define GYM_INCLUDED
+#ifndef _GYM_H_INCLUDED
+#define _GYM_H_INCLUDED
 
 #include "entrenador.h"
 #include "clase.h"
@@ -8,14 +8,14 @@
 
 typedef struct Gym
 {
-    Entrenador* entrenadores;
-    int entrenadoresSize;
-    Clase* clases;
-    int clasesSize;
-    Sector* sectores;
-    int sectoresSize;
-    Cliente* clientes;
-    int clientesSize;
+	Entrenador* entrenadores;
+	int entrenadoresSize;
+	Clase* clases;
+	int clasesSize;
+	Sector* sectores;
+	int sectoresSize;
+	Cliente* clientes;
+	int clientesSize;
 } Gym;
 
-#endif // GYM_INCLUDED
+#endif

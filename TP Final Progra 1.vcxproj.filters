@@ -14,10 +14,16 @@
     <ClCompile Include="main.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="menu.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gym.h">
-      <Filter>Archivos de origen</Filter>
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
