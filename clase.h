@@ -27,5 +27,6 @@ typedef struct Clase
     Horario inicio;
     Duracion duracion;
 } Clase;
+void ClaseMostrarClase(Clase* clases, int size);
 
 #endif
