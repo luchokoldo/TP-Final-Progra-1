@@ -18,6 +18,7 @@ typedef struct Duracion
 typedef struct Clase
 {
     int id;
+    char nombre[32;]
     int idEntrenador;
     int idSector;
     int idClientes[32];

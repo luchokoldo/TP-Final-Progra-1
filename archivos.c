@@ -34,22 +34,122 @@ void CargarGym(Gym* gym)
 
 void ModificarEntrenador(Entrenador* entrenador)
 {
+	FILE* f = fopen(ARCHIVO_ENTRENADORES, "r+b");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_ENTRENADORES);
+
+		return;
+	}
+
+	Entrenador buffer = { 0 };
+
+	do
+	{
+		if (fread(&buffer, sizeof(Entrenador), 1, f) <= 0)
+		{
+			printf("[ERROR] No se encontro el entrenador %s", entrenador->nombre);
+
+			return;
+		}
+	} while (buffer.id != entrenador->id);
+
+	fseek(f, -1 * sizeof(Entrenador), SEEK_CUR);
+
+	fwrite(entrenador, sizeof(Entrenador), 1, f);
+
+	fclose(f);
 }
 
 void ModificarSector(Sector* sector)
 {
+	FILE* f = fopen(ARCHIVO_SECTORES, "r+b");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_SECTORES);
+
+		return;
+	}
+
+	Sector buffer = { 0 };
+
+	do
+	{
+		if (fread(&buffer, sizeof(Sector), 1, f) <= 0)
+		{
+			printf("[ERROR] No se encontro el entrenador %s", sector->nombre);
+
+			return;
+		}
+	} while (buffer.id != sector->id);
+
+	fseek(f, -1 * sizeof(Sector), SEEK_CUR);
+
+	fwrite(sector, sizeof(Sector), 1, f);
+
+	fclose(f);
 }
 
 void ModificarClase(Clase* clase)
 {
+	FILE* f = fopen(ARCHIVO_CLASES, "r+b");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLASES);
+
+		return;
+	}
+
+	Clase buffer = { 0 };
+
+	do
+	{
+		if (fread(&buffer, sizeof(Clase), 1, f) <= 0)
+		{
+			printf("[ERROR] No se encontro la clase %s", clase->nombre);
+
+			return;
+		}
+	} while (buffer.id != clase->id);
+
+	fseek(f, -1 * sizeof(Clase), SEEK_CUR);
+
+	fwrite(clase, sizeof(Clase), 1, f);
+
+	fclose(f);
 }
 
 void ModificarCliente(Cliente* cliente)
 {
+	FILE* f = fopen(ARCHIVO_CLIENTES, "r+b");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLIENTES);
+
+		return;
+	}
+
+	Cliente buffer = { 0 };
+
+	do
+	{
+		if (fread(&buffer, sizeof(Cliente), 1, f) <= 0)
+		{
+			printf("[ERROR] No se encontro el cliente %s", cliente->nombre);
+
+			return;
+		}
+	} while (buffer.id != cliente->id);
+
+	fseek(f, -1 * sizeof(Cliente), SEEK_CUR);
+
+	fwrite(cliente, sizeof(Cliente), 1, f);
+
+	fclose(f);
 }
 
 void BorrarEntrenador(Entrenador* entrenador)
@@ -109,7 +209,7 @@ static Entrenador* CargarEntrenadores(char* nombreArchivo, int* size)
 
 		if (feof(f) == 0)
 		{
-			aux = realloc(&aux, (*size + 1) * sizeof(Entrenador));
+			realloc(&aux, (*size + 1) * sizeof(Entrenador));
 
 			if (aux == NULL)
 			{
