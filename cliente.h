@@ -9,5 +9,5 @@ typedef struct Cliente
     int idClases[32];
     int idClasesValidos;
 } Cliente;
-
+void ClienteMostrarCliente(Cliente* clientes, int size);
 #endif

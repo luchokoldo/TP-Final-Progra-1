@@ -23,9 +23,10 @@ void MostrarMenu(Gym* gym)
 		printf("Seleccione la accion a realizar\n");
 		printf("\n1. Agregar \n");
 		printf("2. Modificar\n");
-		printf("3. Eliminar\n");
-		printf("4. Buscar\n");
-		printf("5.Exportar a .txt\n\n");
+		printf("3. Mostrar\n");
+		printf("4. Eliminar\n");
+		printf("5. Buscar\n");
+		printf("6.Exportar a .txt\n\n");
 		printf("0. Salir\n");
 
 		printf("\nElija una opcion: ");
@@ -41,17 +42,20 @@ void MostrarMenu(Gym* gym)
 			MenuSecundario("Modificar", opcion);
 			Pausa();
 			break;
-
 		case 3:
-			MenuSecundario("Eliminar", opcion);
+			MenuSecundario("Mostrar", opcion);
 			Pausa();
 			break;
 		case 4:
+			MenuSecundario("Eliminar", opcion);
+			Pausa();
+			break;
+		case 5:
 			MenuSecundario("Buscar", opcion);
 			Pausa();
 			break;
 
-		case 5:
+		case 6:
 			MenuSecundario("Exportar", opcion);
 			Pausa();
 			break;
@@ -69,12 +73,15 @@ void MenuSecundarioAccionCliente(int accion)
 	case 2: // modificiar cliente
 		break;
 	case 3:
-		//buscar cliente
+		//Mostrar cliente
 		break;
 	case 4:
-		//eliminar cliente
+		//buscar cliente
 		break;
 	case 5:
+		//eliminar cliente
+		break;
+	case 6:
 		//exportara txt
 		break;
 
@@ -85,17 +92,19 @@ void MenuSecundarioAccionEntrenador(int accion)
 	switch (accion)
 	{
 	case 1: //agregar entrenador
-
 		break;
 	case 2: // modificiar entrenador
 		break;
 	case 3:
-		//buscar entrenador
+		//Mostrar entrenador
 		break;
 	case 4:
-		//eliminar entrenador
+		//buscar entrenador
 		break;
 	case 5:
+		//eliminar entrenador
+		break;
+	case 6:
 		//exportara txt
 		break;
 	}
@@ -106,15 +115,18 @@ void MenuSecundarioAccionSector(int accion)
 	{
 	case 1: //agregar sector
 		break;
-	case 2: // modificiar nombre sector
+	case 2: // modificiar sector
 		break;
 	case 3:
-		//buscar sector
+		//Mostrar sector
 		break;
 	case 4:
-		//eliminar sector
+		//buscar sector
 		break;
 	case 5:
+		//eliminar sector
+		break;
+	case 6:
 		//exportara txt
 		break;
 	}
@@ -126,15 +138,18 @@ void MenuSecundarioAccionClase(int accion)
 	{
 	case 1: //agregar clase
 		break;
-	case 2: // modificiar nombre clase
+	case 2: // modificiar clase
 		break;
 	case 3:
-		//buscar clase 
+		//Mostrar clase
 		break;
 	case 4:
-		//eliminar clase
+		//buscar clase
 		break;
 	case 5:
+		//eliminar clase
+		break;
+	case 6:
 		//exportara txt
 		break;
 	}
@@ -172,7 +187,7 @@ void MenuSecundario(char* nombreAccion, int accion)
 			break;
 		case 4:
 			MenuSecundarioAccionClase(accion);
-			
+
 			break;
 
 		}
