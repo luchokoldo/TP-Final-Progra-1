@@ -4,16 +4,17 @@
 #include "gym.h"
 #include "archivos.h"
 #include "menu.h"
+
 int main()
 {
 	Gym gym = { 0 };
 
 
-	CargarGym(&gym);
+	ArchivoCargarGym(&gym);
 
 	MostrarMenu(&gym);
 
-	GuardarGym(&gym);
+	ArchivoGuardarGym(&gym);
 
 	return 0;
 }

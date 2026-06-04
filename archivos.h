@@ -3,17 +3,22 @@
 
 #include "gym.h"
 
-void GuardarGym(Gym* gym);
-void CargarGym(Gym* gym);
+void ArchivoGuardarGym(Gym* gym);
+void ArchivoCargarGym(Gym* gym);
 
-void ModificarEntrenador(Entrenador* entrenador);
-void ModificarSector(Sector* sector);
-void ModificarClase(Clase* clase);
-void ModificarCliente(Cliente* cliente);
+void ArchivoAgregarEntrenador(Entrenador* entrenador);
+void ArchivoAgregarSector(Sector* sector);
+void ArchivoAgregarClase(Clase* clase);
+void ArchivoAgregarCliente(Cliente* cliente);
 
-void BorrarEntrenador(Entrenador* entrenador);
-void BorrarSector(Sector* sector);
-void BorrarClase(Clase* clase);
-void BorrarCliente(Cliente* cliente);
+void ArchivoModificarEntrenador(Entrenador* entrenador);
+void ArchivoModificarSector(Sector* sector);
+void ArchivoModificarClase(Clase* clase);
+void ArchivoModificarCliente(Cliente* cliente);
+
+void ArchivoBorrarEntrenador(Entrenador* entrenador);
+void ArchivoBorrarSector(Sector* sector);
+void ArchivoBorrarClase(Clase* clase);
+void ArchivoBorrarCliente(Cliente* cliente);
 
 #endif
