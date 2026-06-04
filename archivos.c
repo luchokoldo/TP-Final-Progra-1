@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include "archivos.h"
@@ -7,38 +8,103 @@
 #define ARCHIVO_CLASES		"Clases.bin"
 #define ARCHIVO_CLIENTES	"Clientes.bin"
 
-static Entrenador* CargarEntrenadores(char* nombreArchivo, int* size);
-static Sector* CargarSectores(char* nombreArchivo, int* size);
-static Clase* CargarClases(char* nombreArchivo, int* size);
-static Cliente* CargarClientes(char* nombreArchivo, int* size);
-static void GuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int* size);
-static void GuardarSectores(char* nombreArchivo, Sector* sectores, int* size);
-static void GuardarClases(char* nombreArchivo, Clase* clases, int* size);
-static void GuardarClientes(char* nombreArchivo, Cliente* clientes, int* size);
+static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size);
+static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size);
+static Clase* ArchivoCargarClases(char* nombreArchivo, int* size);
+static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size);
 
-void GuardarGym(Gym* gym)
+static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int size);
+static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int size);
+static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size);
+static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int size);
+
+void ArchivoGuardarGym(Gym* gym)
 {
-	GuardarEntrenadores(ARCHIVO_ENTRENADORES, gym->entrenadores, gym->entrenadoresSize);
-	GuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->entrenadoresSize);
-	GuardarClases(ARCHIVO_CLASES, gym->clases, gym->entrenadoresSize);
-	GuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->entrenadoresSize);
+	ArchivoGuardarEntrenadores(ARCHIVO_ENTRENADORES, gym->entrenadores, gym->entrenadoresSize);
+	ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->entrenadoresSize);
+	ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->entrenadoresSize);
+	ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->entrenadoresSize);
 }
 
-void CargarGym(Gym* gym)
+void ArchivoCargarGym(Gym* gym)
 {
-	gym->entrenadores = CargarEntrenadores(ARCHIVO_ENTRENADORES, &gym->entrenadoresSize);
-	gym->sectores = CargarSectores(ARCHIVO_SECTORES, &gym->sectoresSize);
-	gym->clases = CargarClases(ARCHIVO_CLASES, &gym->clasesSize);
-	gym->clientes = CargarClientes(ARCHIVO_CLIENTES, &gym->clientesSize);
+	gym->entrenadores = ArchivoCargarEntrenadores(ARCHIVO_ENTRENADORES, &gym->entrenadoresSize);
+	gym->sectores = ArchivoCargarSectores(ARCHIVO_SECTORES, &gym->sectoresSize);
+	gym->clases = ArchivoCargarClases(ARCHIVO_CLASES, &gym->clasesSize);
+	gym->clientes = ArchivoCargarClientes(ARCHIVO_CLIENTES, &gym->clientesSize);
 }
 
-void ModificarEntrenador(Entrenador* entrenador)
+void ArchivoAgregarEntrenador(Entrenador* entrenador)
+{
+	FILE* f = fopen(ARCHIVO_ENTRENADORES, "ab");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_ENTRENADORES);
+
+		return;
+	}
+
+	fwrite(entrenador, sizeof(Entrenador), 1, f);
+
+	fclose(f);
+}
+
+void ArchivoAgregarSector(Sector* sector)
+{
+	FILE* f = fopen(ARCHIVO_SECTORES, "ab");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_SECTORES);
+
+		return;
+	}
+
+	fwrite(sector, sizeof(Sector), 1, f);
+
+	fclose(f);
+}
+
+void ArchivoAgregarClase(Clase* clase)
+{
+	FILE* f = fopen(ARCHIVO_CLASES, "ab");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_CLASES);
+
+		return;
+	}
+
+	fwrite(clase, sizeof(Clase), 1, f);
+
+	fclose(f);
+}
+
+void ArchivoAgregarCliente(Cliente* cliente)
+{
+	FILE* f = fopen(ARCHIVO_CLIENTES, "ab");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_CLIENTES);
+
+		return;
+	}
+
+	fwrite(cliente, sizeof(Cliente), 1, f);
+
+	fclose(f);
+}
+
+void ArchivoModificarEntrenador(Entrenador* entrenador)
 {
 	FILE* f = fopen(ARCHIVO_ENTRENADORES, "r+b");
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_ENTRENADORES);
+		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_ENTRENADORES);
 
 		return;
 	}
@@ -62,13 +128,13 @@ void ModificarEntrenador(Entrenador* entrenador)
 	fclose(f);
 }
 
-void ModificarSector(Sector* sector)
+void ArchivoModificarSector(Sector* sector)
 {
 	FILE* f = fopen(ARCHIVO_SECTORES, "r+b");
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_SECTORES);
+		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_SECTORES);
 
 		return;
 	}
@@ -79,7 +145,7 @@ void ModificarSector(Sector* sector)
 	{
 		if (fread(&buffer, sizeof(Sector), 1, f) <= 0)
 		{
-			printf("[ERROR] No se encontro el entrenador %s", sector->nombre);
+			printf("[ERROR] No se encontro el sector %s", sector->nombre);
 
 			return;
 		}
@@ -92,13 +158,13 @@ void ModificarSector(Sector* sector)
 	fclose(f);
 }
 
-void ModificarClase(Clase* clase)
+void ArchivoModificarClase(Clase* clase)
 {
 	FILE* f = fopen(ARCHIVO_CLASES, "r+b");
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLASES);
+		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_CLASES);
 
 		return;
 	}
@@ -122,13 +188,13 @@ void ModificarClase(Clase* clase)
 	fclose(f);
 }
 
-void ModificarCliente(Cliente* cliente)
+void ArchivoModificarCliente(Cliente* cliente)
 {
 	FILE* f = fopen(ARCHIVO_CLIENTES, "r+b");
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLIENTES);
+		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_CLIENTES);
 
 		return;
 	}
@@ -152,27 +218,255 @@ void ModificarCliente(Cliente* cliente)
 	fclose(f);
 }
 
-void BorrarEntrenador(Entrenador* entrenador)
+void ArchivoBorrarEntrenador(Entrenador* entrenador)
 {
+	FILE* f = fopen(ARCHIVO_ENTRENADORES, "rb");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_ENTRENADORES);
+
+		return;
+	}
+
+	Entrenador* aux = calloc(1, sizeof(Entrenador));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL");
+
+		return;
+	}
+
+	size_t size = 1;
+
+	Entrenador buffer = { 0 };
+
+	while (fread(&buffer, sizeof(Entrenador), 1, f) > 0)
+	{
+		if (buffer.id == entrenador->id)
+		{
+			continue;
+		}
+
+		aux[size - 1] = buffer;
+
+		if (feof(f) == 0)
+		{
+			realloc(&aux, ++size * sizeof(Entrenador));
+
+			if (aux == NULL)
+			{
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Entrenador)) devolvio NULL");
+
+				return;
+			}
+		}
+	}
+
+	fclose(f);
+
+	f = fopen(ARCHIVO_ENTRENADORES, "wb");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_ENTRENADORES);
+
+		return;
+	}
+
+	fwrite(aux, sizeof(Entrenador), size, f);
+
+	fclose(f);
 }
 
-void BorrarSector(Sector* sector)
+void ArchivoBorrarSector(Sector* sector)
 {
+	FILE* f = fopen(ARCHIVO_SECTORES, "rb");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_SECTORES);
+
+		return;
+	}
+
+	Sector* aux = calloc(1, sizeof(Sector));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL");
+
+		return;
+	}
+
+	size_t size = 1;
+
+	Sector buffer = { 0 };
+
+	while (fread(&buffer, sizeof(Sector), 1, f) > 0)
+	{
+		if (buffer.id == sector->id)
+		{
+			continue;
+		}
+
+		aux[size - 1] = buffer;
+
+		if (feof(f) == 0)
+		{
+			realloc(&aux, ++size * sizeof(Sector));
+
+			if (aux == NULL)
+			{
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Sector)) devolvio NULL");
+
+				return;
+			}
+		}
+	}
+
+	fclose(f);
+
+	f = fopen(ARCHIVO_SECTORES, "wb");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_SECTORES);
+
+		return;
+	}
+
+	fwrite(aux, sizeof(Sector), size, f);
+
+	fclose(f);
 }
 
-void BorrarClase(Clase* clase)
+void ArchivoBorrarClase(Clase* clase)
 {
+	FILE* f = fopen(ARCHIVO_CLASES, "rb");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_CLASES);
+
+		return;
+	}
+
+	Clase* aux = calloc(1, sizeof(Clase));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL");
+
+		return;
+	}
+
+	size_t size = 1;
+
+	Clase buffer = { 0 };
+
+	while (fread(&buffer, sizeof(Clase), 1, f) > 0)
+	{
+		if (buffer.id == clase->id)
+		{
+			continue;
+		}
+
+		aux[size - 1] = buffer;
+
+		if (feof(f) == 0)
+		{
+			realloc(&aux, ++size * sizeof(Clase));
+
+			if (aux == NULL)
+			{
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Clase)) devolvio NULL");
+
+				return;
+			}
+		}
+	}
+
+	fclose(f);
+
+	f = fopen(ARCHIVO_CLASES, "wb");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLASES);
+
+		return;
+	}
+
+	fwrite(aux, sizeof(Clase), size, f);
+
+	fclose(f);
 }
 
-void BorrarCliente(Cliente* cliente)
+void ArchivoBorrarCliente(Cliente* cliente)
 {
+	FILE* f = fopen(ARCHIVO_CLIENTES, "rb");
 
+	if (f == NULL)
+	{
+		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_CLIENTES);
+
+		return;
+	}
+
+	Cliente* aux = calloc(1, sizeof(Cliente));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL");
+
+		return;
+	}
+
+	size_t size = 1;
+
+	Cliente buffer = { 0 };
+
+	while (fread(&buffer, sizeof(Cliente), 1, f) > 0)
+	{
+		if (buffer.id == cliente->id)
+		{
+			continue;
+		}
+
+		aux[size - 1] = buffer;
+
+		if (feof(f) == 0)
+		{
+			realloc(&aux, ++size * sizeof(Cliente));
+
+			if (aux == NULL)
+			{
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Cliente)) devolvio NULL");
+
+				return;
+			}
+		}
+	}
+
+	fclose(f);
+
+	f = fopen(ARCHIVO_CLIENTES, "wb");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLIENTES);
+
+		return;
+	}
+
+	fwrite(aux, sizeof(Cliente), size, f);
+
+	fclose(f);
 }
 
-static Entrenador* CargarEntrenadores(char* nombreArchivo, int* size)
+static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
 
@@ -227,7 +521,7 @@ static Entrenador* CargarEntrenadores(char* nombreArchivo, int* size)
 	return aux;
 }
 
-static Sector* CargarSectores(char* nombreArchivo, int* size)
+static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
 
@@ -282,7 +576,7 @@ static Sector* CargarSectores(char* nombreArchivo, int* size)
 	return aux;
 }
 
-static Clase* CargarClases(char* nombreArchivo, int* size)
+static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
 
@@ -337,7 +631,7 @@ static Clase* CargarClases(char* nombreArchivo, int* size)
 	return aux;
 }
 
-static Cliente* CargarClientes(char* nombreArchivo, int* size)
+static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
 
@@ -392,7 +686,7 @@ static Cliente* CargarClientes(char* nombreArchivo, int* size)
 	return aux;
 }
 
-static void GuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int* size)
+static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int size)
 {
 	FILE* f = fopen(nombreArchivo, "wb");
 
@@ -403,12 +697,12 @@ static void GuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, i
 		return;
 	}
 
-	fwrite(&entrenadores, sizeof(Entrenador), (size_t)(*size), f);
+	fwrite(&entrenadores, sizeof(Entrenador), (size_t)size, f);
 
 	fclose(f);
 }
 
-static void GuardarSectores(char* nombreArchivo, Sector* sectores, int* size)
+static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int size)
 {
 	FILE* f = fopen(nombreArchivo, "wb");
 
@@ -419,12 +713,12 @@ static void GuardarSectores(char* nombreArchivo, Sector* sectores, int* size)
 		return;
 	}
 
-	fwrite(&sectores, sizeof(Sector), (size_t)(*size), f);
+	fwrite(&sectores, sizeof(Sector), (size_t)size, f);
 
 	fclose(f);
 }
 
-static void GuardarClases(char* nombreArchivo, Clase* clases, int* size)
+static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size)
 {
 	FILE* f = fopen(nombreArchivo, "wb");
 
@@ -435,12 +729,12 @@ static void GuardarClases(char* nombreArchivo, Clase* clases, int* size)
 		return;
 	}
 
-	fwrite(&clases, sizeof(Clase), (size_t)(*size), f);
+	fwrite(&clases, sizeof(Clase), (size_t)size, f);
 
 	fclose(f);
 }
 
-static void GuardarClientes(char* nombreArchivo, Cliente* clientes, int* size)
+static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int size)
 {
 	FILE* f = fopen(nombreArchivo, "wb");
 
@@ -451,8 +745,7 @@ static void GuardarClientes(char* nombreArchivo, Cliente* clientes, int* size)
 		return;
 	}
 
-	fwrite(&clientes, sizeof(Cliente), (size_t)(*size), f);
+	fwrite(&clientes, sizeof(Cliente), (size_t)size, f);
 
 	fclose(f);
 }
-
