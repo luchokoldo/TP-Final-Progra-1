@@ -7,4 +7,6 @@ typedef struct Sector
     char nombre[64];
 } Sector;
 void SectorMostrarSector(Sector* sectores, int size);
+Sector* SectorAgregarSector(Sector* sector, int* size);
+int SectorBuscarSectorId(Sector* sectores, int size, int id, int i);
 #endif

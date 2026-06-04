@@ -8,4 +8,6 @@ typedef struct Entrenador
     char genero[32];
 } Entrenador;
 void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size);
+Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size);
+int EntrenadorBuscarEntrenadorId(Entrenador* entrenador, int size, int id, int i);
 #endif // _ENTRENADOR_INCLUDED

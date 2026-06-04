@@ -28,5 +28,6 @@ typedef struct Clase
     Duracion duracion;
 } Clase;
 void ClaseMostrarClase(Clase* clases, int size);
-
+Clase* ClaseAgregarClase(Clase* clases, int* size);
+int ClaseBuscarClaseId(Clase* clase, int size, int id, int i);
 #endif
