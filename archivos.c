@@ -40,7 +40,7 @@ void ArchivoAgregarEntrenador(Entrenador* entrenador)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_ENTRENADORES);
+		printf("[ERROR] No se pudo agregar un elemento a %s\n", ARCHIVO_ENTRENADORES);
 
 		return;
 	}
@@ -56,7 +56,7 @@ void ArchivoAgregarSector(Sector* sector)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_SECTORES);
+		printf("[ERROR] No se pudo agregar un elemento a %s\n", ARCHIVO_SECTORES);
 
 		return;
 	}
@@ -72,7 +72,7 @@ void ArchivoAgregarClase(Clase* clase)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_CLASES);
+		printf("[ERROR] No se pudo agregar un elemento a %s\n", ARCHIVO_CLASES);
 
 		return;
 	}
@@ -88,7 +88,7 @@ void ArchivoAgregarCliente(Cliente* cliente)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo agregar un elemento a %s", ARCHIVO_CLIENTES);
+		printf("[ERROR] No se pudo agregar un elemento a %s\n", ARCHIVO_CLIENTES);
 
 		return;
 	}
@@ -104,7 +104,7 @@ void ArchivoModificarEntrenador(Entrenador* entrenador)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_ENTRENADORES);
+		printf("[ERROR] No se pudo abrir el archivo %s\n", ARCHIVO_ENTRENADORES);
 
 		return;
 	}
@@ -115,7 +115,7 @@ void ArchivoModificarEntrenador(Entrenador* entrenador)
 	{
 		if (fread(&buffer, sizeof(Entrenador), 1, f) <= 0)
 		{
-			printf("[ERROR] No se encontro el entrenador %s", entrenador->nombre);
+			printf("[ERROR] No se encontro el entrenador %s\n", entrenador->nombre);
 
 			return;
 		}
@@ -134,7 +134,7 @@ void ArchivoModificarSector(Sector* sector)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_SECTORES);
+		printf("[ERROR] No se pudo abrir el archivo %s\n", ARCHIVO_SECTORES);
 
 		return;
 	}
@@ -145,7 +145,7 @@ void ArchivoModificarSector(Sector* sector)
 	{
 		if (fread(&buffer, sizeof(Sector), 1, f) <= 0)
 		{
-			printf("[ERROR] No se encontro el sector %s", sector->nombre);
+			printf("[ERROR] No se encontro el sector %s\n", sector->nombre);
 
 			return;
 		}
@@ -164,7 +164,7 @@ void ArchivoModificarClase(Clase* clase)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_CLASES);
+		printf("[ERROR] No se pudo abrir el archivo %s\n", ARCHIVO_CLASES);
 
 		return;
 	}
@@ -175,7 +175,7 @@ void ArchivoModificarClase(Clase* clase)
 	{
 		if (fread(&buffer, sizeof(Clase), 1, f) <= 0)
 		{
-			printf("[ERROR] No se encontro la clase %s", clase->nombre);
+			printf("[ERROR] No se encontro la clase %s\n", clase->nombre);
 
 			return;
 		}
@@ -194,7 +194,7 @@ void ArchivoModificarCliente(Cliente* cliente)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo abrir el archivo %s", ARCHIVO_CLIENTES);
+		printf("[ERROR] No se pudo abrir el archivo %s\n", ARCHIVO_CLIENTES);
 
 		return;
 	}
@@ -205,7 +205,7 @@ void ArchivoModificarCliente(Cliente* cliente)
 	{
 		if (fread(&buffer, sizeof(Cliente), 1, f) <= 0)
 		{
-			printf("[ERROR] No se encontro el cliente %s", cliente->nombre);
+			printf("[ERROR] No se encontro el cliente %s\n", cliente->nombre);
 
 			return;
 		}
@@ -224,7 +224,7 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_ENTRENADORES);
+		printf("[ERROR] No se encontro el archivo %s\n", ARCHIVO_ENTRENADORES);
 
 		return;
 	}
@@ -233,7 +233,7 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
 
 		return;
 	}
@@ -257,7 +257,7 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Entrenador)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Entrenador)) devolvio NULL\n");
 
 				return;
 			}
@@ -270,7 +270,7 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_ENTRENADORES);
+		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_ENTRENADORES);
 
 		return;
 	}
@@ -286,7 +286,7 @@ void ArchivoBorrarSector(Sector* sector)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_SECTORES);
+		printf("[ERROR] No se encontro el archivo %s\n", ARCHIVO_SECTORES);
 
 		return;
 	}
@@ -295,7 +295,7 @@ void ArchivoBorrarSector(Sector* sector)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
 
 		return;
 	}
@@ -319,7 +319,7 @@ void ArchivoBorrarSector(Sector* sector)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Sector)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Sector)) devolvio NULL\n");
 
 				return;
 			}
@@ -332,7 +332,7 @@ void ArchivoBorrarSector(Sector* sector)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_SECTORES);
+		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_SECTORES);
 
 		return;
 	}
@@ -348,7 +348,7 @@ void ArchivoBorrarClase(Clase* clase)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_CLASES);
+		printf("[ERROR] No se encontro el archivo %s\n", ARCHIVO_CLASES);
 
 		return;
 	}
@@ -357,7 +357,7 @@ void ArchivoBorrarClase(Clase* clase)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
 
 		return;
 	}
@@ -381,7 +381,7 @@ void ArchivoBorrarClase(Clase* clase)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Clase)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Clase)) devolvio NULL\n");
 
 				return;
 			}
@@ -394,7 +394,7 @@ void ArchivoBorrarClase(Clase* clase)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLASES);
+		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_CLASES);
 
 		return;
 	}
@@ -410,7 +410,7 @@ void ArchivoBorrarCliente(Cliente* cliente)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se encontro el archivo %s", ARCHIVO_CLIENTES);
+		printf("[ERROR] No se encontro el archivo %s\n", ARCHIVO_CLIENTES);
 
 		return;
 	}
@@ -419,7 +419,7 @@ void ArchivoBorrarCliente(Cliente* cliente)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
 
 		return;
 	}
@@ -443,7 +443,7 @@ void ArchivoBorrarCliente(Cliente* cliente)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Cliente)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, ++size * sizeof(Cliente)) devolvio NULL\n");
 
 				return;
 			}
@@ -456,7 +456,7 @@ void ArchivoBorrarCliente(Cliente* cliente)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudo crear el archivo %s", ARCHIVO_CLIENTES);
+		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_CLIENTES);
 
 		return;
 	}
@@ -476,7 +476,7 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL");
+			printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
 
 			return NULL;
 		}
@@ -488,7 +488,7 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
 
 		return NULL;
 	}
@@ -507,7 +507,7 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Entrenador)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Entrenador)) devolvio NULL\n");
 
 				*size = 0;
 
@@ -531,7 +531,7 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL");
+			printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
 
 			return NULL;
 		}
@@ -543,7 +543,7 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
 
 		return NULL;
 	}
@@ -562,7 +562,7 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Sector)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Sector)) devolvio NULL\n");
 
 				*size = 0;
 
@@ -586,7 +586,7 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL");
+			printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
 
 			return NULL;
 		}
@@ -598,7 +598,7 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
 
 		return NULL;
 	}
@@ -617,7 +617,7 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Clase)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Clase)) devolvio NULL\n");
 
 				*size = 0;
 
@@ -641,7 +641,7 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL");
+			printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
 
 			return NULL;
 		}
@@ -653,7 +653,7 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL");
+		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
 
 		return NULL;
 	}
@@ -672,7 +672,7 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 
 			if (aux == NULL)
 			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Cliente)) devolvio NULL");
+				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Cliente)) devolvio NULL\n");
 
 				*size = 0;
 
@@ -692,7 +692,7 @@ static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenad
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s", nombreArchivo);
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -708,7 +708,7 @@ static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int si
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s", nombreArchivo);
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -724,7 +724,7 @@ static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s", nombreArchivo);
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -740,7 +740,7 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s", nombreArchivo);
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
