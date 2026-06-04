@@ -6,5 +6,5 @@ typedef struct Sector
     int id;
     char nombre[64];
 } Sector;
-
+void SectorMostrarSector(Sector* sectores, int size);
 #endif

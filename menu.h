@@ -1,6 +1,7 @@
 #ifndef _MENU_H_INCLUDED
 #define _MENU_H_INCLUDED
 
-void MostrarMenu(void);
+#include "gym.h"
+void MostrarMenu(Gym* gym);
 
 #endif
