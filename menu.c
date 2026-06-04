@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "menu.h"
+
 void MenuSecundario(char* nombreAccion, int accion);
 void MenuSecundarioAccionCliente(int accion);
 void MenuSecundarioAccionEntrenador(int accion);
@@ -8,7 +10,9 @@ void MenuSecundarioAccionSector(int accion);
 void MenuSecundarioAccionClase(int accion);
 void Pausa(void);
 
-void MostrarMenu(void)
+
+
+void MostrarMenu(Gym* gym)
 {
 	int opcion = 0;
 
