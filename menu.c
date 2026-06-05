@@ -2,6 +2,11 @@
 #include <stdlib.h>
 #include "scanner.h"
 #include "menu.h"
+#include "cliente.h"
+#include "entrenador.h"
+#include "sector.h"
+#include "clase.h"
+#include "archivos.h"
 
 void MenuSecundario(char* nombreAccion, int accion);
 void MenuSecundarioAccionCliente(int accion);
@@ -24,8 +29,8 @@ void MostrarMenu(Gym* gym)
 		printf("\n1. Agregar \n");
 		printf("2. Modificar\n");
 		printf("3. Mostrar\n");
-		printf("4. Eliminar\n");
-		printf("5. Buscar\n");
+		printf("4. Buscar\n");
+		printf("5. Eliminar\n");
 		printf("6.Exportar a .txt\n\n");
 		printf("0. Salir\n");
 
@@ -47,11 +52,11 @@ void MostrarMenu(Gym* gym)
 			Pausa();
 			break;
 		case 4:
-			MenuSecundario("Eliminar", opcion);
+			MenuSecundario("Buscar", opcion);
 			Pausa();
 			break;
 		case 5:
-			MenuSecundario("Buscar", opcion);
+			MenuSecundario("Eliminar", opcion);
 			Pausa();
 			break;
 
