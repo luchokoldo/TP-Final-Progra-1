@@ -32,7 +32,6 @@ void ClienteMostrarCliente(Cliente* clientes, int size)
 {
 	if (size <= 0)
 	{
-		printf("\tLista de clientes");
 		return;
 	}
 	ClienteMostrarCliente(clientes, size - 1);
@@ -40,7 +39,7 @@ void ClienteMostrarCliente(Cliente* clientes, int size)
 	printf("\n--------------------------------------\n");
 	printf("\nID: %d", clientes[size - 1].id);
 	printf("\nNombre: %s", clientes[size - 1].nombre);
-	printf("\nGenero: %s", clientes[size - 2].genero);
+	printf("\nGenero: %s", clientes[size - 1].genero);
 	printf("\nClases: ");
 	for (int z = 0; z < clientes[size - 1].idClasesValidos; z++)
 	{
@@ -66,7 +65,7 @@ int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
 
 	i++;
 
-	return ClienteBuscarCliente(cliente, size, id, i);
+	return ClienteBuscarClienteId(cliente, size, id, i);
 }
 void ClienteModificarCliente(Cliente* cliente, int size, int id)
 {
@@ -83,7 +82,10 @@ void ClienteModificarCliente(Cliente* cliente, int size, int id)
 		printf("-------------------------------------------------\n");
 		
 		
-		printf("\nIngrese la nueva cantidad de clases validas: ");
-		cliente[posicion].idClasesValidos = ScannerInt();
-		printf("\n Clases modificadas con exito");
+		printf(" Ingrese el nuevo nombre del cliente: ");
+		ScannerString(cliente[posicion].nombre, GET_CHARSMAX(cliente[posicion].nombre));
+
+		printf(" Ingrese el nuevo genero del cliente: ");
+		ScannerString(cliente[posicion].genero, GET_CHARSMAX(cliente[posicion].genero));
+		printf("\n Cliente modificado con exito");
 }

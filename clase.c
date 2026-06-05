@@ -9,23 +9,28 @@ Clase* ClaseAgregarClase(Clase* clases, int* size)
 	Clase nuevo;
 
 	printf("\nIngrese el nombre de la clase: ");
-	ScannerString(&nuevo, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 
 	printf("\nIngrese el id de la clase: ");
 	nuevo.id = ScannerInt();
 	printf("\nIngrese el precio de la clase:$ ");
 	nuevo.precio = ScannerDouble();
 	printf("\nIngrese la hora de inicio: ");
-	nuevo.inicio.horas = ScannerInt;
+	nuevo.inicio.horas = ScannerInt();
 	printf("\nIingrese minutos: ");
 	nuevo.inicio.minutos = ScannerInt();
+	nuevo.inicio.esValido = 1;
 	printf("\nIngrese la duracion de la clase en horas: ");
 	nuevo.duracion.horas = ScannerInt();
 	printf("\nIngrese la duracion en minutos");
 	nuevo.duracion.minutos = ScannerInt();
+	nuevo.duracion.esValido = 1;
 
+	nuevo.idClientesValidos = 0;
+	nuevo.idEntrenador = -1; 
+	nuevo.idSector = -1;
 
-	Clase* aux = realloc(&clases, (*size + 1), sizeof(Clase));
+	Clase* aux = realloc(clases,(*size + 1) * sizeof(Clase));
 	if (aux == NULL)
 	{
 		printf("Error de memoria\n");
@@ -42,8 +47,6 @@ void ClaseMostrarClase(Clase* clases, int size)
 {
 	if (size <= 0)
 	{
-		printf("Lista de clases\n");
-
 		return;
 	}
 
@@ -55,13 +58,19 @@ void ClaseMostrarClase(Clase* clases, int size)
 	printf("\n Id entrenador: %d", clases[size - 1].idEntrenador);
 	printf("\n Id sector: %d ", clases[size - 1].idSector);
 
-	for (int j = 0; j < clases[size - 1].idClientesValidos;j++)
+	if (clases[size - 1].idClientesValidos > 0)
 	{
-		printf("%d,", clases[size - 1].idClientes[j]);
+		for (int j = 0; j < clases[size - 1].idClientesValidos; j++)
+		{
+			printf("%d,", clases[size - 1].idClientes[j]);
+		}
+		printf("\b\b. \n");
 	}
-
-	printf("\b\b.\n");
-	printf("\n--------------------------------------\n");
+	else
+	{
+		printf("Sin clientes asignados.\n");
+	}
+	printf("--------------------------------------\n");
 }
 
 int ClaseBuscarClaseId(Clase* clase, int size, int id,int i)
@@ -76,7 +85,7 @@ int ClaseBuscarClaseId(Clase* clase, int size, int id,int i)
 		return i;
 	}
 	i++;
-	return ClaseBuscarClase(clase,size,id,i);
+	return ClaseBuscarClaseId(clase,size,id,i);
 }
 
 void ClaseModificarClase(Clase* clase, int size, int id)

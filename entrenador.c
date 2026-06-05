@@ -11,9 +11,10 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size)
 	printf("\nIngrese ID: ");
 	nuevo.id = ScannerInt();
 	printf("\nIngrese nombre: ");
-	ScannerString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 	printf("Ingrese genero: ");
 	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
+
 	Entrenador* aux = realloc(entrenadores, (*size + 1) * sizeof(Entrenador));
 
 	if (aux == NULL)
@@ -32,7 +33,6 @@ void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size)
 {
 	if( size<=0)
 	{ 
-	printf("---Lista De Entrenadores---\n");
 	return;
 	}
 	EntrenadorMostrarEntrenadores(entrenadores, size - 1);

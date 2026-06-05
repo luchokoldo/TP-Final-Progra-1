@@ -12,7 +12,7 @@ Sector* SectorAgregarSector(Sector* sector, int* size)
 	printf("Ingrese el id del sector: ");
 	nuevo.id = ScannerInt();
 
-	Sector* aux = realloc(sector, (*size) * sizeof(Sector));
+	Sector* aux = realloc(sector, (*size+1) * sizeof(Sector));
 
 	if (aux == NULL)
 	{
@@ -32,7 +32,6 @@ void SectorMostrarSector(Sector* sectores, int size)
 
 	if (size <= 0)
 	{
-		printf("---Lista De Sectores---\n");
 		return;
 	}
 	SectorMostrarSector(sectores, size - 1);
@@ -55,7 +54,7 @@ int SectorBuscarSectorId(Sector* sectores, int size, int id, int i)
 	}
 
 	i++;
-	returnSectorBuscarSectorId(sectores, size, id, i);
+	return SectorBuscarSectorId(sectores, size, id, i);
 }
 void SectorModificarSector(Sector* sector, int size, int id)
 {
