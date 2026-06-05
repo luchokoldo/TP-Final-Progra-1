@@ -9,11 +9,11 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size)
 	Entrenador nuevo;
 
 	printf("\nIngrese ID: ");
-	nuevo.id = scanInt();
+	nuevo.id = ScannerInt();
 	printf("\nIngrese nombre: ");
-	scanString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 	printf("Ingrese genero: ");
-	scanString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
+	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
 	Entrenador* aux = realloc(entrenadores, (*size + 1) * sizeof(Entrenador));
 
 	if (aux == NULL)
@@ -59,4 +59,23 @@ int EntrenadorBuscarEntrenadorId(Entrenador* entrenador, int size, int id, int i
 	}
 	i++;
 	return EntrenadorBuscarEntrenadorId(entrenador, size, id, i);
+}
+void EntrenadorModificarEntrenador(Entrenador* entrenador, int size, int id)
+{
+	int posicion = EntrenadorBuscarEntrenadorId(entrenador, size, id, 0);
+	if (posicion == -1)
+	{
+		printf("\nno se encontro el entrenador con el id: %d\n", id);
+		return;
+	}
+	printf("--Modificar entrenador con el Id: %d--\n", id);
+	printf("\nNombre del entrenador: %s", entrenador[posicion].nombre);
+	printf("\nGenero: %s", entrenador[posicion].genero);
+	printf("-------------------------------------------------\n");
+
+	printf("\nIngrese el nuevo nombre del entrenador: ");
+	ScannerString(entrenador[posicion].nombre,GET_CHARSMAX(entrenador[posicion].nombre));
+
+	printf("\n Nombre cambiado con Exito");
+
 }

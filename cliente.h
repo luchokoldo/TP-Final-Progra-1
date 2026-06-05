@@ -12,4 +12,5 @@ typedef struct Cliente
 void ClienteMostrarCliente(Cliente* clientes, int size);
 Cliente* ClienteAgregarCliente(Cliente* clientes, int* size);
 int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i);
+void ClienteModificarCliente(Cliente* cliente, int size, int id);
 #endif

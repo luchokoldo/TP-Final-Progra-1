@@ -8,11 +8,11 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int* size)
 {
 	Cliente nuevo;
 	printf("\nIngrese el Id del cliente: ");
-	nuevo.id = scanInt();
+	nuevo.id = ScannerInt();
 	printf("\nIngrese el nombre del cliente : ");
-	scanString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 	printf("\nIngrese el genero del cliente:");
-	scanString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
+	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
 	Cliente* aux = realloc(clientes, (*size + 1) * sizeof(Cliente));
 
 	if (aux == NULL)
@@ -67,4 +67,23 @@ int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
 	i++;
 
 	return ClienteBuscarCliente(cliente, size, id, i);
+}
+void ClienteModificarCliente(Cliente* cliente, int size, int id)
+{
+	int posicion = ClienteBuscarClienteId(cliente, size, id, 0);
+		if (posicion == -1)
+		{
+			printf("\nno se encontro el cliente con el id: %d\n", id);
+				return;
+		}
+		printf("--Modificar cliente Id: %d--\n", id);
+		printf("\nNombre del cliente: %s", cliente[posicion].nombre);
+		printf("\nGenero: %s", cliente[posicion].genero);
+		printf("\nClases validas: %d", cliente[posicion].idClasesValidos);
+		printf("-------------------------------------------------\n");
+		
+		
+		printf("\nIngrese la nueva cantidad de clases validas: ");
+		cliente[posicion].idClasesValidos = ScannerInt();
+		printf("\n Clases modificadas con exito");
 }

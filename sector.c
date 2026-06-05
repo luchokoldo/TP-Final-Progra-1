@@ -8,9 +8,9 @@ Sector* SectorAgregarSector(Sector* sector, int* size)
 {
 	Sector nuevo;
 	printf("\nIngrese el nombre del sector: ");
-	scanString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 	printf("Ingrese el id del sector: ");
-	nuevo.id = scanInt();
+	nuevo.id = ScannerInt();
 
 	Sector* aux = realloc(sector, (*size) * sizeof(Sector));
 
@@ -56,4 +56,24 @@ int SectorBuscarSectorId(Sector* sectores, int size, int id, int i)
 
 	i++;
 	returnSectorBuscarSectorId(sectores, size, id, i);
+}
+void SectorModificarSector(Sector* sector, int size, int id)
+{
+	int posicion = SectorBuscarSectorId(sector, size, id, 0);
+
+	if (posicion == -1)
+	{
+		printf("No se encontro ninguna sector con el ID: %d\n", id);
+		return;
+	}
+
+
+	printf("\n--- Modificando sector ID: %d ---", id);
+	printf("\n Nombre actual: %s", sector[posicion].nombre);
+	printf("---------------------------------------\n");
+
+	printf("\nIngrese el nuevo nombre del sector:");
+	ScannerString(sector[posicion].nombre, GET_CHARSMAX(sector[posicion].nombre));
+	printf("\n Nombre del sector cambiado con exito!");
+
 }

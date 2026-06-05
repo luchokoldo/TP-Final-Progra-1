@@ -4,24 +4,25 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Clase *ClaseAgregarClase(Clase *clases, int *size)
+Clase* ClaseAgregarClase(Clase* clases, int* size)
 {
 	Clase nuevo;
 
 	printf("\nIngrese el nombre de la clase: ");
-	scanString(&nuevo,GET_CHARSMAX(nuevo.nombre))
+	ScannerString(&nuevo, GET_CHARSMAX(nuevo.nombre));
+
 	printf("\nIngrese el id de la clase: ");
-	nuevo.id = scanInt();
+	nuevo.id = ScannerInt();
 	printf("\nIngrese el precio de la clase:$ ");
-	nuevo.precio = scanInt();
+	nuevo.precio = ScannerDouble();
 	printf("\nIngrese la hora de inicio: ");
-	nuevo.inicio.horas = scanInt;
+	nuevo.inicio.horas = ScannerInt;
 	printf("\nIingrese minutos: ");
-	nuevo.inicio.minutos = scanInt();
+	nuevo.inicio.minutos = ScannerInt();
 	printf("\nIngrese la duracion de la clase en horas: ");
-	nuevo.duracion.horas = scanInt();
+	nuevo.duracion.horas = ScannerInt();
 	printf("\nIngrese la duracion en minutos");
-	nuevo.duracion.minutos = scanInt();
+	nuevo.duracion.minutos = ScannerInt();
 
 
 	Clase* aux = realloc(&clases, (*size + 1), sizeof(Clase));
@@ -76,4 +77,51 @@ int ClaseBuscarClaseId(Clase* clase, int size, int id,int i)
 	}
 	i++;
 	return ClaseBuscarClase(clase,size,id,i);
+}
+
+void ClaseModificarClase(Clase* clase, int size, int id)
+{
+	int posicion = ClaseBuscarClaseId(clase, size, id, 0);
+
+	if (posicion == -1)
+	{
+		printf("No se encontro ninguna clase con el ID: %d\n", id);
+		return;
+	}
+
+	
+	printf("\n--- Modificando Clase ID: %d ---", id);
+	printf("\n Nombre actual: %s", clase[posicion].nombre);
+	printf("\n Precio actual: %.2f", clase[posicion].precio);
+	printf("\n Horario de inicio actual: %02d:%02d", clase[posicion].inicio.horas, clase[posicion].inicio.minutos);
+	printf("\n Duracion actual: %02d:%02d hs\n", clase[posicion].duracion.horas, clase[posicion].duracion.minutos);
+	printf("---------------------------------------\n");
+
+	
+	printf(" Ingrese el nuevo nombre: ");
+	
+	ScannerString(clase[posicion].nombre, GET_CHARSMAX(clase[posicion].nombre));
+
+	printf(" Ingrese el nuevo precio: ");
+
+	clase[posicion].precio = ScannerDouble(); 
+	
+	printf("\n Ingrese nueva hora de inicio : ");
+	clase[posicion].inicio.horas = ScannerInt(); 
+
+	printf(" Ingrese nuevos minutos de inicio: ");
+	clase[posicion].inicio.minutos = ScannerInt();
+
+	clase[posicion].inicio.esValido = 1;
+
+	
+	printf("\n Ingrese nuevas horas de duracion: ");
+	clase[posicion].duracion.horas = ScannerInt();
+
+	printf(" Ingrese nuevos minutos de duracion: ");
+	clase[posicion].duracion.minutos = ScannerInt();
+
+	clase[posicion].duracion.esValido = 1; 
+
+	printf("\n Clase, horarios y duracion actualizados con exito\n");
 }

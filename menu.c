@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "scanner.h"
 #include "menu.h"
 
 void MenuSecundario(char* nombreAccion, int accion);
@@ -30,7 +30,7 @@ void MostrarMenu(Gym* gym)
 		printf("0. Salir\n");
 
 		printf("\nElija una opcion: ");
-		scanf_s("%d", &opcion);
+		opcion = ScannerInt();
 		switch (opcion)
 		{
 		case 1:

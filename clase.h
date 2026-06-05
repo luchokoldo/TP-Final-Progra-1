@@ -30,4 +30,5 @@ typedef struct Clase
 void ClaseMostrarClase(Clase* clases, int size);
 Clase* ClaseAgregarClase(Clase* clases, int* size);
 int ClaseBuscarClaseId(Clase* clase, int size, int id, int i);
+void ClaseModificarClase(Clase* clase, int size, int id);
 #endif
