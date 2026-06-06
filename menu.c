@@ -8,14 +8,12 @@
 #include "clase.h"
 #include "archivos.h"
 
-void MenuSecundario(char* nombreAccion, int accion);
-void MenuSecundarioAccionCliente(int accion);
-void MenuSecundarioAccionEntrenador(int accion);
-void MenuSecundarioAccionSector(int accion);
-void MenuSecundarioAccionClase(int accion);
+void MenuSecundario(Gym* gym, char* nombreAccion, int accion);
+void MenuSecundarioAccionCliente(Gym* gym, int accion);
+void MenuSecundarioAccionEntrenador(Gym* gym,int accion);
+void MenuSecundarioAccionSector(Gym* gym, int accion);
+void MenuSecundarioAccionClase(Gym* gym, int accion);
 void Pausa(void);
-
-
 
 void MostrarMenu(Gym* gym)
 {
@@ -31,7 +29,7 @@ void MostrarMenu(Gym* gym)
 		printf("3. Mostrar\n");
 		printf("4. Buscar\n");
 		printf("5. Eliminar\n");
-		printf("6.Exportar a .txt\n\n");
+		printf("6. Exportar a .txt\n\n");
 		printf("0. Salir\n");
 
 		printf("\nElija una opcion: ");
@@ -39,29 +37,29 @@ void MostrarMenu(Gym* gym)
 		switch (opcion)
 		{
 		case 1:
-			MenuSecundario("Agregar", opcion);
+			MenuSecundario(gym, "Agregar", opcion);
 			Pausa();
 			break;
 
 		case 2:
-			MenuSecundario("Modificar", opcion);
+			MenuSecundario(gym, "Modificar", opcion);
 			Pausa();
 			break;
 		case 3:
-			MenuSecundario("Mostrar", opcion);
+			MenuSecundario(gym, "Mostrar", opcion);
 			Pausa();
 			break;
 		case 4:
-			MenuSecundario("Buscar", opcion);
+			MenuSecundario(gym,"Buscar", opcion);
 			Pausa();
 			break;
 		case 5:
-			MenuSecundario("Eliminar", opcion);
+			MenuSecundario(gym, "Eliminar", opcion);
 			Pausa();
 			break;
 
 		case 6:
-			MenuSecundario("Exportar", opcion);
+			MenuSecundario(gym, "Exportar", opcion);
 			Pausa();
 			break;
 		}
@@ -69,101 +67,7 @@ void MostrarMenu(Gym* gym)
 
 	} while (opcion != 0);
 }
-void MenuSecundarioAccionCliente(int accion)
-{
-	switch (accion)
-	{
-	case 1: //agregar cliente
-		break;
-	case 2: // modificiar cliente
-		break;
-	case 3:
-		//Mostrar cliente
-		break;
-	case 4:
-		//buscar cliente
-		break;
-	case 5:
-		//eliminar cliente
-		break;
-	case 6:
-		//exportara txt
-		break;
-
-	}
-}
-void MenuSecundarioAccionEntrenador(int accion)
-{
-	switch (accion)
-	{
-	case 1: //agregar entrenador
-		break;
-	case 2: // modificiar entrenador
-		break;
-	case 3:
-		//Mostrar entrenador
-		break;
-	case 4:
-		//buscar entrenador
-		break;
-	case 5:
-		//eliminar entrenador
-		break;
-	case 6:
-		//exportara txt
-		break;
-	}
-}
-void MenuSecundarioAccionSector(int accion)
-{
-	switch (accion)
-	{
-	case 1: //agregar sector
-		break;
-	case 2: // modificiar sector
-		break;
-	case 3:
-		//Mostrar sector
-		break;
-	case 4:
-		//buscar sector
-		break;
-	case 5:
-		//eliminar sector
-		break;
-	case 6:
-		//exportara txt
-		break;
-	}
-
-}
-void MenuSecundarioAccionClase(int accion)
-{
-	switch (accion)
-	{
-	case 1: //agregar clase
-		break;
-	case 2: // modificiar clase
-		break;
-	case 3:
-		//Mostrar clase
-		break;
-	case 4:
-		//buscar clase
-		break;
-	case 5:
-		//eliminar clase
-		break;
-	case 6:
-		//exportara txt
-		break;
-	}
-
-}
-
-
-
-void MenuSecundario(char* nombreAccion, int accion)
+void MenuSecundario(Gym* gym, char* nombreAccion, int accion)
 {
 	int opcion = 0;
 
@@ -181,17 +85,17 @@ void MenuSecundario(char* nombreAccion, int accion)
 		{
 
 		case 1:
-			MenuSecundarioAccionCliente(accion);
+			MenuSecundarioAccionCliente(gym, accion);
 			break;
 
 		case 2:
-			MenuSecundarioAccionEntrenador(accion);
+			MenuSecundarioAccionEntrenador(gym, accion);
 			break;
 		case 3:
-			MenuSecundarioAccionSector(accion);
+			MenuSecundarioAccionSector(gym, accion);
 			break;
 		case 4:
-			MenuSecundarioAccionClase(accion);
+			MenuSecundarioAccionClase(gym, accion);
 
 			break;
 
@@ -199,6 +103,166 @@ void MenuSecundario(char* nombreAccion, int accion)
 
 	} while (opcion != 0);
 }
+void MenuSecundarioAccionCliente(Gym* gym, int accion)
+{
+	int id;
+
+	switch (accion)
+	{
+	case 1: 
+		gym->clientes = ClienteAgregarCliente(gym->clientes, &gym->clientesSize);
+		break;
+	case 2: 
+		printf(" ingrese ID del cliente: \n");
+		id = ScannerInt();
+		ClienteModificarCliente(gym->clientes, gym->clientesSize, id);
+		break;
+	case 3:
+		ClienteMostrarCliente(gym->clientes, gym->clientesSize);
+		break;
+	case 4:
+		printf(" ingrese ID del cliente: \n");
+		id = ScannerInt();
+		if (ClienteBuscarClienteId(gym->clientes, gym->clientesSize, id, 0) != -1)
+		{
+			printf(" cliente encontrado. \n");
+		}
+		else
+		{
+			printf(" cliente no encontrado. \n");
+		}
+		break;
+	case 5:
+		printf(" ingrese ID del cliente: ");
+		id = ScannerInt();
+		gym->clientes = ClienteEliminarCliente(gym->clientes, &gym->clientesSize, id);
+		break;
+	case 6:
+		//exportara txt
+		break;
+
+	}
+}
+void MenuSecundarioAccionEntrenador(Gym* gym, int accion)
+{
+	int id;
+
+	switch (accion)
+	{
+	case 1: 
+		gym->entrenadores = EntrenadorAgregarEntrenador(gym->entrenadores, &gym->entrenadoresSize);
+		break;
+	case 2:
+		printf(" ingrese ID del entrenador: ");
+		id = ScannerInt();
+		EntrenadorModificarEntrenador(gym->entrenadores, gym->entrenadoresSize, id);
+		break;
+	case 3:
+		EntrenadorMostrarEntrenadores(gym->entrenadores, gym->entrenadoresSize);
+		break;
+	case 4:
+		printf(" ingrese ID del entrenador: ");
+		id = ScannerInt();
+		if (EntrenadorBuscarEntrenadorId(gym->entrenadores, gym->entrenadoresSize, id, 0) != -1)
+		{
+			printf(" entrenador encontrado. \n");
+		} 
+		else
+		{
+			printf(" entrenador no encontrado. \n");
+		}
+		break;
+	case 5:
+		printf(" ingrese ID del entrenador: \n");
+		id = ScannerInt();
+		gym->entrenadores = EntrenadorEliminarEntrenador(gym->entrenadores, &gym->entrenadoresSize, id);
+		break;
+	case 6:
+		//exportara txt
+		break;
+	}
+}
+void MenuSecundarioAccionSector(Gym* gym, int accion)
+{
+	int id;
+	switch (accion)
+	{
+	case 1: 
+		gym->sectores = SectorAgregarSector(gym->sectores, &gym->sectoresSize);
+		break;
+	case 2: 
+		printf(" ingrese ID del sector: ");
+		id = ScannerInt();
+		SectorModificarSector(gym->sectores, gym->sectoresSize,id);
+		break;
+	case 3:
+		SectorMostrarSector(gym->sectores, gym->sectoresSize);
+		break;
+	case 4:
+		printf(" ingrese ID del sector: ");
+		id = ScannerInt();
+		if (SectorBuscarSectorId(gym->sectores, gym->sectoresSize, id, 0) != -1)
+		{
+			printf(" sector encontrado. \n");
+		}
+		else
+		{
+			printf(" sector no encontrado. \n");
+		}
+		break;
+	case 5:
+		printf(" ingrese ID del sector: \n");
+		id = ScannerInt();
+		gym->sectores = SectorEliminarSector(gym->sectores, &gym->sectoresSize, id);
+		break;
+	case 6:
+		//exportara txt
+		break;
+	}
+
+}
+void MenuSecundarioAccionClase(Gym* gym, int accion)
+{
+	int id;
+	switch (accion)
+	{
+	case 1: 
+		gym->clases = ClaseAgregarClase(gym->clases, &gym->clasesSize);
+		break;
+	case 2: 
+		printf(" ingrese ID de la clase: ");
+	id= ScannerInt();
+		ClaseModificarClase(gym->clases, gym->clasesSize,id);
+		break;
+	case 3:
+		ClaseMostrarClase(gym->clases, gym->clasesSize);
+		break;
+	case 4:
+		printf(" ingrese ID de la clase: ");
+		id = ScannerInt();
+		if (ClaseBuscarClaseId(gym->clases, gym->clasesSize, id, 0) != -1)
+		{
+			printf(" clase encontrada. \n");
+		}
+		else
+		{
+			printf(" clase no encontrada. \n");
+		}
+		break;
+	case 5:
+		printf(" ingrese ID de la clase: ");
+		id = ScannerInt();
+		gym->clases = ClaseEliminarClase(gym->clases, &gym->clasesSize, id);
+		break;
+	case 6:
+		//exportara txt
+		break;
+	}
+
+}
+
+
+
 void Pausa(void)
 {
 	printf("\npresione enter para continuar\n");

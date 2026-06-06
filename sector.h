@@ -10,4 +10,6 @@ void SectorMostrarSector(Sector* sectores, int size);
 Sector* SectorAgregarSector(Sector* sector, int* size);
 int SectorBuscarSectorId(Sector* sectores, int size, int id, int i);
 void SectorModificarSector(Sector* sector, int size, int id);
+Sector* SectorEliminarSector(Sector* sectores, int* size, int id);
+void SectorExportarTxt(Sector* sectores, int size);
 #endif
