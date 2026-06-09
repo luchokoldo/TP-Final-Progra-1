@@ -134,3 +134,33 @@ void ClaseModificarClase(Clase* clase, int size, int id)
 
 	printf("\n Clase, horarios y duracion actualizados con exito\n");
 }
+Clase *ClaseEliminarClase(Clase* clase, int* size, int id)
+{
+	int posicion = ClaseBuscarClaseId(clase, size, id, 0);
+	if (posicion == -1)
+	{
+		printf("\n No se encontro la clase con el id: %d", id);
+			return clase;
+	}
+	for (int i = posicion; i < (*size) - 1; i++) {
+		clase[i] = clase[i + 1];
+	}
+
+	
+	(*size)--;
+
+	if (*size > 0) 
+	{
+		Clase* aux = realloc(clase, (*size) * sizeof(Clase));
+		if (aux != NULL) {
+			clase = aux;
+		}
+	}
+	else {
+		
+		free(clase);
+		clase = NULL;
+	}
+
+	return clase;
+}

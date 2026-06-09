@@ -76,3 +76,32 @@ void SectorModificarSector(Sector* sector, int size, int id)
 	printf("\n Nombre del sector cambiado con exito!");
 
 }
+Sector *SectorEliminarSector(Sector* sector, int* size, int id)
+{
+	int posicion = SectorBuscarSectorId(sector, size, id, 0);
+	if (posicion == -1)
+	{
+		printf("No se encontro el sector con el Id: %d", id);
+		return sector;
+	}
+	for (int i = posicion;i < (*size);i++)
+	{
+		sector[i] = sector[i + 1];
+	}
+	(*size)--;
+	if (*size > 0)
+	{
+		Sector* aux = realloc(sector, (*size) * sizeof(sector));
+		if(aux!=NULL)
+		{
+			sector = aux;
+		}
+	}
+	else
+	{
+		free(sector);
+			sector = NULL;
+	}
+
+	return sector;
+}

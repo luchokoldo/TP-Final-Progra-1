@@ -79,3 +79,34 @@ void EntrenadorModificarEntrenador(Entrenador* entrenador, int size, int id)
 	printf("\n Nombre cambiado con Exito");
 
 }
+ Entrenador *EntrenadorEliminarEntrenador(Entrenador* entrenador, int* size, int id)
+{
+	int posicion = EntrenadorBuscarEntrenadorId(entrenador, size, id, 0);
+	if (posicion == -1)
+	{
+		printf("No se encontro el entrenador con el Id: %d", id);
+		return entrenador;
+	}
+	for (int i = posicion; i < (*size);i++)
+	{
+		entrenador[i] = entrenador[i + 1];
+
+	}
+	(*size)--;
+	if (*size > 0)
+	{
+		Entrenador* aux = realloc(entrenador, (*size) * sizeof(entrenador));
+		if (aux != NULL)
+		{
+			entrenador = aux;
+		}
+	}
+	else {
+		
+		free(entrenador);
+			entrenador = NULL;
+
+		}
+	
+	return entrenador;
+}

@@ -10,7 +10,7 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int* size)
 	printf("\nIngrese el Id del cliente: ");
 	nuevo.id = ScannerInt();
 	printf("\nIngrese el nombre del cliente : ");
-	ScannerString(&nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 	printf("\nIngrese el genero del cliente:");
 	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
 	Cliente* aux = realloc(clientes, (*size + 1) * sizeof(Cliente));
@@ -88,4 +88,34 @@ void ClienteModificarCliente(Cliente* cliente, int size, int id)
 		printf(" Ingrese el nuevo genero del cliente: ");
 		ScannerString(cliente[posicion].genero, GET_CHARSMAX(cliente[posicion].genero));
 		printf("\n Cliente modificado con exito");
+}
+Cliente *ClienteEliminarcliente(Cliente* cliente, int* size, int id)
+{
+	int posicion = ClienteBuscarClienteId(cliente,size,id, 0);
+	if (posicion == -1)
+	{
+		printf("No se encontro al cliente con el Id: %d", id);
+		return cliente;
+	}
+	for (int i = posicion; i < (*size);i++)
+	{
+		cliente[i] = cliente[i + 1];
+	}
+	(*size)--;
+
+	if (*size > 0)
+	{
+		Cliente * aux = realloc(cliente, (*size) * sizeof(Cliente));
+		if (aux != NULL) {
+			cliente = aux;
+		}
+	}
+	else
+	{
+		free(cliente);
+			cliente = NULL;
+	}
+	return cliente;
+
+
 }
