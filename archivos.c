@@ -1,12 +1,21 @@
 #define _CRT_SECURE_NO_WARNINGS
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <string.h>
 #include "archivos.h"
 
-#define ARCHIVO_ENTRENADORES	"Entrenadores.bin"
-#define ARCHIVO_SECTORES	"Sectores.bin"
-#define ARCHIVO_CLASES		"Clases.bin"
-#define ARCHIVO_CLIENTES	"Clientes.bin"
+#define ARCHIVO_ENTRENADORES		"Entrenadores.bin"
+#define ARCHIVO_SECTORES			"Sectores.bin"
+#define ARCHIVO_CLASES				"Clases.bin"
+#define ARCHIVO_CLIENTES			"Clientes.bin"
+
+#define ARCHIVO_ENTRENADORES_TXT	"Entrenadores"
+#define ARCHIVO_SECTORES_TXT		"Sectores"
+#define ARCHIVO_CLASES_TXT			"Clases"
+#define ARCHIVO_CLIENTES_TXT		"Clientes"
+#define ARCHIVO_NOMBRE_SIZE_TXT		64
 
 static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size);
 static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size);
@@ -20,10 +29,25 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 
 void ArchivoGuardarGym(Gym* gym)
 {
-	ArchivoGuardarEntrenadores(ARCHIVO_ENTRENADORES, gym->entrenadores, gym->entrenadoresSize);
-	ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->entrenadoresSize);
-	ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->entrenadoresSize);
-	ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->entrenadoresSize);
+	if (gym->entrenadores != NULL)
+	{
+		ArchivoGuardarEntrenadores(ARCHIVO_ENTRENADORES, gym->entrenadores, gym->entrenadoresSize);
+	}
+
+	if (gym->sectores != NULL)
+	{
+		ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->entrenadoresSize);
+	}
+	
+	if (gym->clases != NULL)
+	{
+		ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->entrenadoresSize);
+	}
+	
+	if (gym->clientes != NULL)
+	{
+		ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->entrenadoresSize);
+	}
 }
 
 void ArchivoCargarGym(Gym* gym)
@@ -466,22 +490,233 @@ void ArchivoBorrarCliente(Cliente* cliente)
 	fclose(f);
 }
 
+void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size)
+{
+	time_t now = time(NULL);
+	struct tm* tm = localtime(&now);
+	char nombreArchivo[ARCHIVO_NOMBRE_SIZE_TXT];
+	
+	snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d.txt", ARCHIVO_ENTRENADORES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900);
+
+	FILE* f = fopen(nombreArchivo, "r");
+
+	if (f != NULL)
+	{
+		int i = 0;
+
+		do
+		{
+			fclose(f);
+
+			snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d_%d.txt", ARCHIVO_ENTRENADORES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900, ++i);
+
+			f = fopen(nombreArchivo, "r");
+		} while (f != NULL);
+	}
+
+	f = fopen(nombreArchivo, "w");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+
+		return;
+	}
+
+	fprintf(f, "/t%s\n", ARCHIVO_ENTRENADORES_TXT);
+
+	for (int i = 0; i < size; i++)
+	{
+		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "\nID: %d", entrenadores[i].id);
+		fprintf(f, "\nNombre: %s", entrenadores[i].nombre);
+		fprintf(f, "\nGenero: %s", entrenadores[i].genero);
+		fprintf(f, "\n--------------------------------------\n");
+	}
+
+	fclose(f);
+}
+
+void ArchivoExportarSectores(Sector* sectores, int size)
+{
+	time_t now = time(NULL);
+	struct tm* tm = localtime(&now);
+	char nombreArchivo[ARCHIVO_NOMBRE_SIZE_TXT];
+
+	snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d.txt", ARCHIVO_SECTORES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900);
+
+	FILE* f = fopen(nombreArchivo, "r");
+
+	if (f != NULL)
+	{
+		int i = 0;
+
+		do
+		{
+			fclose(f);
+
+			snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d_%d.txt", ARCHIVO_SECTORES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900, ++i);
+
+			f = fopen(nombreArchivo, "r");
+		} while (f != NULL);
+	}
+
+	f = fopen(nombreArchivo, "w");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+
+		return;
+	}
+
+	fprintf(f, "/t%s\n", ARCHIVO_SECTORES_TXT);
+
+	for (int i = 0; i < size; i++)
+	{
+		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "\nID: %d", sectores[i].id);
+		fprintf(f, "\nNombre: %s\n", sectores[i].nombre);
+		fprintf(f, "\n--------------------------------------\n");
+	}
+
+	fclose(f);
+}
+
+void ArchivoExportarClases(Clase* clases, int size)
+{
+	time_t now = time(NULL);
+	struct tm* tm = localtime(&now);
+	char nombreArchivo[ARCHIVO_NOMBRE_SIZE_TXT];
+
+	snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d.txt", ARCHIVO_CLASES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900);
+
+	FILE* f = fopen(nombreArchivo, "r");
+
+	if (f != NULL)
+	{
+		int i = 0;
+
+		do
+		{
+			fclose(f);
+
+			snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d_%d.txt", ARCHIVO_CLASES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900, ++i);
+
+			f = fopen(nombreArchivo, "r");
+		} while (f != NULL);
+	}
+
+	f = fopen(nombreArchivo, "w");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+
+		return;
+	}
+
+	fprintf(f, "/t%s\n", ARCHIVO_CLASES_TXT);
+
+	for (int i = 0; i < size; i++)
+	{
+		fprintf(f, "\n-------------------------------------\n");
+		fprintf(f, "\nId de la clase: %d", clases[i].id);
+		fprintf(f, "\nClase: %s", clases[i].nombre);
+		fprintf(f, "\nId entrenador: %d", clases[i].idEntrenador);
+		fprintf(f, "\nId sector: %d ", clases[i].idSector);
+		fprintf(f, "\nClientes: ");
+
+		if (clases[i].idClientesValidos > 0)
+		{
+			for (int j = 0; j < clases[i].idClientesValidos; j++)
+			{
+				fprintf(f, "%d, ", clases[i].idClientes[j]);
+			}
+
+			fprintf(f, "\b\b\n");
+		}
+		else
+		{
+			printf("Sin clientes asignados.\n");
+		}
+
+		fprintf(f, "\n--------------------------------------\n");
+	}
+
+	fclose(f);
+}
+
+void ArchivoExportarClientes(Cliente* clientes, int size)
+{
+	time_t now = time(NULL);
+	struct tm* tm = localtime(&now);
+	char nombreArchivo[ARCHIVO_NOMBRE_SIZE_TXT];
+
+	snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d.txt", ARCHIVO_CLIENTES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900);
+
+	FILE* f = fopen(nombreArchivo, "r");
+
+	if (f != NULL)
+	{
+		int i = 0;
+
+		do
+		{
+			fclose(f);
+
+			snprintf(nombreArchivo, ARCHIVO_NOMBRE_SIZE_TXT, "%s_%02d%02d%04d_%d.txt", ARCHIVO_CLIENTES_TXT, tm->tm_mday, tm->tm_mon + 1, tm->tm_year + 1900, ++i);
+
+			f = fopen(nombreArchivo, "r");
+		} while (f != NULL);
+	}
+
+	f = fopen(nombreArchivo, "w");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+
+		return;
+	}
+
+	fprintf(f, "/t%s\n", ARCHIVO_CLIENTES_TXT);
+
+	for (int i = 0; i < size; i++)
+	{
+		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "\nID: %d", clientes[size - 1].id);
+		fprintf(f, "\nNombre: %s", clientes[size - 1].nombre);
+		fprintf(f, "\nGenero: %s", clientes[size - 1].genero);
+		fprintf(f, "\nClases: ");
+		
+		if (clientes[i].idClasesValidos > 0)
+		{
+			for (int j = 0; j < clientes[i].idClasesValidos; j++)
+			{
+				fprintf(f, "%d, ", clientes[i].idClases[j]);
+			}
+
+			fprintf(f, "\b\b\n");
+		}
+		else
+		{
+			fprintf(f, "Sin clases asignadas.\n");
+		}
+		
+		fprintf(f, "\n--------------------------------------\n");
+	}
+
+	fclose(f);
+}
+
 static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
 
 	if (f == NULL)
 	{
-		Entrenador* aux = calloc(1, sizeof(Entrenador));
-
-		if (aux == NULL)
-		{
-			printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
-
-			return NULL;
-		}
-
-		return aux;
+		return NULL;
 	}
 
 	Entrenador* aux = calloc(1, sizeof(Entrenador));
@@ -527,16 +762,7 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 	if (f == NULL)
 	{
-		Sector* aux = calloc(1, sizeof(Sector));
-
-		if (aux == NULL)
-		{
-			printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
-
-			return NULL;
-		}
-
-		return aux;
+		return NULL;
 	}
 
 	Sector* aux = calloc(1, sizeof(Sector));
@@ -582,16 +808,7 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 	if (f == NULL)
 	{
-		Clase* aux = calloc(1, sizeof(Clase));
-
-		if (aux == NULL)
-		{
-			printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
-
-			return NULL;
-		}
-
-		return aux;
+		return NULL;
 	}
 
 	Clase* aux = calloc(1, sizeof(Clase));
@@ -637,16 +854,7 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 
 	if (f == NULL)
 	{
-		Cliente* aux = calloc(1, sizeof(Cliente));
-
-		if (aux == NULL)
-		{
-			printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
-
-			return NULL;
-		}
-
-		return aux;
+		return NULL;
 	}
 
 	Cliente* aux = calloc(1, sizeof(Cliente));

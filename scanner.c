@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +15,7 @@ static void limpiarBuferDeEntrada(void)
 int ScannerConfirmar(char condicion)
 {
 	char aux = '\0';
-	scanf_s("%c", &aux);
+	scanf("%c", &aux);
 	limpiarBuferDeEntrada();
 	return tolower(aux) == tolower(condicion);
 }
@@ -22,7 +23,7 @@ int ScannerConfirmar(char condicion)
 int ScannerInt(void)
 {
 	int aux = 0;
-	scanf_s("%d", &aux);
+	scanf("%d", &aux);
 	limpiarBuferDeEntrada();
 	return aux;
 }
@@ -30,7 +31,7 @@ int ScannerInt(void)
 float ScannerFloat(void)
 {
 	float aux = 0;
-	scanf_s("%f", &aux);
+	scanf("%f", &aux);
 	limpiarBuferDeEntrada();
 	return aux;
 }
@@ -38,7 +39,7 @@ float ScannerFloat(void)
 double ScannerDouble(void)
 {
 	double aux = 0;
-	scanf_s("%lf", &aux);
+	scanf("%lf", &aux);
 	limpiarBuferDeEntrada();
 	return aux;
 }
@@ -49,7 +50,9 @@ int ScannerString(char* string, int maxLength)
 	{
 		return -1;
 	}
+
 	int ult = strlen(string) - 1;
+
 	if (string[ult] == '\n')
 	{
 		string[ult] = '\0';
@@ -58,5 +61,6 @@ int ScannerString(char* string, int maxLength)
 	{
 		limpiarBuferDeEntrada();
 	}
+
 	return strlen(string);
 }

@@ -21,4 +21,9 @@ void ArchivoBorrarSector(Sector* sector);
 void ArchivoBorrarClase(Clase* clase);
 void ArchivoBorrarCliente(Cliente* cliente);
 
+void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size);
+void ArchivoExportarSectores(Sector* sectores, int size);
+void ArchivoExportarClases(Clase* clases, int size);
+void ArchivoExportarClientes(Cliente* clientes, int size);
+
 #endif
