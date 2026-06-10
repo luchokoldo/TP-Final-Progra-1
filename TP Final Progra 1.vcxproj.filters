@@ -20,19 +20,19 @@
     <ClCompile Include="archivos.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="entrenador.c">
+    <ClCompile Include="clase.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="cliente.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="clase.c">
-      <Filter>Archivos de origen</Filter>
-    </ClCompile>
-    <ClCompile Include="sector.c">
+    <ClCompile Include="entrenador.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
     <ClCompile Include="scanner.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="sector.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,6 +56,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="sector.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="utilidades.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="scanner.h">

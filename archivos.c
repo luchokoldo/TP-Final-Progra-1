@@ -36,17 +36,17 @@ void ArchivoGuardarGym(Gym* gym)
 
 	if (gym->sectores != NULL)
 	{
-		ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->entrenadoresSize);
+		ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->sectoresSize);
 	}
 	
 	if (gym->clases != NULL)
 	{
-		ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->entrenadoresSize);
+		ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->clasesSize);
 	}
 	
 	if (gym->clientes != NULL)
 	{
-		ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->entrenadoresSize);
+		ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->clientesSize);
 	}
 }
 
@@ -277,7 +277,7 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, ++size * sizeof(Entrenador));
+			aux = realloc(aux, ++size * sizeof(Entrenador));
 
 			if (aux == NULL)
 			{
@@ -339,7 +339,7 @@ void ArchivoBorrarSector(Sector* sector)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, ++size * sizeof(Sector));
+			aux = realloc(aux, ++size * sizeof(Sector));
 
 			if (aux == NULL)
 			{
@@ -401,7 +401,7 @@ void ArchivoBorrarClase(Clase* clase)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, ++size * sizeof(Clase));
+			aux = realloc(aux, ++size * sizeof(Clase));
 
 			if (aux == NULL)
 			{
@@ -463,7 +463,7 @@ void ArchivoBorrarCliente(Cliente* cliente)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, ++size * sizeof(Cliente));
+			aux = realloc(aux, ++size * sizeof(Cliente));
 
 			if (aux == NULL)
 			{
@@ -738,7 +738,7 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, (*size + 1) * sizeof(Entrenador));
+			aux = realloc(aux, (*size + 1) * sizeof(Entrenador));
 
 			if (aux == NULL)
 			{
@@ -784,7 +784,7 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, (*size + 1) * sizeof(Sector));
+			aux = realloc(aux, (*size + 1) * sizeof(Sector));
 
 			if (aux == NULL)
 			{
@@ -830,7 +830,7 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, (*size + 1) * sizeof(Clase));
+			aux = realloc(aux, (*size + 1) * sizeof(Clase));
 
 			if (aux == NULL)
 			{
@@ -876,7 +876,7 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 
 		if (feof(f) == 0)
 		{
-			realloc(&aux, (*size + 1) * sizeof(Cliente));
+			aux = realloc(aux, (*size + 1) * sizeof(Cliente));
 
 			if (aux == NULL)
 			{
@@ -905,7 +905,7 @@ static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenad
 		return;
 	}
 
-	fwrite(&entrenadores, sizeof(Entrenador), (size_t)size, f);
+	fwrite(entrenadores, sizeof(Entrenador), (size_t)size, f);
 
 	fclose(f);
 }
@@ -921,7 +921,7 @@ static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int si
 		return;
 	}
 
-	fwrite(&sectores, sizeof(Sector), (size_t)size, f);
+	fwrite(sectores, sizeof(Sector), (size_t)size, f);
 
 	fclose(f);
 }
@@ -937,7 +937,7 @@ static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size)
 		return;
 	}
 
-	fwrite(&clases, sizeof(Clase), (size_t)size, f);
+	fwrite(clases, sizeof(Clase), (size_t)size, f);
 
 	fclose(f);
 }
@@ -953,7 +953,7 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 		return;
 	}
 
-	fwrite(&clientes, sizeof(Cliente), (size_t)size, f);
+	fwrite(clientes, sizeof(Cliente), (size_t)size, f);
 
 	fclose(f);
 }
