@@ -7,19 +7,35 @@
 Sector* SectorAgregarSector(Sector* sector, int* size)
 {
 	Sector nuevo;
-	printf("\nIngrese el nombre del sector: ");
+	printf("\nIngrese el nombre: ");
 	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
-	printf("Ingrese el id del sector: ");
+	printf("Ingrese el id: ");
 	nuevo.id = ScannerInt();
 
-	Sector* aux = realloc(sector, (*size+1) * sizeof(Sector));
+	Sector* aux = NULL;
 
-	if (aux == NULL)
+	if (sector == NULL)
 	{
-		printf("Error de memoria\n");
-		return sector;
-	}
+		aux = calloc(1, sizeof(Sector));
 
+		if (aux == NULL)
+		{
+			printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL");
+
+			return NULL;
+		}
+	}
+	else
+	{
+		aux = realloc(sector, (*size + 1) * sizeof(Sector));
+
+		if (aux == NULL)
+		{
+			printf("[ERROR] realloc(sector, (*size + 1) * sizeof(Sector)) devolvio NULL");
+
+			return NULL;
+		}
+	}
 	aux[*size] = nuevo;
 
 	(*size)++;
@@ -36,8 +52,8 @@ void SectorMostrarSector(Sector* sectores, int size)
 	}
 	SectorMostrarSector(sectores, size - 1);
 	printf("\n--------------------------------------");
-	printf("\n ID: %d", sectores[size - 1].id);
-	printf("\n Nombre: %s", sectores[size - 1].nombre);
+	printf("\nID: %d", sectores[size - 1].id);
+	printf("\nNombre: %s", sectores[size - 1].nombre);
 	printf("\n--------------------------------------\n");
 
 
@@ -62,46 +78,52 @@ void SectorModificarSector(Sector* sector, int size, int id)
 
 	if (posicion == -1)
 	{
-		printf("No se encontro ninguna sector con el ID: %d\n", id);
+		printf("\nNo se encontro ninguna sector con el ID: %d\n", id);
 		return;
 	}
 
 
 	printf("\n--- Modificando sector ID: %d ---", id);
-	printf("\n Nombre actual: %s", sector[posicion].nombre);
+	printf("\nNombre actual: %s", sector[posicion].nombre);
 	printf("---------------------------------------\n");
 
-	printf("\nIngrese el nuevo nombre del sector:");
+	printf("\nIngrese el nuevo nombre:");
 	ScannerString(sector[posicion].nombre, GET_CHARSMAX(sector[posicion].nombre));
-	printf("\n Nombre del sector cambiado con exito!");
+	printf("\nNombre del sector cambiado con exito!");
 
 }
 Sector *SectorEliminarSector(Sector* sector, int* size, int id)
 {
-	int posicion = SectorBuscarSectorId(sector, size, id, 0);
+	int posicion = SectorBuscarSectorId(sector, *size, id, 0);
 	if (posicion == -1)
 	{
 		printf("No se encontro el sector con el Id: %d", id);
 		return sector;
 	}
-	for (int i = posicion;i < (*size);i++)
+	if (*size > 1)
 	{
-		sector[i] = sector[i + 1];
-	}
-	(*size)--;
-	if (*size > 0)
-	{
-		Sector* aux = realloc(sector, (*size) * sizeof(sector));
-		if(aux!=NULL)
+		for (int i = posicion; i < (*size)-1; i++)
 		{
-			sector = aux;
+			sector[i] = sector[i + 1];
 		}
 	}
 	else
 	{
 		free(sector);
-			sector = NULL;
+
+		return NULL;
 	}
 
-	return sector;
+	(*size)--;
+
+	Sector* aux = realloc(sector, (*size) * sizeof(Sector));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] realloc(sector, (*size) * sizeof(Sector)) devolvio NULL");
+
+		return NULL;
+	}
+
+	return aux;
 }

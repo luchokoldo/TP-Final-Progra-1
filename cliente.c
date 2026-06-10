@@ -7,33 +7,54 @@
 Cliente* ClienteAgregarCliente(Cliente* clientes, int* size)
 {
 	Cliente nuevo;
-	printf("\nIngrese el Id del cliente: ");
+
+	printf("\nIngrese el Id : ");
 	nuevo.id = ScannerInt();
-	printf("\nIngrese el nombre del cliente : ");
+
+	printf("Ingrese el nombre: ");
 	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
-	printf("\nIngrese el genero del cliente:");
+
+	printf("Ingrese el genero: ");
 	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
-	Cliente* aux = realloc(clientes, (*size + 1) * sizeof(Cliente));
 
-	if (aux == NULL)
+	Cliente* aux = NULL;
+
+	if (clientes == NULL)
 	{
-		printf("Error de memoria\n");
-		return clientes;
-	}
+		aux = calloc(1, sizeof(Cliente));
 
+		if (aux == NULL)
+		{
+			printf("[ERROR] calloc(1, sizeof(clientes)) devolvio NULL");
+
+			return NULL;
+		}
+	}
+	else
+	{
+		aux = realloc(clientes, (*size + 1) * sizeof(Cliente));
+
+		if (aux == NULL)
+		{
+			printf("[ERROR] realloc(clientes, (*size + 1) * sizeof(Cliente)) devolvio NULL");
+
+			return NULL;
+		}
+	}
 	aux[*size] = nuevo;
 
 	(*size)++;
 
 	return aux;
-
 }
+
 void ClienteMostrarCliente(Cliente* clientes, int size)
 {
 	if (size <= 0)
 	{
 		return;
 	}
+
 	ClienteMostrarCliente(clientes, size - 1);
 
 	printf("\n--------------------------------------\n");
@@ -41,14 +62,22 @@ void ClienteMostrarCliente(Cliente* clientes, int size)
 	printf("\nNombre: %s", clientes[size - 1].nombre);
 	printf("\nGenero: %s", clientes[size - 1].genero);
 	printf("\nClases: ");
-	for (int z = 0; z < clientes[size - 1].idClasesValidos; z++)
+
+	if (clientes[size - 1].idClasesValidos > 0)
 	{
-		printf("%d, ", clientes[size - 1].idClases[z]);
+		for (int j = 0; j < clientes[size - 1].idClasesValidos; j++)
+		{
+			printf("%d,", clientes[size - 1].idClases[j]);
+		}
 
+		printf("\b\b. \n");
 	}
-	printf("\b\b.\n");
-	printf("\n--------------------------------------\n");
+	else
+	{
+		printf("Sin clases asignadas.\n");
+	}
 
+	printf("\n--------------------------------------\n");
 }
 
 int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
@@ -67,55 +96,68 @@ int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
 
 	return ClienteBuscarClienteId(cliente, size, id, i);
 }
+
 void ClienteModificarCliente(Cliente* cliente, int size, int id)
 {
 	int posicion = ClienteBuscarClienteId(cliente, size, id, 0);
+
 		if (posicion == -1)
 		{
 			printf("\nno se encontro el cliente con el id: %d\n", id);
+
 				return;
 		}
+
 		printf("--Modificar cliente Id: %d--\n", id);
-		printf("\nNombre del cliente: %s", cliente[posicion].nombre);
+		printf("\nNombre: %s", cliente[posicion].nombre);
 		printf("\nGenero: %s", cliente[posicion].genero);
 		printf("\nClases validas: %d", cliente[posicion].idClasesValidos);
 		printf("-------------------------------------------------\n");
 		
 		
-		printf(" Ingrese el nuevo nombre del cliente: ");
+		printf("Ingrese el nuevo nombre: ");
 		ScannerString(cliente[posicion].nombre, GET_CHARSMAX(cliente[posicion].nombre));
 
-		printf(" Ingrese el nuevo genero del cliente: ");
+		printf("Ingrese el nuevo genero : ");
 		ScannerString(cliente[posicion].genero, GET_CHARSMAX(cliente[posicion].genero));
-		printf("\n Cliente modificado con exito");
+
+		printf("\nCliente modificado con exito");
 }
+
 Cliente *ClienteEliminarcliente(Cliente* cliente, int* size, int id)
 {
-	int posicion = ClienteBuscarClienteId(cliente,size,id, 0);
+	int posicion = ClienteBuscarClienteId(cliente,*size,id, 0);
+
 	if (posicion == -1)
 	{
 		printf("No se encontro al cliente con el Id: %d", id);
+
 		return cliente;
 	}
-	for (int i = posicion; i < (*size);i++)
+	if (*size > 1)
 	{
-		cliente[i] = cliente[i + 1];
-	}
-	(*size)--;
-
-	if (*size > 0)
-	{
-		Cliente * aux = realloc(cliente, (*size) * sizeof(Cliente));
-		if (aux != NULL) {
-			cliente = aux;
+		for (int i = posicion; i < (*size)-1 ; i++)
+		{
+			cliente[i] = cliente[i + 1];
 		}
 	}
 	else
 	{
 		free(cliente);
-			cliente = NULL;
+
+		return NULL;
 	}
-	return cliente;
 
+	(*size)--;
 
+	Cliente* aux = realloc(cliente, (*size) * sizeof(Cliente));
+
+	if (aux == NULL)
+	{
+		printf("[ERROR] realloc(cliente, (*size) * sizeof(Cliente)) devolvio NULL");
+
+		return NULL;
+	}
+
+	return aux;
 }
