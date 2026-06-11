@@ -10,6 +10,7 @@
 #define ARCHIVO_SECTORES			"Sectores.bin"
 #define ARCHIVO_CLASES				"Clases.bin"
 #define ARCHIVO_CLIENTES			"Clientes.bin"
+#define ARCHIVO_IDS					"Ids.bin"
 
 #define ARCHIVO_ENTRENADORES_TXT	"Entrenadores"
 #define ARCHIVO_SECTORES_TXT		"Sectores"
@@ -21,11 +22,13 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size);
 static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size);
 static Clase* ArchivoCargarClases(char* nombreArchivo, int* size);
 static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size);
+static GymIds ArchivoCargarIds(char* nombreArchivo);
 
 static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int size);
 static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int size);
 static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size);
 static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int size);
+static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids);
 
 void ArchivoGuardarGym(Gym* gym)
 {
@@ -48,6 +51,8 @@ void ArchivoGuardarGym(Gym* gym)
 	{
 		ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->clientesSize);
 	}
+
+	ArchivoGuardarIds(ARCHIVO_IDS, &gym->ids);
 }
 
 void ArchivoCargarGym(Gym* gym)
@@ -56,6 +61,7 @@ void ArchivoCargarGym(Gym* gym)
 	gym->sectores = ArchivoCargarSectores(ARCHIVO_SECTORES, &gym->sectoresSize);
 	gym->clases = ArchivoCargarClases(ARCHIVO_CLASES, &gym->clasesSize);
 	gym->clientes = ArchivoCargarClientes(ARCHIVO_CLIENTES, &gym->clientesSize);
+	gym->ids = ArchivoCargarIds(ARCHIVO_IDS);
 }
 
 void ArchivoAgregarEntrenador(Entrenador* entrenador)
@@ -710,6 +716,11 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 	fclose(f);
 }
 
+void ArchivoActualizarIds(GymIds* ids)
+{
+	ArchivoGuardarIds(ARCHIVO_IDS, ids);
+}
+
 static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 {
 	FILE* f = fopen(nombreArchivo, "rb");
@@ -894,6 +905,22 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 	return aux;
 }
 
+static GymIds ArchivoCargarIds(char* nombreArchivo)
+{
+	FILE* f = fopen(nombreArchivo, "rb");
+
+	GymIds ids = { 0 };
+
+	if (f == NULL)
+	{
+		return ids;
+	}
+
+	fread(&ids, sizeof(GymIds), 1, f);
+
+	return ids;
+}
+
 static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenadores, int size)
 {
 	FILE* f = fopen(nombreArchivo, "wb");
@@ -954,6 +981,22 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 	}
 
 	fwrite(clientes, sizeof(Cliente), (size_t)size, f);
+
+	fclose(f);
+}
+
+static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids)
+{
+	FILE* f = fopen(nombreArchivo, "wb");
+
+	if (f == NULL)
+	{
+		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+
+		return;
+	}
+
+	fwrite(ids, sizeof(GymIds), 1, f);
 
 	fclose(f);
 }

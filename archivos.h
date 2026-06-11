@@ -26,4 +26,6 @@ void ArchivoExportarSectores(Sector* sectores, int size);
 void ArchivoExportarClases(Clase* clases, int size);
 void ArchivoExportarClientes(Cliente* clientes, int size);
 
+void ArchivoActualizarIds(GymIds* ids);
+
 #endif
