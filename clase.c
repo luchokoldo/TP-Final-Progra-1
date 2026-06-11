@@ -20,7 +20,7 @@ Clase* ClaseAgregarClase(Clase* clases, int* size)
 	printf("Ingrese la hora de inicio: ");
 	nuevo.inicio.horas = ScannerInt();
 
-	printf("Iingrese minutos: ");
+	printf("Ingrese minutos: ");
 	nuevo.inicio.minutos = ScannerInt();
 	nuevo.inicio.esValido = 1;
 
