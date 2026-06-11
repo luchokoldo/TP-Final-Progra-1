@@ -2,6 +2,6 @@
 #define _MENU_H_INCLUDED
 
 #include "gym.h"
-void MostrarMenu(Gym* gym);
+void MenuMostrarMenu(Gym* gym);
 
 #endif

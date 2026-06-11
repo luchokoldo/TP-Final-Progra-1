@@ -12,7 +12,7 @@ int main()
 
 	ArchivoCargarGym(&gym);
 
-	MostrarMenu(&gym);
+	MenuMostrarMenu(&gym);
 
 	ArchivoGuardarGym(&gym);
 
