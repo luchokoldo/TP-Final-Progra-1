@@ -1,5 +1,5 @@
-#ifndef _ARCHIVOS_INCLUDED
-#define _ARCHIVOS_INCLUDED
+#ifndef _ARCHIVOS_H_INCLUDED
+#define _ARCHIVOS_H_INCLUDED
 
 #include "gym.h"
 
