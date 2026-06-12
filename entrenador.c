@@ -143,7 +143,7 @@ void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenadores, int size, int i
 	snprintf(genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", entrenadores[index].genero);
 }
 
-void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char* nombresEntrenadores, int* idsEntrenadores)
+void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores)
 {
 	for (int i = 0; i < size; i++)
 	{
