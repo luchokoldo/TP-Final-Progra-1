@@ -4,6 +4,8 @@
 #include "scanner.h"
 #include "utilidades.h"
 
+static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i);
+
 Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int id, char* nombre, char* genero)
 {
 	Entrenador nuevo = { 0 };
@@ -45,21 +47,14 @@ void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size)
 	printf("\n--------------------------------------\n");
 }
 
-int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id, int i)
+int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
 {
-	if (i >= size)
+	if (id < 0 || id >= size)
 	{
 		return ENTRENADOR_ID_INVALIDO;
 	}
 
-	if (entrenadores[i].id == id)
-	{
-		return i;
-	}
-
-	i++;
-
-	return EntrenadorBuscarEntrenadorId(entrenadores, size, id, i);
+	return EntrenadorBuscarId(entrenadores, size, id, 0);
 }
 
 Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int id)
@@ -178,4 +173,21 @@ void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int
 	}
 
 	snprintf(entrenadores[index].genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", generoNuevo);
+}
+
+static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
+{
+	if (i >= size)
+	{
+		return ENTRENADOR_ID_INVALIDO;
+	}
+
+	if (entrenadores[i].id == id)
+	{
+		return i;
+	}
+
+	i++;
+
+	return EntrenadorBuscarEntrenadorId(entrenadores, size, id, i);
 }
