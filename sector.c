@@ -4,14 +4,15 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Sector* SectorAgregarSector(Sector* sector, int* size)
+Sector* SectorAgregarSector(Sector* sector, int* size, int *id)
 {
 	Sector nuevo;
+
+	nuevo.id = *id + 1;
+
 	printf("\nIngrese el nombre: ");
 	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
-	printf("Ingrese el id: ");
-	nuevo.id = ScannerInt();
-
+	
 	Sector* aux = NULL;
 
 	if (sector == NULL)
@@ -39,6 +40,7 @@ Sector* SectorAgregarSector(Sector* sector, int* size)
 	aux[*size] = nuevo;
 
 	(*size)++;
+	(*id)++;
 
 	return aux;
 

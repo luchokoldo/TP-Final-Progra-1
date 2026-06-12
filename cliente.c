@@ -4,12 +4,11 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Cliente* ClienteAgregarCliente(Cliente* clientes, int* size)
+Cliente* ClienteAgregarCliente(Cliente* clientes, int* size, int *id)
 {
 	Cliente nuevo;
 
-	printf("\nIngrese el Id : ");
-	nuevo.id = ScannerInt();
+	nuevo.id = *id + 1;
 
 	printf("Ingrese el nombre: ");
 	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
@@ -44,6 +43,7 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int* size)
 	aux[*size] = nuevo;
 
 	(*size)++;
+	(*id)++;
 
 	return aux;
 }
@@ -160,4 +160,12 @@ Cliente *ClienteEliminarcliente(Cliente* cliente, int* size, int id)
 	}
 
 	return aux;
+}
+void ClienteAgregarClase(Cliente* cliente, int idClase)
+{
+
+}
+void ClienteElimarClase(Cliente* cliente, int idClase)
+{
+
 }

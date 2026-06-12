@@ -1,18 +1,24 @@
 #ifndef _CLIENTE_H_INCLUDED
 #define _CLIENTE_H_INCLUDED
 
+#define MAX_NOMBRE_CLIENTE_SIZE 64
+#define MAX_GENERO_CLIENTE_SIZE 32
+#define MAX_ID_CLIENTE_SIZE 32
+
 typedef struct Cliente
 {
     int id;
-    char nombre[64];
-    char genero[32];
-    int idClases[32];
+    char nombre[MAX_NOMBRE_CLIENTE_SIZE];
+    char genero[MAX_GENERO_CLIENTE_SIZE];
+    int idClases[MAX_ID_CLIENTE_SIZE];
     int idClasesValidos;
 } Cliente;
+
+Cliente* ClienteAgregarCliente(Cliente* clientes, int* size, int *id);
 void ClienteMostrarCliente(Cliente* clientes, int size);
-Cliente* ClienteAgregarCliente(Cliente* clientes, int* size);
 int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i);
 void ClienteModificarCliente(Cliente* cliente, int size, int id);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int* size, int id);
 void ClienteExportarTxt(Cliente* clientes, int size);
+
 #endif

@@ -4,15 +4,14 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Clase* ClaseAgregarClase(Clase* clases, int* size)
+Clase* ClaseAgregarClase(Clase* clases, int* size, int *id)
 {
 	Clase nuevo;
 
-	printf("\nIngrese el nombre: ");
-	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	nuevo.id = *id + 1;
 
-	printf("\nIngrese el id : ");
-	nuevo.id = ScannerInt();
+	printf("\nIngrese  el nombre: ");
+	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
 
 	printf("Ingrese el precio:$ ");
 	nuevo.precio = ScannerDouble();
@@ -62,6 +61,7 @@ Clase* ClaseAgregarClase(Clase* clases, int* size)
 	aux[*size] = nuevo;
 
 	(*size)++;
+	(*id)++;
 
 	return aux;
 }
@@ -198,4 +198,176 @@ Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
 	}
 
 	return aux;
+}
+void ClaseAgregarCliente(Clase* clase, int idCliente)
+{
+	if (clase == NULL)
+	{
+		return;
+	}
+
+	if (clase->idClientesValidos >= MAX_ID_CLIENTE_SIZE)
+	{
+		printf("[ERROR] La clase '%s' ya alcanzo el limite maximo de clientes (%d).\n",clase->nombre, MAX_ID_CLIENTE_SIZE);
+
+		return;
+	}
+
+	for (int i = 0; i < clase->idClientesValidos; i++)
+	{
+		if (clase->idClientes[i] == idCliente)
+		{
+			printf("El cliente con ID %d ya se encuentra inscrito en esta clase.\n", idCliente);
+
+			return;
+		}
+	}
+
+	clase->idClientes[clase->idClientesValidos] = idCliente;
+	clase->idClientesValidos++;
+
+	printf("Cliente %d agregado a la clase '%s'.\n", idCliente, clase->nombre);
+}
+
+void ClaseEliminarCliente(Clase* clase, int idCliente)
+{
+	if (clase == NULL || clase->idClientesValidos == 0)
+	{
+		printf("La clase no contiene clientes inscriptos.\n");
+
+		return;
+	}
+
+	int posicion = -1;
+
+	for (int i = 0; i < clase->idClientesValidos; i++)
+	{
+		if (clase->idClientes[i] == idCliente)
+		{
+			posicion = i;
+
+			break;
+		}
+	}
+
+	if (posicion == -1)
+	{
+		printf("No se encontro al cliente %d en la clase '%s'.\n", idCliente, clase->nombre);
+
+		return;
+	}
+
+	for (int i = posicion; i < clase->idClientesValidos - 1; i++)
+	{
+		clase->idClientes[i] = clase->idClientes[i + 1];
+	}
+
+	clase->idClientesValidos--;
+
+	printf("Cliente %d eliminado con exito de la clase '%s'.\n", idCliente, clase->nombre);
+}
+
+
+void ClaseAgregarEntrenador(Clase* clase, int idEntrenador)
+{
+	if (clase == NULL) return;
+
+	if (clase->idEntrenador != -1)
+	{
+		printf("La clase '%s' ya tiene asignado al entrenador ID: %d. Use modificar si desea cambiarlo.\n",clase->nombre, clase->idEntrenador);
+
+		return;
+	}
+
+	clase->idEntrenador = idEntrenador;
+
+	printf("Entrenador %d asignado exitosamente a la clase '%s'.\n", idEntrenador, clase->nombre);
+}
+
+void ClaseModificarEntrendor(Clase* clase, int idEntrenador)
+{
+	if (clase == NULL) return;
+
+	clase->idEntrenador = idEntrenador;
+
+	printf("Entrenador de la clase '%s' actualizado con exito al ID: %d.\n", clase->nombre, idEntrenador);
+}
+
+void ClaseEliminarEntrenador(Clase* clase, int idEntrenador)
+{
+	if (clase == NULL) return;
+
+	if (clase->idEntrenador == -1)
+	{
+		printf("La clase '%s' no tiene ningun entrenador asignado actualmente.\n", clase->nombre);
+
+		return;
+	}
+
+	if (clase->idEntrenador != idEntrenador)
+	{
+		printf("El ID %d no coincide con el entrenador actual de la clase.\n", idEntrenador);
+
+		return;
+	}
+
+	clase->idEntrenador = -1;
+
+	printf("Entrenador removido de la clase '%s' con exito.\n", clase->nombre);
+}
+
+void ClaseAgregarSector(Clase* clase, int idSector)
+{
+	if (clase == NULL)
+	{
+		return;
+	}
+
+	if (clase->idSector != -1)
+	{
+		printf("La clase '%s' ya tiene asignado el sector ID: %d.\n", clase->nombre, clase->idSector);
+		return;
+	}
+
+	clase->idSector = idSector;
+
+	printf("Sector %d asignado exitosamente a la clase '%s'.\n", idSector, clase->nombre);
+}
+
+void ClaseModificarSector(Clase* clase, int idSector)
+{
+	if (clase == NULL)
+	{
+		return;
+	}
+
+	clase->idSector = idSector;
+
+	printf("Sector de la clase '%s' modificado con exito al ID: %d.\n", clase->nombre, idSector);
+}
+
+void ClaseEliminarSector(Clase* clase, int idSector)
+{
+	if (clase == NULL)
+	{
+		return;
+	}
+
+	if (clase->idSector == -1)
+	{
+		printf("La clase '%s' no tiene ningun sector asignado actualmente.\n", clase->nombre);
+
+		return;
+	}
+
+	if (clase->idSector != idSector)
+	{
+		printf("El ID %d no coincide con el sector actual de la clase.\n", idSector);
+
+		return;
+	}
+
+	clase->idSector = -1;
+
+	printf("Sector removido de la clase '%s' con exito.\n", clase->nombre);
 }

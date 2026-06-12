@@ -4,12 +4,11 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size)
+Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size, int *id)
 {
 	Entrenador nuevo;
 
-	printf("\nIngrese ID: ");
-	nuevo.id = ScannerInt();
+	nuevo.id = *id + 1;
 
 	printf("Ingrese nombre: ");
 	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
@@ -45,6 +44,7 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int* size)
 	aux[*size] = nuevo;
 
 	(*size)++;
+	(*id)++;
 
 	return aux;
 }
