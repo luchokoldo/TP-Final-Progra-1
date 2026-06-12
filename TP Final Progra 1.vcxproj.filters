@@ -35,6 +35,12 @@
     <ClCompile Include="sector.c">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="gym.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="utilidades.c">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gym.h">
