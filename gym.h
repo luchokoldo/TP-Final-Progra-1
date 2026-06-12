@@ -27,4 +27,18 @@ typedef struct Gym
 	GymIds ids;
 } Gym;
 
+void GymAgregarEntrenador(Gym* gym);
+void GymModificarEntrenadorNombre(Gym* gym, int id);
+void GymModificarEntrenadorGenero(Gym* gym, int id);
+void GymMostrarEntrenadores(Gym* gym);
+void GymEliminarEntrenador(Gym* gym, int id);
+int GymHayEntrenadores(Gym* gym);
+
+void GymAgregarSector(Gym* gym);
+
+void GymAgregarClase(Gym* gym);
+
+void GymAgregarCliente(Gym* gym);
+
+
 #endif

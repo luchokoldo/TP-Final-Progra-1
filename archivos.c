@@ -29,6 +29,7 @@ static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int si
 static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size);
 static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int size);
 static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids);
+static void ArchivoBorrarArchivo(char* nombreArchivo);
 
 void ArchivoGuardarGym(Gym* gym)
 {
@@ -248,7 +249,7 @@ void ArchivoModificarCliente(Cliente* cliente)
 	fclose(f);
 }
 
-void ArchivoBorrarEntrenador(Entrenador* entrenador)
+void ArchivoBorrarEntrenador(int idEntrenador)
 {
 	FILE* f = fopen(ARCHIVO_ENTRENADORES, "rb");
 
@@ -259,39 +260,35 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 		return;
 	}
 
-	Entrenador* aux = calloc(1, sizeof(Entrenador));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
-
-		return;
-	}
-
-	size_t size = 1;
-
+	Entrenador* aux = NULL;
+	size_t size = 0;
 	Entrenador buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Entrenador), 1, f) > 0)
 	{
-		if (buffer.id == entrenador->id)
+		if (buffer.id == idEntrenador)
 		{
 			continue;
 		}
+		
+		Entrenador* temp = realloc(aux, (size + 1) * sizeof(Entrenador));
 
-		aux[size - 1] = buffer;
-
-		if (feof(f) == 0)
+		if (temp == NULL)
 		{
-			aux = realloc(aux, ++size * sizeof(Entrenador));
+			printf("[ERROR] realloc(aux, (size + 1) * sizeof(Entrenador)) devolvio NULL\n");
 
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Entrenador)) devolvio NULL\n");
+			free(aux);
 
-				return;
-			}
+			fclose(f);
+
+			return;
 		}
+
+		aux = temp;
+
+		aux[size] = buffer;
+
+		size++;
 	}
 
 	fclose(f);
@@ -302,15 +299,22 @@ void ArchivoBorrarEntrenador(Entrenador* entrenador)
 	{
 		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_ENTRENADORES);
 
+		free(aux);
+
 		return;
 	}
 
-	fwrite(aux, sizeof(Entrenador), size, f);
+	if (size > 0)
+	{
+		fwrite(aux, sizeof(Entrenador), size, f);
+	}
 
 	fclose(f);
+
+	free(aux);
 }
 
-void ArchivoBorrarSector(Sector* sector)
+void ArchivoBorrarSector(int idSector)
 {
 	FILE* f = fopen(ARCHIVO_SECTORES, "rb");
 
@@ -321,39 +325,35 @@ void ArchivoBorrarSector(Sector* sector)
 		return;
 	}
 
-	Sector* aux = calloc(1, sizeof(Sector));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
-
-		return;
-	}
-
-	size_t size = 1;
-
+	Sector* aux = NULL;
+	size_t size = 0;
 	Sector buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Sector), 1, f) > 0)
 	{
-		if (buffer.id == sector->id)
+		if (buffer.id == idSector)
 		{
 			continue;
 		}
 
-		aux[size - 1] = buffer;
+		Sector* temp = realloc(aux, (size + 1) * sizeof(Sector));
 
-		if (feof(f) == 0)
+		if (temp == NULL)
 		{
-			aux = realloc(aux, ++size * sizeof(Sector));
+			printf("[ERROR] realloc(aux, (size + 1) * sizeof(Sector)) devolvio NULL\n");
 
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Sector)) devolvio NULL\n");
+			free(aux);
 
-				return;
-			}
+			fclose(f);
+
+			return;
 		}
+
+		aux = temp;
+
+		aux[size] = buffer;
+
+		size++;
 	}
 
 	fclose(f);
@@ -364,15 +364,22 @@ void ArchivoBorrarSector(Sector* sector)
 	{
 		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_SECTORES);
 
+		free(aux);
+
 		return;
 	}
 
-	fwrite(aux, sizeof(Sector), size, f);
+	if (size > 0)
+	{
+		fwrite(aux, sizeof(Sector), size, f);
+	}
 
 	fclose(f);
+
+	free(aux);
 }
 
-void ArchivoBorrarClase(Clase* clase)
+void ArchivoBorrarClase(int idClase)
 {
 	FILE* f = fopen(ARCHIVO_CLASES, "rb");
 
@@ -383,39 +390,35 @@ void ArchivoBorrarClase(Clase* clase)
 		return;
 	}
 
-	Clase* aux = calloc(1, sizeof(Clase));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
-
-		return;
-	}
-
-	size_t size = 1;
-
+	Clase* aux = NULL;
+	size_t size = 0;
 	Clase buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Clase), 1, f) > 0)
 	{
-		if (buffer.id == clase->id)
+		if (buffer.id == idClase)
 		{
 			continue;
 		}
 
-		aux[size - 1] = buffer;
+		Clase* temp = realloc(aux, (size + 1) * sizeof(Clase));
 
-		if (feof(f) == 0)
+		if (temp == NULL)
 		{
-			aux = realloc(aux, ++size * sizeof(Clase));
+			printf("[ERROR] realloc(aux, (size + 1) * sizeof(Clase)) devolvio NULL\n");
 
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Clase)) devolvio NULL\n");
+			free(aux);
 
-				return;
-			}
+			fclose(f);
+
+			return;
 		}
+
+		aux = temp;
+
+		aux[size] = buffer;
+
+		size++;
 	}
 
 	fclose(f);
@@ -426,15 +429,22 @@ void ArchivoBorrarClase(Clase* clase)
 	{
 		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_CLASES);
 
+		free(aux);
+
 		return;
 	}
 
-	fwrite(aux, sizeof(Clase), size, f);
+	if (size > 0)
+	{
+		fwrite(aux, sizeof(Clase), size, f);
+	}
 
 	fclose(f);
+
+	free(aux);
 }
 
-void ArchivoBorrarCliente(Cliente* cliente)
+void ArchivoBorrarCliente(int idCliente)
 {
 	FILE* f = fopen(ARCHIVO_CLIENTES, "rb");
 
@@ -445,39 +455,35 @@ void ArchivoBorrarCliente(Cliente* cliente)
 		return;
 	}
 
-	Cliente* aux = calloc(1, sizeof(Cliente));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
-
-		return;
-	}
-
-	size_t size = 1;
-
+	Cliente* aux = NULL;
+	size_t size = 0;
 	Cliente buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Cliente), 1, f) > 0)
 	{
-		if (buffer.id == cliente->id)
+		if (buffer.id == idCliente)
 		{
 			continue;
 		}
 
-		aux[size - 1] = buffer;
+		Cliente* temp = realloc(aux, (size + 1) * sizeof(Cliente));
 
-		if (feof(f) == 0)
+		if (temp == NULL)
 		{
-			aux = realloc(aux, ++size * sizeof(Cliente));
+			printf("[ERROR] realloc(aux, (size + 1) * sizeof(Cliente)) devolvio NULL\n");
 
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, ++size * sizeof(Cliente)) devolvio NULL\n");
+			free(aux);
 
-				return;
-			}
+			fclose(f);
+
+			return;
 		}
+
+		aux = temp;
+
+		aux[size] = buffer;
+
+		size++;
 	}
 
 	fclose(f);
@@ -488,12 +494,19 @@ void ArchivoBorrarCliente(Cliente* cliente)
 	{
 		printf("[ERROR] No se pudo crear el archivo %s\n", ARCHIVO_CLIENTES);
 
+		free(aux);
+
 		return;
 	}
 
-	fwrite(aux, sizeof(Cliente), size, f);
+	if (size > 0)
+	{
+		fwrite(aux, sizeof(Cliente), size, f);
+	}
 
 	fclose(f);
+
+	free(aux);
 }
 
 void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size)
@@ -716,6 +729,26 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 	fclose(f);
 }
 
+void ArchivoBorrarEntrenadores()
+{
+	ArchivoBorrarArchivo(ARCHIVO_ENTRENADORES);
+}
+
+void ArchivoBorrarSectores()
+{
+	ArchivoBorrarArchivo(ARCHIVO_SECTORES);
+}
+
+void ArchivoBorrarClases()
+{
+	ArchivoBorrarArchivo(ARCHIVO_CLASES);
+}
+
+void ArchivoBorrarClientes()
+{
+	ArchivoBorrarArchivo(ARCHIVO_CLIENTES);
+}
+
 void ArchivoActualizarIds(GymIds* ids)
 {
 	ArchivoGuardarIds(ARCHIVO_IDS, ids);
@@ -723,6 +756,8 @@ void ArchivoActualizarIds(GymIds* ids)
 
 static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 {
+	*size = 0;
+
 	FILE* f = fopen(nombreArchivo, "rb");
 
 	if (f == NULL)
@@ -730,36 +765,32 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 		return NULL;
 	}
 
-	Entrenador* aux = calloc(1, sizeof(Entrenador));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Entrenador)) devolvio NULL\n");
-
-		return NULL;
-	}
-
+	Entrenador* aux = NULL;
 	Entrenador buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Entrenador), 1, f) > 0)
 	{
+		
+		Entrenador* temp = realloc(aux, (size_t)(*size + 1) * sizeof(Entrenador));
+
+		if (temp == NULL)
+		{
+			printf("[ERROR] realloc(aux, (size_t)(*size + 1) * sizeof(Entrenador)) devolvio NULL\n");
+
+			free(aux);
+
+			fclose(f);
+
+			*size = 0;
+
+			return NULL;
+		}
+
+		aux = temp;
+
 		aux[*size] = buffer;
 
 		(*size)++;
-
-		if (feof(f) == 0)
-		{
-			aux = realloc(aux, (*size + 1) * sizeof(Entrenador));
-
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Entrenador)) devolvio NULL\n");
-
-				*size = 0;
-
-				return NULL;
-			}
-		}
 	}
 
 	fclose(f);
@@ -769,6 +800,8 @@ static Entrenador* ArchivoCargarEntrenadores(char* nombreArchivo, int* size)
 
 static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 {
+	*size = 0;
+
 	FILE* f = fopen(nombreArchivo, "rb");
 
 	if (f == NULL)
@@ -776,36 +809,32 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 		return NULL;
 	}
 
-	Sector* aux = calloc(1, sizeof(Sector));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Sector)) devolvio NULL\n");
-
-		return NULL;
-	}
-
+	Sector* aux = NULL;
 	Sector buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Sector), 1, f) > 0)
 	{
+
+		Sector* temp = realloc(aux, (size_t)(*size + 1) * sizeof(Sector));
+
+		if (temp == NULL)
+		{
+			printf("[ERROR] realloc(aux, (size_t)(*size + 1) * sizeof(Sector)) devolvio NULL\n");
+
+			free(aux);
+
+			fclose(f);
+
+			*size = 0;
+
+			return NULL;
+		}
+
+		aux = temp;
+
 		aux[*size] = buffer;
 
 		(*size)++;
-
-		if (feof(f) == 0)
-		{
-			aux = realloc(aux, (*size + 1) * sizeof(Sector));
-
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Sector)) devolvio NULL\n");
-
-				*size = 0;
-
-				return NULL;
-			}
-		}
 	}
 
 	fclose(f);
@@ -815,6 +844,8 @@ static Sector* ArchivoCargarSectores(char* nombreArchivo, int* size)
 
 static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 {
+	*size = 0;
+
 	FILE* f = fopen(nombreArchivo, "rb");
 
 	if (f == NULL)
@@ -822,36 +853,32 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 		return NULL;
 	}
 
-	Clase* aux = calloc(1, sizeof(Clase));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL\n");
-
-		return NULL;
-	}
-
+	Clase* aux = NULL;
 	Clase buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Clase), 1, f) > 0)
 	{
+
+		Clase* temp = realloc(aux, (size_t)(*size + 1) * sizeof(Clase));
+
+		if (temp == NULL)
+		{
+			printf("[ERROR] realloc(aux, (size_t)(*size + 1) * sizeof(Clase)) devolvio NULL\n");
+
+			free(aux);
+
+			fclose(f);
+
+			*size = 0;
+
+			return NULL;
+		}
+
+		aux = temp;
+
 		aux[*size] = buffer;
 
 		(*size)++;
-
-		if (feof(f) == 0)
-		{
-			aux = realloc(aux, (*size + 1) * sizeof(Clase));
-
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Clase)) devolvio NULL\n");
-
-				*size = 0;
-
-				return NULL;
-			}
-		}
 	}
 
 	fclose(f);
@@ -861,6 +888,8 @@ static Clase* ArchivoCargarClases(char* nombreArchivo, int* size)
 
 static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 {
+	*size = 0;
+
 	FILE* f = fopen(nombreArchivo, "rb");
 
 	if (f == NULL)
@@ -868,36 +897,32 @@ static Cliente* ArchivoCargarClientes(char* nombreArchivo, int* size)
 		return NULL;
 	}
 
-	Cliente* aux = calloc(1, sizeof(Cliente));
-
-	if (aux == NULL)
-	{
-		printf("[ERROR] calloc(1, sizeof(Cliente)) devolvio NULL\n");
-
-		return NULL;
-	}
-
+	Cliente* aux = NULL;
 	Cliente buffer = { 0 };
 
 	while (fread(&buffer, sizeof(Cliente), 1, f) > 0)
 	{
+
+		Cliente* temp = realloc(aux, (size_t)(*size + 1) * sizeof(Cliente));
+
+		if (temp == NULL)
+		{
+			printf("[ERROR] realloc(aux, (size_t)(*size + 1) * sizeof(Cliente)) devolvio NULL\n");
+
+			free(aux);
+
+			fclose(f);
+
+			*size = 0;
+
+			return NULL;
+		}
+
+		aux = temp;
+
 		aux[*size] = buffer;
 
 		(*size)++;
-
-		if (feof(f) == 0)
-		{
-			aux = realloc(aux, (*size + 1) * sizeof(Cliente));
-
-			if (aux == NULL)
-			{
-				printf("[ERROR] realloc(&aux, (*size + 1) * sizeof(Cliente)) devolvio NULL\n");
-
-				*size = 0;
-
-				return NULL;
-			}
-		}
 	}
 
 	fclose(f);
@@ -999,4 +1024,12 @@ static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids)
 	fwrite(ids, sizeof(GymIds), 1, f);
 
 	fclose(f);
+}
+
+static void ArchivoBorrarArchivo(char* nombreArchivo)
+{
+	if (remove(nombreArchivo) != 0)
+	{
+		printf("[ERROR] No se pudo borrar el archivo %s", nombreArchivo);
+	}
 }

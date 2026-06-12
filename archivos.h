@@ -16,15 +16,20 @@ void ArchivoModificarSector(Sector* sector);
 void ArchivoModificarClase(Clase* clase);
 void ArchivoModificarCliente(Cliente* cliente);
 
-void ArchivoBorrarEntrenador(Entrenador* entrenador);
-void ArchivoBorrarSector(Sector* sector);
-void ArchivoBorrarClase(Clase* clase);
-void ArchivoBorrarCliente(Cliente* cliente);
+void ArchivoBorrarEntrenador(int idEntrenador);
+void ArchivoBorrarSector(int idSector);
+void ArchivoBorrarClase(int idClase);
+void ArchivoBorrarCliente(int idCliente);
 
 void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size);
 void ArchivoExportarSectores(Sector* sectores, int size);
 void ArchivoExportarClases(Clase* clases, int size);
 void ArchivoExportarClientes(Cliente* clientes, int size);
+
+void ArchivoBorrarEntrenadores(void);
+void ArchivoBorrarSectores(void);
+void ArchivoBorrarClases(void);
+void ArchivoBorrarClientes(void);
 
 void ArchivoActualizarIds(GymIds* ids);
 
