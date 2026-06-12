@@ -9,11 +9,12 @@ typedef struct Sector
     char nombre[MAX_NOMBRE_SECTOR_SIZE];
 } Sector;
 
-Sector* SectorAgregarSector(Sector* sector, int* size, int *id);
-void SectorMostrarSector(Sector* sectores, int size);
+Sector* SectorAgregarSector(Sector* sectores, int size, int id, char* nombre);
+void SectorMostrarSectores(Sector* sectores, int size);
 int SectorBuscarSectorId(Sector* sectores, int size, int id, int i);
-void SectorModificarSector(Sector* sector, int size, int id);
-Sector* SectorEliminarSector(Sector* sectores, int* size, int id);
-void SectorExportarTxt(Sector* sectores, int size);
+Sector* SectorEliminarSector(Sector* sectores, int size, int id);
+Sector* SectorObtenerSector(Sector* sectores, int size, int id);
+void SectorObtenerSectorNombre(Sector* sectores, int size, int id, char* nombre);
+void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombreNuevo);
 
 #endif

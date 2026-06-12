@@ -4,46 +4,28 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Cliente* ClienteAgregarCliente(Cliente* clientes, int* size, int *id)
+Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char *nombre, char *genero)
 {
-	Cliente nuevo;
+	Cliente nuevo = { 0 };
 
-	nuevo.id = *id + 1;
+	nuevo.id = id;
 
-	printf("Ingrese el nombre: ");
-	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
+	snprintf(nuevo.nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", nombre);
+	snprintf(nuevo.genero, MAX_GENERO_CLIENTE_SIZE, "%s", genero);
 
-	printf("Ingrese el genero: ");
-	ScannerString(nuevo.genero, GET_CHARSMAX(nuevo.genero));
+	nuevo.idClasesValidos = 0;
 
 	Cliente* aux = NULL;
 
-	if (clientes == NULL)
-	{
-		aux = calloc(1, sizeof(Cliente));
-
+	aux = realloc(clientes, (size_t)(size + 1) * sizeof(clientes));
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(clientes)) devolvio NULL");
+			printf("[ERROR] realloc(clientes,(size_t)(size + 1) * sizeof(cliente)) devolvio NULL");
 
 			return NULL;
 		}
-	}
-	else
-	{
-		aux = realloc(clientes, (*size + 1) * sizeof(Cliente));
-
-		if (aux == NULL)
-		{
-			printf("[ERROR] realloc(clientes, (*size + 1) * sizeof(Cliente)) devolvio NULL");
-
-			return NULL;
-		}
-	}
-	aux[*size] = nuevo;
-
-	(*size)++;
-	(*id)++;
+	
+	aux[size] = nuevo;
 
 	return aux;
 }
@@ -97,60 +79,33 @@ int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
 	return ClienteBuscarClienteId(cliente, size, id, i);
 }
 
-void ClienteModificarCliente(Cliente* cliente, int size, int id)
+Cliente *ClienteEliminarcliente(Cliente* clientes, int size, int id)
 {
-	int posicion = ClienteBuscarClienteId(cliente, size, id, 0);
-
-		if (posicion == -1)
-		{
-			printf("\nno se encontro el cliente con el id: %d\n", id);
-
-				return;
-		}
-
-		printf("--Modificar cliente Id: %d--\n", id);
-		printf("\nNombre: %s", cliente[posicion].nombre);
-		printf("\nGenero: %s", cliente[posicion].genero);
-		printf("\nClases validas: %d", cliente[posicion].idClasesValidos);
-		printf("-------------------------------------------------\n");
-		
-		
-		printf("Ingrese el nuevo nombre: ");
-		ScannerString(cliente[posicion].nombre, GET_CHARSMAX(cliente[posicion].nombre));
-
-		printf("Ingrese el nuevo genero : ");
-		ScannerString(cliente[posicion].genero, GET_CHARSMAX(cliente[posicion].genero));
-
-		printf("\nCliente modificado con exito");
-}
-
-Cliente *ClienteEliminarcliente(Cliente* cliente, int* size, int id)
-{
-	int posicion = ClienteBuscarClienteId(cliente,*size,id, 0);
+	int posicion = ClienteBuscarClienteId(clientes,size,id, 0);
 
 	if (posicion == -1)
 	{
 		printf("No se encontro al cliente con el Id: %d", id);
 
-		return cliente;
+		return clientes;
 	}
-	if (*size > 1)
+	if (size > 1)
 	{
-		for (int i = posicion; i < (*size)-1 ; i++)
+		for (int i = posicion; i < (size)-1 ; i++)
 		{
-			cliente[i] = cliente[i + 1];
+			clientes[i] = clientes[i + 1];
 		}
 	}
 	else
 	{
-		free(cliente);
+		free(clientes);
 
 		return NULL;
 	}
 
-	(*size)--;
+	(size)--;
 
-	Cliente* aux = realloc(cliente, (*size) * sizeof(Cliente));
+	Cliente* aux = realloc(clientes, size * sizeof(Cliente));
 
 	if (aux == NULL)
 	{
@@ -161,11 +116,118 @@ Cliente *ClienteEliminarcliente(Cliente* cliente, int* size, int id)
 
 	return aux;
 }
+
 void ClienteAgregarClase(Cliente* cliente, int idClase)
 {
+	if (cliente == NULL) return;
 
+	if (cliente->idClasesValidos >= 32) 
+	{
+		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas.\n", cliente->nombre);
+		return;
+	}
+
+	for (int i = 0; i < cliente->idClasesValidos; i++)
+	{
+		if (cliente->idClases[i] == idClase)
+		{
+			printf("El cliente '%s' ya se encuentra inscripto en la clase ID %d.\n", cliente->nombre, idClase);
+			return;
+		}
+	}
+
+	cliente->idClases[cliente->idClasesValidos] = idClase;
+	cliente->idClasesValidos++;
 }
+
 void ClienteElimarClase(Cliente* cliente, int idClase)
 {
+	if (cliente == NULL || cliente->idClasesValidos == 0) return;
 
+	int posicion = -1;
+
+	for (int i = 0; i < cliente->idClasesValidos; i++)
+	{
+		if (cliente->idClases[i] == idClase)
+		{
+			posicion = i;
+			break;
+		}
+	}
+
+	if (posicion == -1) return;
+
+	for (int i = posicion; i < cliente->idClasesValidos - 1; i++)
+	{
+		cliente->idClases[i] = cliente->idClases[i + 1];
+	}
+
+	cliente->idClasesValidos--;
+}
+
+
+
+Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
+{
+	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+
+	if (index == -1)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+		return NULL;
+	}
+
+	return &clientes[index];
+}
+
+void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nombre)
+{
+	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+
+	if (index == -1)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+		return;
+	}
+
+	snprintf(nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", clientes[index].nombre);
+}
+
+void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* genero)
+{
+	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+
+	if (index == -1)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+		return;
+	}
+
+	snprintf(genero, MAX_GENERO_CLIENTE_SIZE, "%s", clientes[index].genero);
+}
+
+void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* nombreNuevo)
+{
+	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+
+	if (index == -1)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+		return;
+	}
+
+	snprintf(clientes[index].nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", nombreNuevo);
+}
+
+void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* generoNuevo)
+{
+	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+
+	if (index == -1)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+		return;
+	}
+
+	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
 }
