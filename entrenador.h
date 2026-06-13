@@ -15,6 +15,7 @@ typedef struct Entrenador
 
 Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int id, char* nombre, char* genero);
 void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size);
+void EntrenadorMostrarEntrenador(Entrenador* entrenador);
 int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id);
 Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int id);
 

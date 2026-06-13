@@ -47,6 +47,15 @@ void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size)
 	printf("\n--------------------------------------\n");
 }
 
+void EntrenadorMostrarEntrenador(Entrenador* entrenador)
+{
+	printf("\n--------------------------------------\n\n");
+	printf("ID: %d\n", entrenador->id);
+	printf("Nombre: %s\n", entrenador->nombre);
+	printf("Genero: %s\n", entrenador->genero);
+	printf("\n--------------------------------------\n");
+}
+
 int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
 {
 	if (id < 0 || id >= size)

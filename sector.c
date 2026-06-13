@@ -40,9 +40,17 @@ void SectorMostrarSectores(Sector* sectores, int size)
 
 	SectorMostrarSectores(sectores, size - 1);
 
-	printf("\n--------------------------------------");
-	printf("\nID: %d", sectores[size - 1].id);
-	printf("\nNombre: %s", sectores[size - 1].nombre);
+	printf("\n--------------------------------------\n\n");
+	printf("ID: %d\n", sectores[size - 1].id);
+	printf("Nombre: %s\n", sectores[size - 1].nombre);
+	printf("\n--------------------------------------\n");
+}
+
+void SectorMostrarSector(Sector* sector)
+{
+	printf("\n--------------------------------------\n\n");
+	printf("ID: %d\n", sector->id);
+	printf("Nombre: %s\n", sector->nombre);
 	printf("\n--------------------------------------\n");
 }
 

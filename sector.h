@@ -12,6 +12,7 @@ typedef struct Sector
 
 Sector* SectorAgregarSector(Sector* sectores, int size, int id, char* nombre);
 void SectorMostrarSectores(Sector* sectores, int size);
+void SectorMostrarSector(Sector* sector);
 int SectorBuscarSectorId(Sector* sectores, int size, int id);
 Sector* SectorEliminarSector(Sector* sectores, int size, int id);
 
