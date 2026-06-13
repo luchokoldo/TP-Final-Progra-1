@@ -69,7 +69,7 @@ int ClienteBuscarId(Cliente* cliente, int size, int id)
 		return CLIENTE_ID_INVALIDO;
 	}
 
-	return ClienteBuscarId(cliente, size, id, 0);
+	return ClienteBuscarClienteId(cliente, size, id, 0);
 }
 
 Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
@@ -148,7 +148,10 @@ void ClienteElimarClase(Cliente* cliente, int idClase)
 		}
 	}
 
-	if (posicion == -1) return;
+	if (posicion == CLIENTE_ID_INVALIDO)
+	{
+		return;
+	}
 
 	for (int i = posicion; i < cliente->idClasesValidos - 1; i++)
 	{
@@ -164,9 +167,10 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
 {
 	int index = ClienteBuscarClienteId(clientes, size, id, 0);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return NULL;
 	}
 
@@ -177,9 +181,10 @@ void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nomb
 {
 	int index = ClienteBuscarClienteId(clientes, size, id, 0);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -190,9 +195,10 @@ void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* gene
 {
 	int index = ClienteBuscarClienteId(clientes, size, id, 0);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -203,9 +209,10 @@ void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* no
 {
 	int index = ClienteBuscarClienteId(clientes, size, id, 0);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO))
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -216,11 +223,30 @@ void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* ge
 {
 	int index = ClienteBuscarClienteId(clientes, size, id, 0);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
+}
+static int ClienteBuscarId(Cliente* clientes, int size, int id, int i)
+{
+	if (i >= size)
+	{
+		return	
+
+			CLIENTE_ID_INVALIDO;
+	}
+
+	if (clientes[i].id == id)
+	{
+		return i;
+	}
+
+	i++;
+
+	return EntrenadorBuscarEntrenadorId(clientes, size, id, i);
 }
