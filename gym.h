@@ -36,10 +36,27 @@ void GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_N
 int GymHayEntrenadores(Gym* gym);
 
 void GymAgregarSector(Gym* gym);
+void GymModificarSectorNombre(Gym* gym, int id);
+void GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores);
+void GymMostrarSectores(Gym* gym);
+void GymEliminarSector(Gym* gym, int id);
+int GymHaySectores(Gym* gym);
 
-void GymAgregarClase(Gym* gym);
+
+
+
+void GymAgregarClase(Gym* gym)
+{
+
+}
 
 void GymAgregarCliente(Gym* gym);
+void GymModificarClienteNombre(Gym* gym, int id);
+void GymModificarClienteGenero(Gym* gym, int id);
+void GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
+void GymMostrarClientes(Gym* gym);
+void GymEliminarClientes(Gym* gym, int id);
+int GymHayClientes(Gym* gym);
 
 
 #endif

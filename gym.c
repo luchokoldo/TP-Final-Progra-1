@@ -17,7 +17,7 @@ void GymAgregarEntrenador(Gym* gym)
 {
 	char nombre[MAX_NOMBRE_ENTRENADOR_SIZE];
 	char genero[MAX_GENERO_ENTRENADOR_SIZE];
-	
+
 	do
 	{
 		GymIngresarNombre(nombre, MAX_NOMBRE_ENTRENADOR_SIZE);
@@ -38,7 +38,7 @@ void GymAgregarEntrenador(Gym* gym)
 		}
 	} while (*genero == '\0');
 
-	
+
 	Entrenador* temp = EntrenadorAgregarEntrenador(gym->entrenadores, gym->entrenadoresSize, gym->ids.entrenador + 1, nombre, genero);
 
 	if (temp == NULL)
@@ -158,7 +158,7 @@ void GymEliminarEntrenador(Gym* gym, int id)
 		else
 		{
 			GymExit(gym);
-		}		
+		}
 	}
 
 	gym->entrenadores = temp;
@@ -179,8 +179,130 @@ int GymHayEntrenadores(Gym* gym)
 
 void GymAgregarSector(Gym* gym)
 {
+	char nombre[MAX_NOMBRE_SECTOR_SIZE];
 
+
+	do
+	{
+		GymIngresarNombre(nombre, MAX_NOMBRE_SECTOR_SIZE);
+
+		if (*nombre == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombre == '\0');
+
+
+
+
+	Sector* temp = SectorAgregarSector(gym->sectores, gym->sectoresSize, gym->ids.sector + 1, nombre);
+
+	if (temp == NULL)
+	{
+		GymExit(gym);
+	}
+
+	gym->sectores = temp;
+	gym->sectoresSize++;
+	gym->ids.sector++;
+
+	Sector* sector = SectorObtenerSector(gym->sectores, gym->sectoresSize, gym->ids.sector);
+
+	if (sector == NULL)
+	{
+		printf("[ERROR] SectorObtenerSector(gym->sectores, gym->sectoresSize, gym->ids.sector)  devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ArchivoAgregarSector(sector);
+	ArchivoActualizarIds(&gym->ids);
 }
+void GymModificarSectorNombre(Gym* gym, int id)
+{
+	char nombreViejo[MAX_NOMBRE_SECTOR_SIZE];
+	char nombreNuevo[MAX_NOMBRE_SECTOR_SIZE];
+
+	SectorObtenerSectorNombre(gym->sectores, gym->sectoresSize, id, nombreViejo);
+	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SECTOR_SIZE);
+
+	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+	{
+		return;
+	}
+
+	SectorModificarSectorNombre(gym->sectores, gym->sectoresSize, id, nombreNuevo);
+
+	Sector* sector = SectorObtenerSector(gym->sectores, gym->sectoresSize, id);
+
+	if (sector == NULL)
+	{
+		printf("[ERROR] SectorObtenerSector(gym->sectores, gym->sectoresSize, id)  devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ArchivoModificarSector(sector);
+}
+void GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores)
+{
+	SectorObtenerSectorNombre(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
+}
+
+void GymMostrarsectores(Gym* gym)
+{
+	SectorMostrarSectores(gym->sectores, gym->sectoresSize);
+}
+
+void GymEliminarSector(Gym* gym, int id)
+{
+	Sector* temp = NULL;
+
+	temp = SectorEliminarSector(gym->sectores, gym->sectoresSize, id);
+
+	if (temp == gym->sectores)
+	{
+		GymExit(gym);
+	}
+
+	if (temp == NULL)
+	{
+		if (gym->sectoresSize - 1 <= 0)
+		{
+			gym->sectores = NULL;
+			gym->sectoresSize = 0;
+
+			ArchivoBorrarSectores();
+
+			return;
+		}
+		else
+		{
+			GymExit(gym);
+		}
+	}
+
+	gym->sectores = temp;
+	gym->sectoresSize--;
+
+	ArchivoBorrarSector(id);
+}
+
+int GymHaySectores(Gym* gym)
+{
+	if (gym->sectores == NULL)
+	{
+		return 0;
+	}
+
+	return gym->sectoresSize;
+}
+
+
 
 void GymAgregarClase(Gym* gym)
 {
@@ -189,8 +311,166 @@ void GymAgregarClase(Gym* gym)
 
 void GymAgregarCliente(Gym* gym)
 {
+	char nombre[MAX_NOMBRE_CLIENTE_SIZE];
+	char genero[MAX_GENERO_CLIENTE_SIZE];
 
+	do
+	{
+		GymIngresarNombre(nombre, MAX_NOMBRE_CLIENTE_SIZE);
+
+		if (*nombre == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombre == '\0');
+
+	do
+	{
+		GymIngresarGenero(genero, MAX_GENERO_CLIENTE_SIZE);
+
+		if (*genero == '\0')
+		{
+			printf("[ERROR] El genero no puede estar vacio\n");
+		}
+	} while (*genero == '\0');
+
+
+	Cliente* temp = ClienteAgregarCliente(gym->clientes, gym->clientesSize, gym->ids.cliente + 1, nombre, genero);
+
+	if (temp == NULL)
+	{
+		GymExit(gym);
+	}
+
+	gym->clientes = temp;
+	gym->clientesSize++;
+	gym->ids.cliente++;
+
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, gym->ids.cliente);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] ClienteObtenerCliente(gym->clientes, gym->clientesSize, gym->ids.cliente) devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+	ArchivoAgregarCliente(cliente);
+	ArchivoActualizarIds(&gym->ids);
 }
+void GymModificarClienteNombre(Gym* gym, int id)
+{
+	char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
+	char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
+
+	ClienteObtenerClienteNombre(gym->clientes, gym->clientesSize, id, nombreViejo);
+	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
+
+	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+	{
+		return;
+	}
+
+	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, id, nombreNuevo);
+
+	Cliente* cliente = SectorObtenerSector(gym->clientes, gym->clientesSize, id);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] SectorObtenerSector(gym->clientes, gym->clientesSize, id) devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ArchivoModificarCliente(cliente);
+}
+
+void GymModificarClienteGenero(Gym* gym, int id)
+{
+	char generoViejo[MAX_GENERO_CLIENTE_SIZE];
+	char generoNuevo[MAX_GENERO_CLIENTE_SIZE];
+
+	ClienteObtenerClienteGenero(gym->clientes, gym->clientesSize, id, generoViejo);
+	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_CLIENTE_SIZE);
+
+	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
+	{
+		return;
+	}
+
+	ClienteModificarClienteGenero(gym->clientes, gym->clientesSize, id, generoNuevo);
+
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, id);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] ClienteObtenerCliente(gym->clientes, gym->clientesSize, id) devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ArchivoModificarCliente(cliente);
+}
+
+void GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes)
+{
+ ClienteObtenerClienteNombre(gym->clientes, gym->clientesSize, nombresClientes, idsClientes);
+}
+
+void GymMostrarClientes(Gym* gym)
+{
+	ClienteMostrarClientes(gym->clientes, gym->clientesSize);
+}
+
+void GymEliminarClientes(Gym* gym, int id)
+{
+	Cliente* temp = NULL;
+
+	temp = ClienteEliminarCliente(gym->clientes, gym->clientesSize, id);
+
+	if (temp == gym->clientes)
+	{
+		GymExit(gym);
+	}
+
+	if (temp == NULL)
+	{
+		if (gym->clientesSize - 1 <= 0)
+		{
+			gym->clientes = NULL;
+			gym->clientesSize = 0;
+
+			ArchivoBorrarClientes();
+
+			return;
+		}
+		else
+		{
+			GymExit(gym);
+		}
+	}
+
+	gym->clientes = temp;
+	gym->clientesSize--;
+
+	ArchivoBorrarClientes(id);
+}
+
+int GymHayClientes(Gym* gym)
+{
+	if (gym->clientes == NULL)
+	{
+		return 0;
+	}
+
+	return gym->clientesSize;
+}
+
 
 static void GymIngresarNombre(char* nombre, int size)
 {
