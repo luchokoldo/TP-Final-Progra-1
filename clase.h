@@ -3,6 +3,8 @@
 
 #define MAX_NOMBRE_CLASE_SIZE 64
 #define MAX_ID_CLIENTE_SIZE 32
+#define CLASE_ID_INVALIDO      -1
+
 
 typedef struct Horario
 {
@@ -33,7 +35,7 @@ typedef struct Clase
 
 Clase* ClaseAgregarClase(Clase* clases, int* size, int *id);
 void ClaseMostrarClase(Clase* clases, int size);
-int ClaseBuscarClaseId(Clase* clase, int size, int id, int i);
+int ClaseBuscarId(Clase* clase, int size, int id, int i);
 void ClaseModificarClase(Clase* clase, int size, int id);
 Clase* ClaseEliminarClase(Clase* clases, int* size, int id);
 void ClaseExportarTxt(Clase* clases, int size);

@@ -4,31 +4,15 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Clase* ClaseAgregarClase(Clase* clases, int* size, int *id)
+Clase* ClaseAgregarClase(Clase* clases, int size, int id,char* nombre, double precio, Horario inicio, Duracion duracion)
 {
-	Clase nuevo;
+	Clase nuevo = { 0 };
 
-	nuevo.id = *id + 1;
-
-	printf("\nIngrese  el nombre: ");
-	ScannerString(nuevo.nombre, GET_CHARSMAX(nuevo.nombre));
-
-	printf("Ingrese el precio:$ ");
-	nuevo.precio = ScannerDouble();
-
-	printf("Ingrese la hora de inicio: ");
-	nuevo.inicio.horas = ScannerInt();
-
-	printf("Ingrese minutos: ");
-	nuevo.inicio.minutos = ScannerInt();
-	nuevo.inicio.esValido = 1;
-
-	printf("Ingrese la duracion en horas: ");
-	nuevo.duracion.horas = ScannerInt();
-
-	printf("Ingrese la duracion en minutos: ");
-	nuevo.duracion.minutos = ScannerInt();
-	nuevo.duracion.esValido = 1;
+	nuevo.id = id;
+	snprintf(nuevo.nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombre);
+	nuevo.precio = precio;
+	nuevo.inicio = inicio;
+	nuevo.duracion=duracion ;
 
 	nuevo.idClientesValidos = 0;
 	nuevo.idEntrenador = -1; 
@@ -36,33 +20,18 @@ Clase* ClaseAgregarClase(Clase* clases, int* size, int *id)
 
 	Clase* aux = NULL;
 
-	if (clases == NULL)
-	{
-		aux = calloc(1, sizeof(Clase));
+		aux = realloc(clases, (size_t)(size + 1) * sizeof(Clase));
 
 		if (aux == NULL)
 		{
-			printf("[ERROR] calloc(1, sizeof(Clase)) devolvio NULL");
+			printf("[ERROR] realloc(clases, (size_t)(size + 1) * sizeof(Clase)) devolvio NULL");
 
 			return NULL;
 		}
-	}
-	else
-	{
-		aux = realloc(clases, (*size + 1) * sizeof(Clase));
+	
+	aux[size] = nuevo;
 
-		if (aux == NULL)
-		{
-			printf("[ERROR] realloc(clases, (*size + 1) * sizeof(Clase)) devolvio NULL");
-
-			return NULL;
-		}
-	}
-	aux[*size] = nuevo;
-
-	(*size)++;
-	(*id)++;
-
+	
 	return aux;
 }
 
@@ -98,22 +67,14 @@ void ClaseMostrarClase(Clase* clases, int size)
 	printf("\n--------------------------------------\n");
 }
 
-int ClaseBuscarClaseId(Clase* clase, int size, int id,int i)
+int ClaseBuscarId(Clase* clase, int size, int id,int i)
 {
-	if (i >= size)
+	if (id < 0 || id >= size)
 	{
-		return -1;
-	}
-	
-	if (clase[i].id == id)
-	{
-		return i;
+		return CLASE_ID_INVALIDO;
 	}
 
-	i++;
-
-	return ClaseBuscarClaseId(clase,size,id,i);
-}
+	return ClaseBuscarId(clase, size, id, 0);
 
 void ClaseModificarClase(Clase* clase, int size, int id)
 {

@@ -4,7 +4,7 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char *nombre, char *genero)
+Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char* nombre, char* genero)
 {
 	Cliente nuevo = { 0 };
 
@@ -18,13 +18,13 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char *nombre
 	Cliente* aux = NULL;
 
 	aux = realloc(clientes, (size_t)(size + 1) * sizeof(clientes));
-		if (aux == NULL)
-		{
-			printf("[ERROR] realloc(clientes,(size_t)(size + 1) * sizeof(cliente)) devolvio NULL");
+	if (aux == NULL)
+	{
+		printf("[ERROR] realloc(clientes,(size_t)(size + 1) * sizeof(cliente)) devolvio NULL");
 
-			return NULL;
-		}
-	
+		return NULL;
+	}
+
 	aux[size] = nuevo;
 
 	return aux;
@@ -62,26 +62,19 @@ void ClienteMostrarCliente(Cliente* clientes, int size)
 	printf("\n--------------------------------------\n");
 }
 
-int ClienteBuscarClienteId(Cliente* cliente, int size, int id, int i)
+int ClienteBuscarId(Cliente* cliente, int size, int id)
 {
-	if (i >= size)
+	if (id < 0 || id >= size)
 	{
-		return -1;
+		return CLIENTE_ID_INVALIDO;
 	}
 
-	if (cliente[i].id == id)
-	{
-		return i;
-	}
-
-	i++;
-
-	return ClienteBuscarClienteId(cliente, size, id, i);
+	return ClienteBuscarId(cliente, size, id, 0);
 }
 
-Cliente *ClienteEliminarcliente(Cliente* clientes, int size, int id)
+Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
 {
-	int posicion = ClienteBuscarClienteId(clientes,size,id, 0);
+	int posicion = ClienteBuscarClienteId(clientes, size, id, 0);
 
 	if (posicion == -1)
 	{
@@ -91,7 +84,7 @@ Cliente *ClienteEliminarcliente(Cliente* clientes, int size, int id)
 	}
 	if (size > 1)
 	{
-		for (int i = posicion; i < (size)-1 ; i++)
+		for (int i = posicion; i < (size)-1; i++)
 		{
 			clientes[i] = clientes[i + 1];
 		}
@@ -121,7 +114,7 @@ void ClienteAgregarClase(Cliente* cliente, int idClase)
 {
 	if (cliente == NULL) return;
 
-	if (cliente->idClasesValidos >= 32) 
+	if (cliente->idClasesValidos >= 32)
 	{
 		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas.\n", cliente->nombre);
 		return;

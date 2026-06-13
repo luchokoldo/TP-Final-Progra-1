@@ -45,19 +45,14 @@ void SectorMostrarSector(Sector* sectores, int size)
 
 
 }
-int SectorBuscarSectorId(Sector* sectores, int size, int id, int i)
+int SectorBuscarId(Sector* sectores, int size, int id)
 {
-	if (i >= size)
+	if (id < 0 || id >= size)
 	{
-		return -1;
-	}
-	if (sectores[i].id == id)
-	{
-		return i;
+		return SECTOR_ID_INVALIDO;
 	}
 
-	i++;
-	return SectorBuscarSectorId(sectores, size, id, i);
+	return SectorBuscarId(sectores, size, id, 0);
 }
 
 Sector *SectorEliminarSector(Sector* sectores, int size, int id)
