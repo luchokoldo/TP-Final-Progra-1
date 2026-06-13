@@ -59,7 +59,7 @@ int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
 
 Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int id)
 {
-	int posicion = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int posicion = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (posicion == ENTRENADOR_ID_INVALIDO)
 	{
@@ -98,7 +98,7 @@ Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int
 
 Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int id)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (index == ENTRENADOR_ID_INVALIDO)
 	{
@@ -112,7 +112,7 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 
 void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombre)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (index == ENTRENADOR_ID_INVALIDO)
 	{
@@ -126,7 +126,7 @@ void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenadores, int size, int i
 
 void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* genero)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (index == ENTRENADOR_ID_INVALIDO)
 	{
@@ -149,7 +149,7 @@ void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size,
 
 void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombreNuevo)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (index == ENTRENADOR_ID_INVALIDO)
 	{
@@ -163,7 +163,7 @@ void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int
 
 void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* generoNuevo)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id, 0);
+	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
 	if (index == ENTRENADOR_ID_INVALIDO)
 	{

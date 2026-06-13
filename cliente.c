@@ -69,12 +69,12 @@ int ClienteBuscarId(Cliente* cliente, int size, int id)
 		return CLIENTE_ID_INVALIDO;
 	}
 
-	return ClienteBuscarClienteId(cliente, size, id, 0);
+	return ClienteBuscarClienteId(cliente, size, id);
 }
 
 Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
 {
-	int posicion = ClienteBuscarClienteId(clientes, size, id, 0);
+	int posicion = ClienteBuscarClienteId(clientes, size, id);
 
 	if (posicion == -1)
 	{
@@ -165,7 +165,7 @@ void ClienteElimarClase(Cliente* cliente, int idClase)
 
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
 	if (index == CLIENTE_ID_INVALIDO)
 	{
@@ -179,7 +179,7 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
 
 void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nombre)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
 	if (index == CLIENTE_ID_INVALIDO)
 	{
@@ -193,7 +193,7 @@ void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nomb
 
 void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* genero)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
 	if (index == CLIENTE_ID_INVALIDO)
 	{
@@ -207,9 +207,9 @@ void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* gene
 
 void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* nombreNuevo)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == CLIENTE_ID_INVALIDO))
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
 
@@ -221,7 +221,7 @@ void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* no
 
 void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* generoNuevo)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
 	if (index == CLIENTE_ID_INVALIDO)
 	{
