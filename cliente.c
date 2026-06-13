@@ -32,14 +32,14 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char* nombre
 	return aux;
 }
 
-void ClienteMostrarCliente(Cliente* clientes, int size)
+void ClienteMostrarClientes(Cliente* clientes, int size)
 {
 	if (size <= 0)
 	{
 		return;
 	}
 
-	ClienteMostrarCliente(clientes, size - 1);
+	ClienteMostrarClientes(clientes, size - 1);
 
 	printf("\n--------------------------------------\n");
 	printf("\nID: %d", clientes[size - 1].id);
@@ -207,6 +207,15 @@ void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* gene
 	snprintf(genero, MAX_GENERO_CLIENTE_SIZE, "%s", clientes[index].genero);
 }
 
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes)
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(nombresClientes[i], MAX_NOMBRE_CLIENTE_SIZE, "%s", clientes[i].nombre);
+		idsClientes[i] = clientes[i].id;
+	}
+}
+
 void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* nombreNuevo)
 {
 	int index = ClienteBuscarClienteId(clientes, size, id);
@@ -233,6 +242,31 @@ void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* ge
 	}
 
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
+}
+
+void ClienteMostrarCliente(Cliente* cliente)
+{
+	printf("\n--------------------------------------\n");
+	printf("\nID: %d", cliente->id);
+	printf("\nNombre: %s", cliente->nombre);
+	printf("\nGenero: %s", cliente->genero);
+	printf("\nClases: ");
+
+	if (cliente->idClasesValidos > 0)
+	{
+		for (int j = 0; j < cliente->idClasesValidos; j++)
+		{
+			printf("%d,", cliente->idClases[j]);
+		}
+
+		printf("\b\b. \n");
+	}
+	else
+	{
+		printf("Sin clases asignadas.\n");
+	}
+
+	printf("\n--------------------------------------\n");
 }
 
 static int ClienteBuscarId(Cliente* clientes, int size, int id, int i)

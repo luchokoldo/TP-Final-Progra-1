@@ -16,11 +16,21 @@ typedef struct Cliente
     int idClasesValidos;
 } Cliente;
 
-Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id,char *nombre, char *genero);
-void ClienteMostrarCliente(Cliente* clientes, int size);
+Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char *nombre, char *genero);
+void ClienteMostrarClientes(Cliente* clientes, int size);
+void ClienteMostrarCliente(Cliente* cliente);
 int ClienteBuscarClienteId(Cliente* cliente, int size, int id);
-void ClienteModificarCliente(Cliente* cliente, int size, int id);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int* size, int id);
-void ClienteExportarTxt(Cliente* clientes, int size);
+
+void ClienteAgregarClase(Cliente* cliente, int idClase);
+void ClienteElimarClase(Cliente* cliente, int idClase);
+
+Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id);
+void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nombre);
+void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* genero);
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
+
+void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* nombreNuevo);
+void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* generoNuevo);
 
 #endif
