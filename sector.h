@@ -12,10 +12,12 @@ typedef struct Sector
 
 Sector* SectorAgregarSector(Sector* sectores, int size, int id, char* nombre);
 void SectorMostrarSectores(Sector* sectores, int size);
-int SectorBuscarId(Sector* sectores, int size, int id, int i);
+int SectorBuscarSectorId(Sector* sectores, int size, int id);
 Sector* SectorEliminarSector(Sector* sectores, int size, int id);
+
 Sector* SectorObtenerSector(Sector* sectores, int size, int id);
 void SectorObtenerSectorNombre(Sector* sectores, int size, int id, char* nombre);
+
 void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombreNuevo);
 
 #endif

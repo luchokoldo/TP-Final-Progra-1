@@ -138,7 +138,7 @@ void GymModificarEntrenadorGenero(Gym* gym, int id)
 	ArchivoModificarEntrenador(entrenador);
 }
 
-void GymObtenerEntrenadoresNombresIds(Gym* gym, char* nombresEntrenadores, int* idsEntrenadores)
+void GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores)
 {
 	EntrenadorObtenerEntrenadoresNombresIds(gym->entrenadores, gym->entrenadoresSize, nombresEntrenadores, idsEntrenadores);
 }

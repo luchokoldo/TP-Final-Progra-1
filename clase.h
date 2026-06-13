@@ -1,9 +1,9 @@
 #ifndef _CLASE_H_INCLUDED
 #define _CLASE_H_INCLUDED
 
-#define MAX_NOMBRE_CLASE_SIZE 64
-#define MAX_ID_CLIENTE_SIZE 32
-#define CLASE_ID_INVALIDO      -1
+#define MAX_NOMBRE_CLASE_SIZE   64
+#define MAX_ID_CLIENTE_SIZE     32
+#define CLASE_ID_INVALIDO       -1
 
 
 typedef struct Horario
@@ -35,17 +35,19 @@ typedef struct Clase
 
 Clase* ClaseAgregarClase(Clase* clases, int* size, int *id);
 void ClaseMostrarClase(Clase* clases, int size);
-int ClaseBuscarId(Clase* clase, int size, int id, int i);
-void ClaseModificarClase(Clase* clase, int size, int id);
+int ClaseBuscarClaseId(Clase* clase, int size, int id);
 Clase* ClaseEliminarClase(Clase* clases, int* size, int id);
-void ClaseExportarTxt(Clase* clases, int size);
+
+void ClaseAgregarCliente(Clase* clase, int idCliente);
 void ClaseEliminarCliente(Clase* clase, int idCliente);
+
 void ClaseAgregarEntrenador(Clase* clase, int idEntrenador);
 void ClaseModificarEntrendor(Clase* clase, int idEntrenador);
-void ClaseEliminarEntrenador(Clase* clase, int idEntrenador);
+void ClaseEliminarEntrenador(Clase* clase);
+
 void ClaseAgregarSector(Clase* clase, int idSector);
 void ClaseModificarSector(Clase* clase, int idSector);
-void ClaseEliminarSector(Clase* clase, int idSector);
+void ClaseEliminarSector(Clase* clase);
 
 
 #endif

@@ -32,6 +32,7 @@ void GymModificarEntrenadorNombre(Gym* gym, int id);
 void GymModificarEntrenadorGenero(Gym* gym, int id);
 void GymMostrarEntrenadores(Gym* gym);
 void GymEliminarEntrenador(Gym* gym, int id);
+void GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores);
 int GymHayEntrenadores(Gym* gym);
 
 void GymAgregarSector(Gym* gym);
