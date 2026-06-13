@@ -32,7 +32,6 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double p
 	
 	aux[size] = nuevo;
 
-	
 	return aux;
 }
 
@@ -248,7 +247,6 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 
 	printf("Cliente %d eliminado con exito de la clase '%s'.\n", idCliente, clase->nombre);
 }
-
 
 void ClaseAgregarEntrenador(Clase* clase, int idEntrenador)
 {

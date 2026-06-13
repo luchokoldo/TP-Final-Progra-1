@@ -19,11 +19,11 @@ typedef struct Cliente
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char *nombre, char *genero);
 void ClienteMostrarClientes(Cliente* clientes, int size);
 void ClienteMostrarCliente(Cliente* cliente);
-int ClienteBuscarClienteId(Cliente* cliente, int size, int id);
+int ClienteBuscarClienteId(Cliente* clientes, int size, int id);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int* size, int id);
 
 void ClienteAgregarClase(Cliente* cliente, int idClase);
-void ClienteElimarClase(Cliente* cliente, int idClase);
+void ClienteEliminarClase(Cliente* cliente, int idClase);
 
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id);
 void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nombre);

@@ -42,20 +42,16 @@ void GymMostrarSectores(Gym* gym);
 void GymEliminarSector(Gym* gym, int id);
 int GymHaySectores(Gym* gym);
 
-
-
-
-void GymAgregarClase(Gym* gym)
-{
-
-}
+void GymAgregarClase(Gym* gym);
 
 void GymAgregarCliente(Gym* gym);
 void GymModificarClienteNombre(Gym* gym, int id);
 void GymModificarClienteGenero(Gym* gym, int id);
 void GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
 void GymMostrarClientes(Gym* gym);
-void GymEliminarClientes(Gym* gym, int id);
+void GymEliminarCliente(Gym* gym, int id);
+void GymAgregarClienteClase(Gym* gym, int idCliente, int idClase);
+void GymEliminarClienteClase(Gym* gym, int idCliente, int idClase);
 int GymHayClientes(Gym* gym);
 
 

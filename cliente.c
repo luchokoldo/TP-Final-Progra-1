@@ -64,17 +64,17 @@ void ClienteMostrarClientes(Cliente* clientes, int size)
 	printf("\n--------------------------------------\n");
 }
 
-int ClienteBuscarClienteId(Cliente* cliente, int size, int id)
+int ClienteBuscarClienteId(Cliente* clientes, int size, int id)
 {
 	if (id < 0 || id >= size)
 	{
 		return CLIENTE_ID_INVALIDO;
 	}
 
-	return ClienteBuscarId(cliente, size, id, 0);
+	return ClienteBuscarId(clientes, size, id, 0);
 }
 
-Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
+Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int id)
 {
 	int posicion = ClienteBuscarClienteId(clientes, size, id);
 
@@ -84,6 +84,7 @@ Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
 
 		return clientes;
 	}
+
 	if (size > 1)
 	{
 		for (int i = posicion; i < (size)-1; i++)
@@ -114,8 +115,6 @@ Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
 
 void ClienteAgregarClase(Cliente* cliente, int idClase)
 {
-	if (cliente == NULL) return;
-
 	if (cliente->idClasesValidos >= MAX_ID_CLIENTE_SIZE)
 	{
 		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas.\n", cliente->nombre);
@@ -137,7 +136,7 @@ void ClienteAgregarClase(Cliente* cliente, int idClase)
 	cliente->idClasesValidos++;
 }
 
-void ClienteElimarClase(Cliente* cliente, int idClase)
+void ClienteEliminarClase(Cliente* cliente, int idClase)
 {
 	if (cliente == NULL || cliente->idClasesValidos == 0) return;
 

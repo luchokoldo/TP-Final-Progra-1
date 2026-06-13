@@ -5,7 +5,6 @@
 #define MAX_ID_CLIENTE_SIZE     32
 #define CLASE_ID_INVALIDO       -1
 
-
 typedef struct Horario
 {
     int horas;
