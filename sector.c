@@ -121,6 +121,15 @@ void SectorObtenerSectorNombre(Sector* sectores, int size, int id, char* nombre)
 	snprintf(nombre, MAX_NOMBRE_SECTOR_SIZE, "%s", sectores[index].nombre);
 }
 
+void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores)
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(nombresSectores[i], MAX_NOMBRE_SECTOR_SIZE, "%s", sectores[i].nombre);
+		idsSectores[i] = sectores[i].id;
+	}
+}
+
 void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombreNuevo)
 {
 	int index = SectorBuscarSectorId(sectores, size, id);
