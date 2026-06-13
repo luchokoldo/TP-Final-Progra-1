@@ -69,12 +69,12 @@ int ClienteBuscarId(Cliente* cliente, int size, int id)
 		return CLIENTE_ID_INVALIDO;
 	}
 
-	return ClienteBuscarId(cliente, size, id, 0);
+	return ClienteBuscarClienteId(cliente, size, id);
 }
 
 Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
 {
-	int posicion = ClienteBuscarClienteId(clientes, size, id, 0);
+	int posicion = ClienteBuscarClienteId(clientes, size, id);
 
 	if (posicion == -1)
 	{
@@ -148,7 +148,10 @@ void ClienteElimarClase(Cliente* cliente, int idClase)
 		}
 	}
 
-	if (posicion == -1) return;
+	if (posicion == CLIENTE_ID_INVALIDO)
+	{
+		return;
+	}
 
 	for (int i = posicion; i < cliente->idClasesValidos - 1; i++)
 	{
@@ -162,11 +165,12 @@ void ClienteElimarClase(Cliente* cliente, int idClase)
 
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return NULL;
 	}
 
@@ -175,11 +179,12 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int id)
 
 void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nombre)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -188,11 +193,12 @@ void ClienteObtenerClienteNombre(Cliente* clientes, int size, int id, char* nomb
 
 void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* genero)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -201,11 +207,12 @@ void ClienteObtenerClienteGenero(Cliente* clientes, int size, int id, char* gene
 
 void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* nombreNuevo)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
@@ -214,13 +221,32 @@ void ClienteModificarClienteNombre(Cliente* clientes, int size, int id, char* no
 
 void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* generoNuevo)
 {
-	int index = ClienteBuscarClienteId(clientes, size, id, 0);
+	int index = ClienteBuscarClienteId(clientes, size, id);
 
-	if (index == -1)
+	if (index == CLIENTE_ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
+
 		return;
 	}
 
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
+}
+static int ClienteBuscarId(Cliente* clientes, int size, int id, int i)
+{
+	if (i >= size)
+	{
+		return	
+
+			CLIENTE_ID_INVALIDO;
+	}
+
+	if (clientes[i].id == id)
+	{
+		return i;
+	}
+
+	i++;
+
+	return EntrenadorBuscarEntrenadorId(clientes, size, id, i);
 }
