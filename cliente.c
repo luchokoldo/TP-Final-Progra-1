@@ -116,9 +116,10 @@ void ClienteAgregarClase(Cliente* cliente, int idClase)
 {
 	if (cliente == NULL) return;
 
-	if (cliente->idClasesValidos >= 32)
+	if (cliente->idClasesValidos >= MAX_ID_CLIENTE_SIZE)
 	{
 		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas.\n", cliente->nombre);
+
 		return;
 	}
 
@@ -127,6 +128,7 @@ void ClienteAgregarClase(Cliente* cliente, int idClase)
 		if (cliente->idClases[i] == idClase)
 		{
 			printf("El cliente '%s' ya se encuentra inscripto en la clase ID %d.\n", cliente->nombre, idClase);
+
 			return;
 		}
 	}
@@ -139,13 +141,14 @@ void ClienteElimarClase(Cliente* cliente, int idClase)
 {
 	if (cliente == NULL || cliente->idClasesValidos == 0) return;
 
-	int posicion = -1;
+	int posicion = CLIENTE_ID_INVALIDO;
 
 	for (int i = 0; i < cliente->idClasesValidos; i++)
 	{
 		if (cliente->idClases[i] == idClase)
 		{
 			posicion = i;
+
 			break;
 		}
 	}

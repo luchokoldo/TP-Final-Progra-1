@@ -3,8 +3,8 @@
 
 #define MAX_NOMBRE_CLIENTE_SIZE 64
 #define MAX_GENERO_CLIENTE_SIZE 32
-#define MAX_ID_CLIENTE_SIZE 32
-#define CLIENTE_ID_INVALIDO      -1
+#define MAX_ID_CLIENTE_SIZE     32
+#define CLIENTE_ID_INVALIDO     -1
 
 
 typedef struct Cliente

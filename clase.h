@@ -33,10 +33,15 @@ typedef struct Clase
     Duracion duracion;
 } Clase;
 
-Clase* ClaseAgregarClase(Clase* clases, int* size, int *id);
-void ClaseMostrarClase(Clase* clases, int size);
+Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double precio, Horario inicio, Duracion duracion);
+void ClaseMostrarClases(Clase* clases, int size);
+void ClaseMostrarClase(Clase* clase);
 int ClaseBuscarClaseId(Clase* clase, int size, int id);
 Clase* ClaseEliminarClase(Clase* clases, int* size, int id);
+
+Clase* ClaseObtenerClase(Clase* clases, int size, int id);
+void ClaseObtenerClaseNombre(Clase* clases, int size, int id, char* nombre);
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
 
 void ClaseAgregarCliente(Clase* clase, int idCliente);
 void ClaseEliminarCliente(Clase* clase, int idCliente);

@@ -14,21 +14,21 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double p
 	snprintf(nuevo.nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombre);
 	nuevo.precio = precio;
 	nuevo.inicio = inicio;
-	nuevo.duracion=duracion ;
+	nuevo.duracion= duracion;
 	nuevo.idClientesValidos = 0;
-	nuevo.idEntrenador = -1; 
-	nuevo.idSector = -1;
+	nuevo.idEntrenador = CLASE_ID_INVALIDO; 
+	nuevo.idSector = CLASE_ID_INVALIDO;
 
 	Clase* aux = NULL;
 
-		aux = realloc(clases, (size_t)(size + 1) * sizeof(Clase));
+	aux = realloc(clases, (size_t)(size + 1) * sizeof(Clase));
 
-		if (aux == NULL)
-		{
-			printf("[ERROR] realloc(clases, (size_t)(size + 1) * sizeof(Clase)) devolvio NULL");
+	if (aux == NULL)
+	{
+		printf("[ERROR] realloc(clases, (size_t)(size + 1) * sizeof(Clase)) devolvio NULL");
 
-			return NULL;
-		}
+		return NULL;
+	}
 	
 	aux[size] = nuevo;
 
@@ -36,27 +36,27 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double p
 	return aux;
 }
 
-void ClaseMostrarClase(Clase* clases, int size)
+void ClaseMostrarClases(Clase* clases, int size)
 {
 	if (size <= 0)
 	{
 		return;
 	}
 
-	ClaseMostrarClase(clases, size - 1);
+	ClaseMostrarClases(clases, size - 1);
 
-	printf("-------------------------------------\n");
-	printf("\nId de la clase: %d", clases[size-1].id);
-	printf("\n Clase: %s", clases[size - 1].nombre);
-	printf("\n Id entrenador: %d", clases[size - 1].idEntrenador);
-	printf("\n Id sector: %d ", clases[size - 1].idSector);
-	printf("\nClientes: ");
+	printf("\n-------------------------------------\n\n");
+	printf("Id de la clase: %d\n", clases[size-1].id);
+	printf("Clase: %s\n", clases[size - 1].nombre);
+	printf("Id entrenador: %d\n", clases[size - 1].idEntrenador);
+	printf("Id sector: %d\n", clases[size - 1].idSector);
+	printf("Clientes: ");
 
 	if (clases[size - 1].idClientesValidos > 0)
 	{
 		for (int j = 0; j < clases[size - 1].idClientesValidos; j++)
 		{
-			printf("%d,", clases[size - 1].idClientes[j]);
+			printf("%d, ", clases[size - 1].idClientes[j]);
 		}
 
 		printf("\b\b. \n");
@@ -65,17 +65,44 @@ void ClaseMostrarClase(Clase* clases, int size)
 	{
 		printf("Sin clientes asignados.\n");
 	}
+
 	printf("\n--------------------------------------\n");
 }
 
-int ClaseBuscarClaseId(Clase* clase, int size, int id)
+void ClaseMostrarClase(Clase* clase)
+{
+	printf("\n-------------------------------------\n\n");
+	printf("Id de la clase: %d\n", clase->id);
+	printf("Clase: %s\n", clase->nombre);
+	printf("Id entrenador: %d\n", clase->idEntrenador);
+	printf("Id sector: %d\n", clase->idSector);
+	printf("Clientes: ");
+
+	if (clase->idClientesValidos > 0)
+	{
+		for (int j = 0; j < clase->idClientesValidos; j++)
+		{
+			printf("%d, ", clase->idClientes[j]);
+		}
+
+		printf("\b\b. \n");
+	}
+	else
+	{
+		printf("Sin clientes asignados.\n");
+	}
+
+	printf("\n--------------------------------------\n");
+}
+
+int ClaseBuscarClaseId(Clase* clases, int size, int id)
 {
 	if (id < 0 || id >= size)
 	{
 		return CLASE_ID_INVALIDO;
 	}
 
-	return ClaseBuscarId(clase, size, id, 0);
+	return ClaseBuscarId(clases, size, id, 0);
 }
 
 Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
@@ -115,6 +142,43 @@ Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
 	}
 
 	return aux;
+}
+
+Clase* ClaseObtenerClase(Clase* clases, int size, int id)
+{
+	int index = ClaseBuscarClaseId(clases, size, id);
+
+	if (index == CLASE_ID_INVALIDO)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+
+		return NULL;
+	}
+
+	return &clases[index];
+}
+
+void ClaseObtenerClaseNombre(Clase* clases, int size, int id, char* nombre)
+{
+	int index = ClaseBuscarClaseId(clases, size, id);
+
+	if (index == CLASE_ID_INVALIDO)
+	{
+		printf("[ERROR] No se encontro el id %d", id);
+
+		return;
+	}
+
+	snprintf(nombre, MAX_NOMBRE_CLASE_SIZE, "%s", clases[index].nombre);
+}
+
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(nombresClases[i], MAX_NOMBRE_CLASE_SIZE, "%s", clases[i].nombre);
+		idsClases[i] = clases[i].id;
+	}
 }
 
 void ClaseAgregarCliente(Clase* clase, int idCliente)
@@ -188,7 +252,10 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 
 void ClaseAgregarEntrenador(Clase* clase, int idEntrenador)
 {
-	if (clase == NULL) return;
+	if (clase == NULL)
+	{
+		return;
+	}
 
 	clase->idEntrenador = idEntrenador;
 
@@ -255,19 +322,19 @@ void ClaseEliminarSector(Clase* clase)
 	printf("Sector removido de la clase '%s' con exito.\n", clase->nombre);
 }
 
-static int ClaseBuscarId(Clase* clase, int size, int id, int i)
+static int ClaseBuscarId(Clase* clases, int size, int id, int i)
 {
 	if (i == size)
 	{
 		return CLASE_ID_INVALIDO;
 	}
 
-	if (clase[i].id == id)
+	if (clases[i].id == id)
 	{
 		return i;
 	}
 
 	i++;
 
-	return ClaseBuscarId(clase, size, id, i);
+	return ClaseBuscarId(clases, size, id, i);
 }
