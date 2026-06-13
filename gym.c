@@ -65,21 +65,6 @@ void GymAgregarEntrenador(Gym* gym)
 	ArchivoActualizarIds(&gym->ids);
 }
 
-void GymAgregarSector(Gym* gym)
-{
-	
-}
-
-void GymAgregarClase(Gym* gym)
-{
-	
-}
-
-void GymAgregarCliente(Gym* gym)
-{
-	
-}
-
 void GymModificarEntrenadorNombre(Gym* gym, int id)
 {
 	char nombreViejo[MAX_NOMBRE_ENTRENADOR_SIZE];
@@ -190,6 +175,21 @@ int GymHayEntrenadores(Gym* gym)
 	}
 
 	return gym->entrenadoresSize;
+}
+
+void GymAgregarSector(Gym* gym)
+{
+
+}
+
+void GymAgregarClase(Gym* gym)
+{
+
+}
+
+void GymAgregarCliente(Gym* gym)
+{
+
 }
 
 static void GymIngresarNombre(char* nombre, int size)
