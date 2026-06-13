@@ -4,6 +4,8 @@
 #include "scanner.h"
 #include "utilidades.h"
 
+static int ClienteBuscarId(Cliente* clientes, int size, int id, int i);
+
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int id, char* nombre, char* genero)
 {
 	Cliente nuevo = { 0 };
@@ -62,14 +64,14 @@ void ClienteMostrarCliente(Cliente* clientes, int size)
 	printf("\n--------------------------------------\n");
 }
 
-int ClienteBuscarId(Cliente* cliente, int size, int id)
+int ClienteBuscarClienteId(Cliente* cliente, int size, int id)
 {
 	if (id < 0 || id >= size)
 	{
 		return CLIENTE_ID_INVALIDO;
 	}
 
-	return ClienteBuscarClienteId(cliente, size, id);
+	return ClienteBuscarId(cliente, size, id, 0);
 }
 
 Cliente* ClienteEliminarcliente(Cliente* clientes, int size, int id)
@@ -232,9 +234,10 @@ void ClienteModificarClienteGenero(Cliente* clientes, int size, int id, char* ge
 
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
 }
+
 static int ClienteBuscarId(Cliente* clientes, int size, int id, int i)
 {
-	if (i >= size)
+	if (i == size)
 	{
 		return	
 
@@ -248,5 +251,5 @@ static int ClienteBuscarId(Cliente* clientes, int size, int id, int i)
 
 	i++;
 
-	return EntrenadorBuscarEntrenadorId(clientes, size, id, i);
+	return ClienteBuscarId(clientes, size, id, i);
 }

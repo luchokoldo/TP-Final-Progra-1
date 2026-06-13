@@ -177,7 +177,7 @@ void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int
 
 static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
 {
-	if (i >= size)
+	if (i == size)
 	{
 		return ENTRENADOR_ID_INVALIDO;
 	}
@@ -189,5 +189,5 @@ static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
 
 	i++;
 
-	return EntrenadorBuscarEntrenadorId(entrenadores, size, id, i);
+	return EntrenadorBuscarId(entrenadores, size, id, i);
 }

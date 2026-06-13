@@ -33,19 +33,17 @@ Sector* SectorAgregarSector(Sector* sectores, int size, int id, char *nombre)
 }
 void SectorMostrarSectores(Sector* sectores, int size)
 {
-
 	if (size <= 0)
 	{
 		return;
 	}
-	SectorMostrarSector(sectores, size - 1);
+
+	SectorMostrarSectores(sectores, size - 1);
 
 	printf("\n--------------------------------------");
 	printf("\nID: %d", sectores[size - 1].id);
 	printf("\nNombre: %s", sectores[size - 1].nombre);
 	printf("\n--------------------------------------\n");
-
-
 }
 
 int SectorBuscarSectorId(Sector* sectores, int size, int id)
