@@ -8,5 +8,6 @@ int ScannerInt(void);
 float ScannerFloat(void);
 double ScannerDouble(void); 
 int ScannerString(char* string, int maxLength);
+char ScannerChar(void);
 
 #endif

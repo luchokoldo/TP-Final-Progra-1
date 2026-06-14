@@ -64,3 +64,11 @@ int ScannerString(char* string, int maxLength)
 
 	return strlen(string);
 }
+
+char ScannerChar(void)
+{
+	char aux = '\0';
+	scanf("%c", &aux);
+	limpiarBuferDeEntrada();
+	return aux;
+}
