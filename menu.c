@@ -8,6 +8,14 @@
 #include "clase.h"
 #include "archivos.h"
 
+#define MAX_MENU_ITEMS  7
+
+#define MENU_PREV       8
+#define MENU_NEXT       9
+#define MENU_EXIT       0
+
+#define MENU_EXIT_VALUE -1
+
 static void MenuSecundario(Gym* gym, char* nombreAccion, int accion);
 static void MenuSecundarioAccionCliente(Gym* gym, int accion);
 static void MenuSecundarioAccionEntrenador(Gym* gym, int accion);
@@ -333,7 +341,98 @@ static void MenuSecundarioAccionClase(Gym* gym, int accion)
 
 }
 
+static void MenuListaAgregarVolver(int pagina)
+{
+	if (pagina > 1)
+	{
+		printf("%d. Volver\n", MENU_PREV);
+	}
+	else
+	{
+		printf("\n");
+	}
+}
 
+static void MenuListaAgregarSiguiente(int size, int pagina)
+{
+	if (size > MAX_MENU_ITEMS * pagina)
+	{
+		printf("%d. Siguiente\n", MENU_NEXT);
+	}
+	else
+	{
+		printf("\n");
+	}
+}
+
+static void MenuListaAgregarSalir(void)
+{
+	printf("\n%d. Salir\n\n", MENU_EXIT);
+}
+
+static int MenuListaObtenerOpcionValida(int size, int pagina)
+{
+	char opcion;
+	int iOpcion;
+
+	printf("Elegir opcion: ");
+
+	opcion = ScannerChar();
+
+	iOpcion = opcion - '0';
+
+	if (iOpcion >= 0 && iOpcion <= 9)
+	{
+		int opcionesEnPagina = (size - MAX_MENU_ITEMS * (pagina - 1) < MAX_MENU_ITEMS) ?
+			(size - MAX_MENU_ITEMS * (pagina - 1)) : MAX_MENU_ITEMS;
+
+		if (iOpcion <= opcionesEnPagina ||
+			(pagina > 1 && iOpcion == MENU_PREV) ||
+			(size > MAX_MENU_ITEMS * pagina && iOpcion == MENU_NEXT))
+		{
+			return iOpcion;
+		}
+	}
+
+	printf("[MENU] Opcion incorrecta. Intente de nuevo.\n");
+
+	return MenuListaObtenerOpcionValida(size, pagina);
+}
+
+static int MenuListaCrearMenu(const char* titulo, char texto[][64], int textoSize, int pagina)
+{
+	printf("\n\t%s (Pagina %d)\n\n", titulo, pagina);
+
+	int inicio = MAX_MENU_ITEMS * (pagina - 1);
+	int fin = inicio + MAX_MENU_ITEMS;
+
+	if (fin > textoSize)
+	{
+		fin = textoSize;
+	}
+
+	for (int i = inicio; i < fin; i++)
+	{
+		printf("%d. %s\n", (i % MAX_MENU_ITEMS) + 1, texto[i]);
+	}
+
+	printf("\n");
+
+	MenuListaAgregarVolver(pagina);
+	MenuListaAgregarSiguiente(textoSize, pagina);
+	MenuListaAgregarSalir();
+
+	int opcion = MenuListaObtenerOpcionValida(textoSize, pagina);
+
+	switch (opcion)
+	{
+	case MENU_PREV:  return MenuListaCrearMenu(titulo, texto, textoSize, pagina - 1);
+	case MENU_NEXT:  return MenuListaCrearMenu(titulo, texto, textoSize, pagina + 1);
+	case MENU_EXIT:  return MENU_EXIT_VALUE;
+	}
+
+	return inicio + opcion - 1;
+}
 
 static void Pausa(void)
 {
