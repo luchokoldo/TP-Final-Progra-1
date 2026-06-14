@@ -40,18 +40,28 @@ Clase* ClaseEliminarClase(Clase* clases, int* size, int id);
 
 Clase* ClaseObtenerClase(Clase* clases, int size, int id);
 void ClaseObtenerClaseNombre(Clase* clases, int size, int id, char* nombre);
+
 void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
+void ClaseModificarClaseNombre(Clase* clases, int size, int id, char* nombreNuevo);
+
+void ClaseObtenerClaseHorario(Clase* clases, int size, int id, Horario* horario);
+void ClaseModificarClaseHorario(Clase* clases, int size, int id, Horario horarioNuevo);
+
+void ClaseObtenerClaseDuracion(Clase* clases, int size, int id, Duracion* duracion);
+void ClaseModificarClaseDuracion(Clase* clases, int size, int id, Duracion duracionNueva);
 
 void ClaseAgregarCliente(Clase* clase, int idCliente);
 void ClaseEliminarCliente(Clase* clase, int idCliente);
 
-void ClaseAgregarEntrenador(Clase* clase, int idEntrenador);
-void ClaseModificarEntrendor(Clase* clase, int idEntrenador);
+void ClaseAsignarEntrenador(Clase* clase, int idEntrenador);
 void ClaseEliminarEntrenador(Clase* clase);
 
-void ClaseAgregarSector(Clase* clase, int idSector);
-void ClaseModificarSector(Clase* clase, int idSector);
+void ClaseAsignarSector(Clase* clase, int idSector);
 void ClaseEliminarSector(Clase* clase);
 
+
+double ClaseObtenerClasePrecio(Clase* clases, int size, int id);
+void ClaseEliminarPrecio(Clase* clases, int size, int id);
+void ClaseAsignarPrecio(Clase* clases, int size, int id, double precioNuevo);
 
 #endif

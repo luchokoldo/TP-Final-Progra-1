@@ -302,7 +302,160 @@ int GymHaySectores(Gym* gym)
 
 void GymAgregarClase(Gym* gym)
 {
+}
+void GymModificarClaseNombre(Gym* gym, int id)
+{
+	char nombreViejo[MAX_NOMBRE_CLASE_SIZE];
+	char nombreNuevo[MAX_NOMBRE_CLASE_SIZE];
 
+	ClaseObtenerClaseNombre(gym->clases, gym->clasesSize, id, nombreViejo);
+	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLASE_SIZE);
+
+	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+	{
+		return;
+	}
+
+	ClaseModificarClaseNombre(gym->clases, gym->clasesSize, id, nombreNuevo);
+
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, id);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, id) devolvio NULL\n");
+		GymExit(gym);
+		return;
+	}
+
+	ArchivoModificarClase(clase);
+}
+
+void GymEliminarClasePrecio(Gym* gym, int id)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, id);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, id) devolvio NULL\n");
+		return;
+	}
+
+	ClaseEliminarPrecio(gym->clases, gym->clasesSize, id);
+
+	ArchivoModificarClase(clase);
+}
+
+void GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
+{
+	ClaseObtenerClasesNombresIds(gym->clases, gym->clasesSize, nombresClases, idsClases);
+}
+
+void GymMostrarClases(Gym* gym)
+{
+	ClaseMostrarClases(gym->clases, gym->clasesSize);
+}
+
+void GymEliminarClase(Gym* gym, int id)
+{
+	Clase* temp = NULL;
+
+	temp = ClaseEliminarClase(gym->clases, &gym->clasesSize, id);
+
+	if (temp == gym->clases && gym->clasesSize > 0)
+	{
+		GymExit(gym);
+	}
+
+	if (temp == NULL)
+	{
+		if (gym->clasesSize <= 0)
+		{
+			gym->clases = NULL;
+			gym->clasesSize = 0;
+
+			ArchivoBorrarClases();
+
+			return;
+		}
+		else
+		{
+			GymExit(gym);
+		}
+	}
+
+	gym->clases = temp;
+
+	ArchivoBorrarClase(id);
+}
+
+void GymAsignarEntrenadorClase(Gym* gym, int idClase, int idEntrenador)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] No se encontro la clase con ID %d para asignar entrenador.\n", idClase);
+		return;
+	}
+
+	ClaseAsignarEntrenador(clase, idEntrenador);
+
+	ArchivoModificarClase(clase);
+}
+
+void GymEliminarEntrenadorClase(Gym* gym, int idClase)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] No se encontro la clase con ID %d para remover entrenador.\n", idClase);
+		return;
+	}
+
+	ClaseEliminarEntrenador(clase);
+
+	ArchivoModificarClase(clase);
+}
+
+void GymAsignarSectorClase(Gym* gym, int idClase, int idSector)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] No se encontro la clase con ID %d para asignar sector.\n", idClase);
+		return;
+	}
+
+	ClaseAsignarSector(clase, idSector);
+
+	ArchivoModificarClase(clase);
+}
+
+void GymEliminarSectorClase(Gym* gym, int idClase)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] No se encontro la clase con ID %d para remover sector.\n", idClase);
+		return;
+	}
+
+	ClaseEliminarSector(clase);
+
+	ArchivoModificarClase(clase);
+}
+
+int GymHayClases(Gym* gym)
+{
+	if (gym->clases == NULL)
+	{
+		return 0;
+	}
+
+	return gym->clasesSize;
 }
 
 void GymAgregarCliente(Gym* gym)
@@ -456,7 +609,7 @@ void GymEliminarCliente(Gym* gym, int id)
 	gym->clientes = temp;
 	gym->clientesSize--;
 
-	ArchivoBorrarClientes(id);
+	ArchivoBorrarCliente(id);
 }
 
 void GymAgregarClienteClase(Gym* gym, int idCliente, int idClase)
