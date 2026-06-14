@@ -542,14 +542,14 @@ void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size)
 		return;
 	}
 
-	fprintf(f, "/t%s\n", ARCHIVO_ENTRENADORES_TXT);
+	fprintf(f, "\t%s\n", ARCHIVO_ENTRENADORES_TXT);
 
 	for (int i = 0; i < size; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n");
-		fprintf(f, "\nID: %d", entrenadores[i].id);
-		fprintf(f, "\nNombre: %s", entrenadores[i].nombre);
-		fprintf(f, "\nGenero: %s", entrenadores[i].genero);
+		fprintf(f, "\n--------------------------------------\n\n");
+		fprintf(f, "ID: %d\n", entrenadores[i].id);
+		fprintf(f, "Nombre: %s\n", entrenadores[i].nombre);
+		fprintf(f, "Genero: %s\n", entrenadores[i].genero);
 		fprintf(f, "\n--------------------------------------\n");
 	}
 
@@ -589,13 +589,13 @@ void ArchivoExportarSectores(Sector* sectores, int size)
 		return;
 	}
 
-	fprintf(f, "/t%s\n", ARCHIVO_SECTORES_TXT);
+	fprintf(f, "\t%s\n", ARCHIVO_SECTORES_TXT);
 
 	for (int i = 0; i < size; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n");
-		fprintf(f, "\nID: %d", sectores[i].id);
-		fprintf(f, "\nNombre: %s\n", sectores[i].nombre);
+		fprintf(f, "\n--------------------------------------\n\n");
+		fprintf(f, "ID: %d\n", sectores[i].id);
+		fprintf(f, "Nombre: %s\n", sectores[i].nombre);
 		fprintf(f, "\n--------------------------------------\n");
 	}
 
@@ -635,16 +635,16 @@ void ArchivoExportarClases(Clase* clases, int size)
 		return;
 	}
 
-	fprintf(f, "/t%s\n", ARCHIVO_CLASES_TXT);
+	fprintf(f, "\t%s\n", ARCHIVO_CLASES_TXT);
 
 	for (int i = 0; i < size; i++)
 	{
-		fprintf(f, "\n-------------------------------------\n");
-		fprintf(f, "\nId de la clase: %d", clases[i].id);
-		fprintf(f, "\nClase: %s", clases[i].nombre);
-		fprintf(f, "\nId entrenador: %d", clases[i].idEntrenador);
-		fprintf(f, "\nId sector: %d ", clases[i].idSector);
-		fprintf(f, "\nClientes: ");
+		fprintf(f, "\n-------------------------------------\n\n");
+		fprintf(f, "Id de la clase: %d\n", clases[i].id);
+		fprintf(f, "Clase: %s\n", clases[i].nombre);
+		fprintf(f, "Id entrenador: %d\n", clases[i].idEntrenador);
+		fprintf(f, "Id sector: %d\n", clases[i].idSector);
+		fprintf(f, "Clientes: ");
 
 		if (clases[i].idClientesValidos > 0)
 		{
@@ -653,7 +653,7 @@ void ArchivoExportarClases(Clase* clases, int size)
 				fprintf(f, "%d, ", clases[i].idClientes[j]);
 			}
 
-			fprintf(f, "\b\b\n");
+			fprintf(f, "\b\b.\n");
 		}
 		else
 		{
@@ -699,15 +699,15 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 		return;
 	}
 
-	fprintf(f, "/t%s\n", ARCHIVO_CLIENTES_TXT);
+	fprintf(f, "\t%s\n", ARCHIVO_CLIENTES_TXT);
 
 	for (int i = 0; i < size; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n");
-		fprintf(f, "\nID: %d", clientes[size - 1].id);
-		fprintf(f, "\nNombre: %s", clientes[size - 1].nombre);
-		fprintf(f, "\nGenero: %s", clientes[size - 1].genero);
-		fprintf(f, "\nClases: ");
+		fprintf(f, "\n--------------------------------------\n\n");
+		fprintf(f, "ID: %d\n", clientes[size - 1].id);
+		fprintf(f, "Nombre: %s\n", clientes[size - 1].nombre);
+		fprintf(f, "Genero: %s\n", clientes[size - 1].genero);
+		fprintf(f, "Clases: ");
 		
 		if (clientes[i].idClasesValidos > 0)
 		{
@@ -716,7 +716,7 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 				fprintf(f, "%d, ", clientes[i].idClases[j]);
 			}
 
-			fprintf(f, "\b\b\n");
+			fprintf(f, "\b\b.\n");
 		}
 		else
 		{

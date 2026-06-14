@@ -32,23 +32,25 @@ typedef struct Clase
     Duracion duracion;
 } Clase;
 
-Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double precio, Horario inicio, Duracion duracion);
+Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, double precio, Horario inicio, Duracion duracion);
 void ClaseMostrarClases(Clase* clases, int size);
 void ClaseMostrarClase(Clase* clase);
-int ClaseBuscarClaseId(Clase* clase, int size, int id);
-Clase* ClaseEliminarClase(Clase* clases, int* size, int id);
+int ClaseBuscarClaseId(Clase* clase, int size, int idClase);
+Clase* ClaseEliminarClase(Clase* clases, int size, int idClase);
 
-Clase* ClaseObtenerClase(Clase* clases, int size, int id);
-void ClaseObtenerClaseNombre(Clase* clases, int size, int id, char* nombre);
+Clase* ClaseObtenerClase(Clase* clases, int size, int idClase);
+int ClaseObtenerClientesEnClase(Clase* clase);
+void ClaseObtenerClaseNombre(Clase* clases, int size, int idClase, char* nombre);
+void ClaseObtenerClaseClientesIds(Clase* clase, int* idsClientes);
 
 void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
-void ClaseModificarClaseNombre(Clase* clases, int size, int id, char* nombreNuevo);
+void ClaseModificarClaseNombre(Clase* clases, int size, int idClase, char* nombreNuevo);
 
-void ClaseObtenerClaseHorario(Clase* clases, int size, int id, Horario* horario);
-void ClaseModificarClaseHorario(Clase* clases, int size, int id, Horario horarioNuevo);
+Horario ClaseObtenerClaseHorario(Clase* clase);
+void ClaseModificarClaseHorario(Clase* clase, Horario horarioNuevo);
 
-void ClaseObtenerClaseDuracion(Clase* clases, int size, int id, Duracion* duracion);
-void ClaseModificarClaseDuracion(Clase* clases, int size, int id, Duracion duracionNueva);
+Duracion ClaseObtenerClaseDuracion(Clase* clase);
+void ClaseModificarClaseDuracion(Clase* clase, Duracion duracionNueva);
 
 void ClaseAgregarCliente(Clase* clase, int idCliente);
 void ClaseEliminarCliente(Clase* clase, int idCliente);
@@ -59,9 +61,7 @@ void ClaseEliminarEntrenador(Clase* clase);
 void ClaseAsignarSector(Clase* clase, int idSector);
 void ClaseEliminarSector(Clase* clase);
 
-
-double ClaseObtenerClasePrecio(Clase* clases, int size, int id);
-void ClaseEliminarPrecio(Clase* clases, int size, int id);
-void ClaseAsignarPrecio(Clase* clases, int size, int id, double precioNuevo);
+double ClaseObtenerClasePrecio(Clase* clase);
+void ClaseAsignarPrecio(Clase* clase, double precioNuevo);
 
 #endif

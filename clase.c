@@ -4,13 +4,13 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-static int ClaseBuscarId(Clase* clase, int size, int id, int i);
+static int ClaseBuscarId(Clase* clase, int size, int idClase, int i);
 
-Clase* ClaseAgregarClase(Clase* clases, int size, int id, char* nombre, double precio, Horario inicio, Duracion duracion)
+Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, double precio, Horario inicio, Duracion duracion)
 {
 	Clase nuevo = { 0 };
 
-	nuevo.id = id;
+	nuevo.id = idClase;
 	snprintf(nuevo.nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombre);
 	nuevo.precio = precio;
 	nuevo.inicio = inicio;
@@ -65,6 +65,9 @@ void ClaseMostrarClases(Clase* clases, int size)
 		printf("Sin clientes asignados.\n");
 	}
 
+	printf("Hora de inicio: %02d:%02d\n", clases[size - 1].inicio.horas, clases[size - 1].inicio.minutos);
+	printf("Duracion: %02d:%02d\n", clases[size - 1].duracion.horas, clases[size - 1].duracion.minutos);
+
 	printf("\n--------------------------------------\n");
 }
 
@@ -91,33 +94,36 @@ void ClaseMostrarClase(Clase* clase)
 		printf("Sin clientes asignados.\n");
 	}
 
+	printf("Hora de inicio: %02d:%02d\n", clase->inicio.horas, clase->inicio.minutos);
+	printf("Duracion: %02d:%02d\n", clase->duracion.horas, clase->duracion.minutos);
+
 	printf("\n--------------------------------------\n");
 }
 
-int ClaseBuscarClaseId(Clase* clases, int size, int id)
+int ClaseBuscarClaseId(Clase* clases, int size, int idClase)
 {
-	if (id < 0 || id >= size)
+	if (idClase < 0)
 	{
 		return CLASE_ID_INVALIDO;
 	}
 
-	return ClaseBuscarId(clases, size, id, 0);
+	return ClaseBuscarId(clases, size, idClase, 0);
 }
 
-Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
+Clase* ClaseEliminarClase(Clase* clases, int size, int idClase)
 {
-	int posicion = ClaseBuscarClaseId(clases, *size, id);
+	int posicion = ClaseBuscarClaseId(clases, size, idClase);
 
 	if (posicion == CLASE_ID_INVALIDO)
 	{
-		printf("[ERROR] No se encontro la clase con el id: %d\n", id);
+		printf("[ERROR] No se encontro la clase con el id: %d\n", idClase);
 
-			return clases;
+		return NULL;
 	}
 
-	if (*size > 1)
+	if (size > 1)
 	{
-		for (int i = posicion; i < (*size)-1; i++)
+		for (int i = posicion; i < size - 1; i++)
 		{
 			clases[i] = clases[i + 1];
 		}
@@ -129,13 +135,13 @@ Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
 		return NULL;
 	}
 
-	(*size)--;
+	size--;
 
-	Clase* aux = realloc(clases, (*size) * sizeof(Clase));
+	Clase* aux = realloc(clases, size * sizeof(Clase));
 
 	if (aux == NULL)
 	{
-		printf("[ERROR] realloc(clase, (*size) * sizeof(Clase)) devolvio NULL");
+		printf("[ERROR] realloc(clase, size * sizeof(Clase)) devolvio NULL\n");
 
 		return NULL;
 	}
@@ -143,13 +149,13 @@ Clase *ClaseEliminarClase(Clase* clases, int* size, int id)
 	return aux;
 }
 
-Clase* ClaseObtenerClase(Clase* clases, int size, int id)
+Clase* ClaseObtenerClase(Clase* clases, int size, int idClase)
 {
-	int index = ClaseBuscarClaseId(clases, size, id);
+	int index = ClaseBuscarClaseId(clases, size, idClase);
 
 	if (index == CLASE_ID_INVALIDO)
 	{
-		printf("[ERROR] No se encontro el id %d", id);
+		printf("[ERROR] No se encontro el id %d", idClase);
 
 		return NULL;
 	}
@@ -157,13 +163,13 @@ Clase* ClaseObtenerClase(Clase* clases, int size, int id)
 	return &clases[index];
 }
 
-void ClaseObtenerClaseNombre(Clase* clases, int size, int id, char* nombre)
+void ClaseObtenerClaseNombre(Clase* clases, int size, int idClase, char* nombre)
 {
-	int index = ClaseBuscarClaseId(clases, size, id);
+	int index = ClaseBuscarClaseId(clases, size, idClase);
 
 	if (index == CLASE_ID_INVALIDO)
 	{
-		printf("[ERROR] No se encontro el id %d", id);
+		printf("[ERROR] No se encontro el id %d", idClase);
 
 		return;
 	}
@@ -189,7 +195,7 @@ void ClaseAgregarCliente(Clase* clase, int idCliente)
 
 	if (clase->idClientesValidos >= MAX_ID_CLIENTE_SIZE)
 	{
-		printf("[ERROR] La clase '%s' ya alcanzo el limite maximo de clientes (%d).\n",clase->nombre, MAX_ID_CLIENTE_SIZE);
+		printf("[ERROR] La clase '%s' ya alcanzo el limite maximo de clientes (%d)\n",clase->nombre, MAX_ID_CLIENTE_SIZE);
 
 		return;
 	}
@@ -198,7 +204,7 @@ void ClaseAgregarCliente(Clase* clase, int idCliente)
 	{
 		if (clase->idClientes[i] == idCliente)
 		{
-			printf("[ERROR] El cliente con ID %d ya se encuentra inscrito en esta clase.\n", idCliente);
+			printf("[ERROR] El cliente con ID %d ya se encuentra inscrito en esta clase\n", idCliente);
 
 			return;
 		}
@@ -206,15 +212,13 @@ void ClaseAgregarCliente(Clase* clase, int idCliente)
 
 	clase->idClientes[clase->idClientesValidos] = idCliente;
 	clase->idClientesValidos++;
-
-	printf("Cliente %d agregado a la clase '%s'.\n", idCliente, clase->nombre);
 }
 
 void ClaseEliminarCliente(Clase* clase, int idCliente)
 {
 	if (clase == NULL || clase->idClientesValidos == 0)
 	{
-		printf("[ERROR] La clase no contiene clientes inscriptos.\n");
+		printf("[ERROR] La clase no contiene clientes inscriptos\n");
 
 		return;
 	}
@@ -233,7 +237,7 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 
 	if (posicion == CLASE_ID_INVALIDO)
 	{
-		printf("[ERROR] No se encontro al cliente %d en la clase '%s'.\n", idCliente, clase->nombre);
+		printf("[ERROR] No se encontro al cliente %d en la clase '%s'\n", idCliente, clase->nombre);
 
 		return;
 	}
@@ -244,8 +248,6 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 	}
 
 	clase->idClientesValidos--;
-
-	printf("Cliente %d eliminado con exito de la clase '%s'.\n", idCliente, clase->nombre);
 }
 
 
@@ -257,8 +259,6 @@ void ClaseAsignarEntrenador(Clase* clase, int idEntrenador)
 	}
 
 	clase->idEntrenador = idEntrenador;
-
-	printf("Entrenador %d asignado exitosamente a la clase '%s'.\n", idEntrenador, clase->nombre);
 }
 
 void ClaseEliminarEntrenador(Clase* clase)
@@ -269,8 +269,6 @@ void ClaseEliminarEntrenador(Clase* clase)
 	}
 
 	clase->idEntrenador = CLASE_ID_INVALIDO;
-
-	printf("Entrenador removido de la clase '%s' con exito.\n", clase->nombre);
 }
 
 void ClaseAsignarSector(Clase* clase, int idSector)
@@ -281,8 +279,6 @@ void ClaseAsignarSector(Clase* clase, int idSector)
 	}
 
 	clase->idSector = idSector;
-
-	printf("Sector %d asignado exitosamente a la clase '%s'.\n", idSector, clase->nombre);
 }
 
 void ClaseEliminarSector(Clase* clase)
@@ -293,16 +289,15 @@ void ClaseEliminarSector(Clase* clase)
 	}
 
 	clase->idSector = CLASE_ID_INVALIDO;
-
-	printf("Sector removido de la clase '%s' con exito.\n", clase->nombre);
 }
 
-void ClaseModificarClaseNombre(Clase* clases,int size, int id, char* nombreNuevo)
+void ClaseModificarClaseNombre(Clase* clases,int size, int idClase, char* nombreNuevo)
 {
-	int index = ClaseBuscarClaseId(clases, size, id);
+	int index = ClaseBuscarClaseId(clases, size, idClase);
+
 	if (index == CLASE_ID_INVALIDO)
 	{
-		printf("[ERROR] No se encontro el id %d", id);
+		printf("[ERROR] No se encontro el id %d", idClase);
 
 		return;
 	}
@@ -310,119 +305,62 @@ void ClaseModificarClaseNombre(Clase* clases,int size, int id, char* nombreNuevo
 	snprintf(clases[index].nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombreNuevo);
 }
 
-void ClaseObtenerClaseHorario(Clase* clases, int size, int id, Horario* horario)
+Horario ClaseObtenerClaseHorario(Clase* clase)
 {
-	int index = ClaseBuscarClaseId(clases, size, id);
+	return clase->inicio;
+}
 
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d para obtener el horario.\n", id);
-		return;
-	}
+void ClaseModificarClaseHorario(Clase* clase, Horario horarioNuevo)
+{
+	clase->inicio = horarioNuevo;
+}
 
-	if (horario != NULL)
+Duracion ClaseObtenerClaseDuracion(Clase* clase)
+{
+	return clase->duracion;
+}
+
+void ClaseModificarClaseDuracion(Clase* clase, Duracion duracionNueva)
+{
+	clase->duracion = duracionNueva;
+}
+
+void ClaseAsignarPrecio(Clase* clase, double precioNuevo)
+{
+	clase->precio = precioNuevo;
+}
+
+double ClaseObtenerClasePrecio(Clase* clase)
+{
+	return clase->precio;
+}
+
+int ClaseObtenerClientesEnClase(Clase* clase)
+{
+	return clase->idClientesValidos;
+}
+
+void ClaseObtenerClaseClientesIds(Clase* clase, int* idsClientes)
+{
+	for (int i = 0; i < clase->idClientesValidos; i++)
 	{
-		*horario = clases[index].inicio;
+		idsClientes[i] = clase->idClientes[i];
 	}
 }
 
-void ClaseModificarClaseHorario(Clase* clases, int size, int id, Horario horarioNuevo)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d para modificar el horario.\n", id);
-
-		return;
-	}
-
-	clases[index].inicio = horarioNuevo;
-}
-
-void ClaseObtenerClaseDuracion(Clase* clases, int size, int id, Duracion* duracion)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d para obtener la duracion.\n", id);
-		return;
-	}
-
-	if (duracion != NULL)
-	{
-		*duracion = clases[index].duracion;
-	}
-}
-
-void ClaseModificarClaseDuracion(Clase* clases, int size, int id, Duracion duracionNueva)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d para modificar la duracion.\n", id);
-
-		return;
-	}
-
-	clases[index].duracion = duracionNueva;
-}
-
-void ClaseAsignarPrecio(Clase* clases, int size, int id, double precioNuevo)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d\n", id);
-
-		return;
-	}
-
-	clases[index].precio = precioNuevo;
-}
-double ClaseObtenerClasePrecio(Clase* clases, int size, int id)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d para obtener el precio.\n", id);
-		return -1.0;
-	}
-
-	return clases[index].precio;
-}
-
-void ClaseEliminarPrecio(Clase* clases, int size, int id)
-{
-	int index = ClaseBuscarClaseId(clases, size, id);
-
-	if (index == CLASE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d\n", id);
-
-		return;
-	}
-
-	clases[index].precio = 0.0;
-}
-
-static int ClaseBuscarId(Clase* clases, int size, int id, int i)
+static int ClaseBuscarId(Clase* clases, int size, int idClase, int i)
 {
 	if (i == size)
 	{
 		return CLASE_ID_INVALIDO;
 	}
 
-	if (clases[i].id == id)
+	if (clases[i].id == idClase)
 	{
 		return i;
 	}
 
 	i++;
 
-	return ClaseBuscarId(clases, size, id, i);
+	return ClaseBuscarId(clases, size, idClase, i);
 }

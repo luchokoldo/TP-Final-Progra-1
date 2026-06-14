@@ -56,7 +56,7 @@ void SectorMostrarSector(Sector* sector)
 
 int SectorBuscarSectorId(Sector* sectores, int size, int id)
 {
-	if (id < 0 || id >= size)
+	if (id < 0)
 	{
 		return SECTOR_ID_INVALIDO;
 	}

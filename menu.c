@@ -1,344 +1,874 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "scanner.h"
 #include "menu.h"
-#include "cliente.h"
-#include "entrenador.h"
-#include "sector.h"
-#include "clase.h"
-#include "archivos.h"
+#include "scanner.h"
+#include "utilidades.h"
 
-#define MAX_MENU_ITEMS  7
+#define MAX_MENU_ARRAY_SIZE	256
+#define MAX_MENU_TEXT_SIZE	64
+#define MAX_MENU_ITEMS		7
 
-#define MENU_PREV       8
-#define MENU_NEXT       9
-#define MENU_EXIT       0
+#define MENU_PREV			8
+#define MENU_NEXT			9
+#define MENU_EXIT			0
 
-#define MENU_EXIT_VALUE -1
+#define MENU_EXIT_VALUE		-1
 
-static void MenuSecundario(Gym* gym, char* nombreAccion, int accion);
-static void MenuSecundarioAccionCliente(Gym* gym, int accion);
-static void MenuSecundarioAccionEntrenador(Gym* gym, int accion);
-static void MenuSecundarioAccionSector(Gym* gym, int accion);
-static void MenuSecundarioAccionClase(Gym* gym, int accion);
-static void Pausa(void);
+static int MenuMostrarMenuSecundario(Gym* gym, char* nombreAccion, int accion);
+static void MenuSecundarioAccionCliente(Gym* gym, char* textoAccion, int accion);
+static void MenuSecundarioAccionEntrenador(Gym* gym, char* textoAccion, int accion);
+static void MenuSecundarioAccionSector(Gym* gym, char* textoAccion, int accion);
+static void MenuSecundarioAccionClase(Gym* gym, char* textoAccion, int accion);
+static int MenuListaCrearMenu(const char* titulo, char texto[][64], int textoSize, int pagina);
+static int MenuListaObtenerOpcionValida(int size, int pagina);
+static void MenuListaAgregarVolver(int pagina);
+static void MenuListaAgregarSiguiente(int size, int pagina);
+static void MenuListaAgregarSalir(void);
+static void MenuPausa(void);
+static int MenuListaClientes(Gym* gym, char* titulo, int* idsClientes);
+static int MenuListaClases(Gym* gym, char* titulo, int* idsClases);
+static int MenuListaSectores(Gym* gym, char* titulo, int* idsSectores);
 
 void MenuMostrarMenu(Gym* gym)
 {
-	int opcion = 0;
+	int opcion = MENU_EXIT_VALUE;
+
+	char texto[][MAX_MENU_TEXT_SIZE] =
+	{
+		"Clientes",
+		"Entrenadores",
+		"Sectores",
+		"Clases"
+	};
 
 	do
 	{
-		printf("\n----Sistema Gestion UtnGYM----\n\n");
-		printf("\n");
-		printf("Seleccione la accion a realizar\n\n");
-		printf("1. Agregar\n");
-		printf("2. Modificar\n");
-		printf("3. Mostrar\n");
-		printf("4. Buscar\n");
-		printf("5. Eliminar\n");
-		printf("6. Exportar a .txt\n\n");
-		printf("0. Salir\n");
+		system("cls");
 
-		printf("\nElija una opcion: ");
-		opcion = ScannerInt();
-		switch (opcion)
+		opcion = MenuListaCrearMenu("Sistema de Gestion", texto, GET_CHARSMAX(texto), 1);
+
+		if (opcion != MENU_EXIT_VALUE)
 		{
-		case 1:
-			MenuSecundario(gym, "Agregar", opcion);
-			Pausa();
-			break;
+			int opcionSecundario = MenuMostrarMenuSecundario(gym, texto[opcion], opcion);
 
+			if (opcionSecundario != MENU_EXIT_VALUE)
+			{
+				MenuPausa();
+			}
+		}
+	} while (opcion != MENU_EXIT_VALUE);
+}
+
+static int MenuMostrarMenuSecundario(Gym* gym, char* textoAccion, int accion)
+{
+	int opcion = MENU_EXIT_VALUE;
+
+	char texto[][MAX_MENU_TEXT_SIZE] =
+	{
+		"Agregar",
+		"Modificar",
+		"Mostrar",
+		"Buscar",
+		"Eliminar",
+		"Exportar a .txt"
+	};
+
+	opcion = MenuListaCrearMenu(textoAccion, texto, GET_CHARSMAX(texto), 1);
+
+	switch (accion)
+	{
+		case 0:
+			MenuSecundarioAccionCliente(gym, texto[opcion], opcion);
+			break;
+		case 1:
+			MenuSecundarioAccionEntrenador(gym, texto[opcion], opcion);
+			break;
 		case 2:
-			MenuSecundario(gym, "Modificar", opcion);
-			Pausa();
+			MenuSecundarioAccionSector(gym, texto[opcion], opcion);
 			break;
 		case 3:
-			MenuSecundario(gym, "Mostrar", opcion);
-			Pausa();
+			MenuSecundarioAccionClase(gym, texto[opcion], opcion);
 			break;
+	}
+
+	return opcion;
+}
+
+static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
+{
+	switch (accion)
+	{
+		case 0: 
+		{
+			GymAgregarCliente(gym);
+
+			break;
+		}
+		case 1: 
+		{
+			if (GymHayClientes(gym) == 0)
+			{
+				printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsClientes[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClientes = MENU_EXIT_VALUE;
+
+			opcionClientes = MenuListaClientes(gym, accionTexto, idsClientes);
+
+			if (opcionClientes == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			char textoModificar[][MAX_MENU_TEXT_SIZE] =
+			{
+				"Nombre",
+				"Genero",
+				"Clases"
+			};
+
+			int opcionModificar = MenuListaCrearMenu(accionTexto, textoModificar, GET_CHARSMAX(textoModificar), 1);
+
+			if (opcionModificar == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			switch (opcionModificar)
+			{
+				case 0: 
+					GymModificarClienteNombre(gym, idsClientes[opcionClientes]);
+					break;
+				case 1:
+					GymModificarClienteGenero(gym, idsClientes[opcionClientes]);
+					break;
+				case 2:
+				{
+					if (GymHayClases(gym) == 0)
+					{
+						printf("[ERROR] No hay Clases\n");
+
+						return;
+					}
+			
+					char textoClases[][MAX_MENU_TEXT_SIZE] =
+					{
+						"Agregar",
+						"Eliminar"
+					};
+
+					char titulo[MAX_MENU_TEXT_SIZE];
+
+					snprintf(titulo, MAX_MENU_TEXT_SIZE, "%s %s", accionTexto, textoModificar[opcionModificar]);
+
+					int opcionClases = MenuListaCrearMenu(titulo, textoClases, GET_CHARSMAX(textoClases), 1);
+
+					if (opcionClases == MENU_EXIT_VALUE)
+					{
+						return;
+					}
+
+					switch (opcionClases)
+					{
+						case 0:
+						{
+							int idsClases[MAX_MENU_ARRAY_SIZE] = { 0 };
+							int opcionClases = MENU_EXIT_VALUE;
+
+							opcionClases = MenuListaClases(gym, "Clases", idsClases);
+
+							if (opcionClases == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							break;
+						}
+						case 1:
+						{
+							if (GymHayClasesEnCliente(gym, idsClientes[opcionClientes]) == 0)
+							{
+								printf("[ERROR] El cliente no tiene ninguna clase asignada.\n");
+
+								return;
+							}
+
+							char nombresClases[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+							int idsClases[MAX_ID_CLIENTE_SIZE] = { 0 };
+							int clasesSize = 0;
+							int opcionClases = MENU_EXIT_VALUE;
+				
+							clasesSize = GymObtenerClienteClasesNombresIds(gym, idsClientes[opcionClientes], nombresClases, idsClases);
+
+							opcionClases = MenuListaCrearMenu("Clases", nombresClases, clasesSize, 1);
+
+							if (opcionClases == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymEliminarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							break;
+						}
+					}
+
+					break;
+				}
+			}
+			
+			break;
+		}
+		case 2:
+		{
+			if (GymHayClientes(gym) == 0)
+			{
+				printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymMostrarClientes(gym);
+
+			break;
+		}
+		case 3:
+		{
+			if (GymHayClientes(gym) == 0)
+			{
+				printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsClientes[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClientes = MENU_EXIT_VALUE;
+
+			opcionClientes = MenuListaClientes(gym, accionTexto, idsClientes);
+
+			if (opcionClientes == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymMostrarCliente(gym, idsClientes[opcionClientes]);
+
+			break;
+		}
 		case 4:
-			MenuSecundario(gym, "Buscar", opcion);
-			Pausa();
+		{
+			if (GymHayClientes(gym) == 0)
+			{
+				printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsClientes[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClientes = MENU_EXIT_VALUE;
+
+			opcionClientes = MenuListaClientes(gym, accionTexto, idsClientes);
+
+			if (opcionClientes == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymEliminarCliente(gym, idsClientes[opcionClientes]);
+
 			break;
+		}
 		case 5:
-			MenuSecundario(gym, "Eliminar", opcion);
-			Pausa();
-			break;
+		{
+			if (GymHayClientes(gym) == 0)
+			{
+				printf("[ERROR] No hay clientes para %s\n", accionTexto);
 
-		case 6:
-			MenuSecundario(gym, "Exportar", opcion);
-			Pausa();
+				return;
+			}
+
+			GymExportarClientesArchivoTexto(gym);
+
 			break;
 		}
-
-
-	} while (opcion != 0);
+	}
 }
-static void MenuSecundario(Gym* gym, char* nombreAccion, int accion)
+
+static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int accion)
 {
-	int opcion = 0;
-
-	do
+	switch (accion)
 	{
-		printf("\t%s\n\n", nombreAccion);
-		printf("1. Cliente\n");
-		printf("2. Entrenador\n");
-		printf("3. Sector\n");
-		printf("4. Clase\n\n");
-		printf("0. Volver\n");
-		printf("Elija la opcion: ");
-		opcion = ScannerInt();
-		switch (opcion)
+		case 0:
 		{
+			GymAgregarEntrenador(gym);
 
+			break;
+		}
 		case 1:
-			MenuSecundarioAccionCliente(gym, accion);
+		{
+			if (GymHayEntrenadores(gym) == 0)
+			{
+				printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionEntrenadores = MENU_EXIT_VALUE;
+
+			opcionEntrenadores = MenuListaEntrenadores(gym, accionTexto, idsEntrenadores);
+
+			if (opcionEntrenadores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			char textoModificar[][MAX_MENU_TEXT_SIZE] =
+			{
+				"Nombre",
+				"Genero"
+			};
+
+			int opcionModificar = MenuListaCrearMenu(accionTexto, textoModificar, GET_CHARSMAX(textoModificar), 1);
+
+			if (opcionModificar == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			switch (opcionModificar)
+			{
+				case 0:
+					GymModificarEntrenadorNombre(gym, idsEntrenadores[opcionEntrenadores]);
+					break;
+				case 1:
+					GymModificarEntrenadorGenero(gym, idsEntrenadores[opcionEntrenadores]);
+					break;
+			}
+
 			break;
+		}
 		case 2:
-			MenuSecundarioAccionEntrenador(gym, accion);
+		{
+			if (GymHayEntrenadores(gym) == 0)
+			{
+				printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymMostrarEntrenadores(gym);
+
 			break;
+		}
 		case 3:
-			MenuSecundarioAccionSector(gym, accion);
+		{
+			if (GymHayEntrenadores(gym) == 0)
+			{
+				printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionEntrenadores = MENU_EXIT_VALUE;
+
+			opcionEntrenadores = MenuListaEntrenadores(gym, accionTexto, idsEntrenadores);
+
+			if (opcionEntrenadores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymMostrarEntrenador(gym, idsEntrenadores[opcionEntrenadores]);
+
 			break;
+		}
 		case 4:
-			MenuSecundarioAccionClase(gym, accion);
+		{
+			if (GymHayEntrenadores(gym) == 0)
+			{
+				printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionEntrenadores = MENU_EXIT_VALUE;
+
+			opcionEntrenadores = MenuListaEntrenadores(gym, accionTexto, idsEntrenadores);
+
+			if (opcionEntrenadores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymEliminarEntrenador(gym, idsEntrenadores[opcionEntrenadores]);
+
 			break;
+		}
+		case 5:
+		{
+			if (GymHayEntrenadores(gym) == 0)
+			{
+				printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
 
-		}
+				return;
+			}
 
-	} while (opcion != 0);
-}
-static void MenuSecundarioAccionCliente(Gym* gym, int accion)
-{
-	int id;
-	int indice;
-	switch (accion)
-	{
-	case 1: 
-		gym->clientes = ClienteAgregarCliente(gym->clientes, &gym->clientesSize);
-		if (gym->clientesSize > 0)
-		{
-		ArchivoAgregarCliente(&gym->clientes[gym->clientesSize - 1]);
-		}
-		break;
-	case 2: 
-		printf("Ingrese ID del cliente: ");
-		id = ScannerInt();
-		ClienteModificarCliente(gym->clientes, gym->clientesSize, id);
-		indice = ClienteBuscarClienteId(gym->clientes, gym->clientesSize, id, 0);
-		if (indice != -1)
-		{
-			ArchivoModificarCliente(&gym->clientes[indice]);
-		}
-		break;
-	case 3:
-		ClienteMostrarCliente(gym->clientes, gym->clientesSize);
-		break;
-	case 4:
-		printf("Ingrese ID del cliente: ");
-		id = ScannerInt();
-		if (ClienteBuscarClienteId(gym->clientes, gym->clientesSize, id, 0) != -1)
-		{
-			printf("Cliente encontrado.\n");
-		}
-		else
-		{
-			printf("Cliente no encontrado.\n");
-		}
-		break;
-	case 5:
-		printf("Ingrese ID del cliente: ");
-		id = ScannerInt();
-		indice = ClienteBuscarClienteId(gym->clientes, gym->clientesSize, id, 0);
-		if (indice != -1)
-		{
-			ArchivoBorrarCliente(&gym->clientes[indice]);
-			printf("Cliente eliminado.\n");
-		}
-		else
-		{
-			printf("Cliente no encontrado.\n");
-		}
-		break;
-	case 6:
-		ArchivoExportarClientes(gym->clientes, gym->clientesSize);
-		break;
+			GymExportarEntrenadoresArchivoTexto(gym);
 
+			break;
+		}
 	}
 }
-static void MenuSecundarioAccionEntrenador(Gym* gym, int accion)
+
+static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 {
-	int id;
-	int indice;
 	switch (accion)
 	{
-	case 1: 
-		gym->entrenadores = EntrenadorAgregarEntrenador(gym->entrenadores, &gym->entrenadoresSize);
-		if (gym->entrenadoresSize > 0)
+		case 0:
 		{
-			ArchivoAgregarEntrenador(&gym->entrenadores[gym->entrenadoresSize - 1]);
+			GymAgregarSector(gym);
+
+			break;
 		}
-		break;
-	case 2:
-		printf("Ingrese ID del entrenador: ");
-		id = ScannerInt();
-		EntrenadorModificarEntrenador(gym->entrenadores, gym->entrenadoresSize, id);
-		indice = EntrenadorBuscarEntrenadorId(gym->entrenadores, gym->entrenadoresSize, id, 0);
-		if (indice != -1)
+		case 1:
 		{
-			ArchivoModificarEntrenador(&gym->entrenadores[indice]);
+			if (GymHaySectores(gym) == 0)
+			{
+				printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionSectores = MENU_EXIT_VALUE;
+
+			opcionSectores = MenuListaSectores(gym, accionTexto, idsSectores);
+
+			if (opcionSectores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymModificarSectorNombre(gym, idsSectores[opcionSectores]);
+			
+			break;
 		}
-		break;
-	case 3:
-		EntrenadorMostrarEntrenadores(gym->entrenadores, gym->entrenadoresSize);
-		break;
-	case 4:
-		printf("Ingrese ID del entrenador: ");
-		id = ScannerInt();
-		if (EntrenadorBuscarEntrenadorId(gym->entrenadores, gym->entrenadoresSize, id, 0) != -1)
+		case 2:
 		{
-			printf("Entrenador encontrado.\n");
-		} 
-		else
-		{
-			printf("Entrenador no encontrado.\n");
+			if (GymHaySectores(gym) == 0)
+			{
+				printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymMostrarSectores(gym);
+
+			break;
 		}
-		break;
-	case 5:
-		printf("Ingrese ID del entrenador: ");
-		id = ScannerInt();
-		indice = EntrenadorBuscarEntrenadorId(gym->entrenadores, gym->entrenadoresSize, id, 0);
-		if (indice != -1)
+		case 3:
 		{
-			ArchivoBorrarEntrenador(&gym->entrenadores[indice]);
-			printf("Entrenador eliminado.\n");
+			if (GymHaySectores(gym) == 0)
+			{
+				printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionSectores = MENU_EXIT_VALUE;
+
+			opcionSectores = MenuListaSectores(gym, accionTexto, idsSectores);
+
+			if (opcionSectores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymMostrarSector(gym, idsSectores[opcionSectores]);
+
+			break;
 		}
-		else
+		case 4:
 		{
-			printf("Entrenador no encontrado.\n");
+			if (GymHaySectores(gym) == 0)
+			{
+				printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionSectores = MENU_EXIT_VALUE;
+
+			opcionSectores = MenuListaSectores(gym, accionTexto, idsSectores);
+
+			if (opcionSectores == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymEliminarSector(gym, idsSectores[opcionSectores]);
+
+			break;
 		}
-		break;
-	case 6:
-		ArchivoExportarEntrenadores(gym->entrenadores, gym->entrenadoresSize);
-		break;
+		case 5:
+		{
+			if (GymHaySectores(gym) == 0)
+			{
+				printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymExportarSectoresArchivoTexto(gym);
+
+			break;
+		}
 	}
 }
-static void MenuSecundarioAccionSector(Gym* gym, int accion)
+
+static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 {
-	int id;
-	int indice;
 	switch (accion)
 	{
-	case 1: 
-		gym->sectores = SectorAgregarSector(gym->sectores, &gym->sectoresSize);
-		if (gym->sectoresSize > 0)
+		case 0:
 		{
-			ArchivoAgregarSector(&gym->sectores[gym->sectoresSize - 1]);
-		}
-		break;
-	case 2: 
-		printf("Ingrese ID del sector: ");
-		id = ScannerInt();
-		SectorModificarSector(gym->sectores, gym->sectoresSize, id);
-		indice = SectorBuscarSectorId(gym->sectores, gym->sectoresSize, id, 0);
-		if (indice != -1)
-		{
-			ArchivoModificarSector(&gym->sectores[indice]);
-		}
-		break;
-	case 3:
-		SectorMostrarSector(gym->sectores, gym->sectoresSize);
-		break;
-	case 4:
-		printf("Ingrese ID del sector: ");
-		id = ScannerInt();
-		if (SectorBuscarSectorId(gym->sectores, gym->sectoresSize, id, 0) != -1)
-		{
-			printf("Sector encontrado.\n");
-		}
-		else
-		{
-			printf("Sector no encontrado.\n");
-		}
-		break;
-	case 5:
-		printf("Ingrese ID del sector: ");
-		id = ScannerInt();
-		indice = SectorBuscarSectorId(gym->sectores, gym->sectoresSize, id, 0);
-		if (indice != -1)
-		{
-			ArchivoBorrarSector(&gym->sectores[indice]);
-			printf("Sector eliminado.\n");
-		}
-		else
-		{
-			printf("Sector no encontrado.\n");
-		}
-		break;
-	case 6:
-		ArchivoExportarSectores(gym->sectores, gym->sectoresSize);
-		break;
-	}
+			GymAgregarClase(gym);
 
-}
-static void MenuSecundarioAccionClase(Gym* gym, int accion)
-{
-	int id;
-	int indice;
-	switch (accion)
-	{
-	case 1: 
-		gym->clases = ClaseAgregarClase(gym->clases, &gym->clasesSize);
-		if (gym->clasesSize > 0)
-		{
-			ArchivoAgregarClase(&gym->clases[gym->clasesSize - 1]);
+			break;
 		}
-		break;
-	case 2: 
-		printf("Ingrese ID de la clase: ");
-	    id = ScannerInt();
-		ClaseModificarClase(gym->clases, gym->clasesSize, id);
-		indice = ClaseBuscarClaseId(gym->clases, gym->clasesSize, id, 0);
-		if (indice != -1)
+		case 1:
 		{
-			ArchivoModificarClase(&gym->clases[indice]);
-		}
-		break;
-	case 3:
-		ClaseMostrarClase(gym->clases, gym->clasesSize);
-		break;
-	case 4:
-		printf("Ingrese ID de la clase: ");
-		id = ScannerInt();
-		if (ClaseBuscarClaseId(gym->clases, gym->clasesSize, id, 0) != -1)
-		{
-			printf("Clase encontrada.\n");
-		}
-		else
-		{
-			printf("Clase no encontrada.\n");
-		}
-		break;
-	case 5:
-		printf("Ingrese ID de la clase: ");
-		id = ScannerInt();
-		indice = ClaseBuscarClaseId(gym->clases, gym->clasesSize, id, 0);
-		if (indice != -1)
-		{
-			ArchivoBorrarClase(&gym->clases[indice]);
-			printf("Clase eliminada.\n");
-		}
-		else
-		{
-			printf("Clase no encontrada.\n");
-		}
-		break;
-	case 6:
-		ArchivoExportarClases(gym->clases, gym->clasesSize);
-		break;
-	}
+			if (GymHayClases(gym) == 0)
+			{
+				printf("[ERROR] No hay clases para %s\n", accionTexto);
 
+				return;
+			}
+
+			int idsClases[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClases = MENU_EXIT_VALUE;
+
+			opcionClases = MenuListaClases(gym, "Clases", idsClases);
+
+			if (opcionClases == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			char textoModificar[][MAX_MENU_TEXT_SIZE] =
+			{
+				"Nombre",
+				"Entrenador",
+				"Sector",
+				"Clientes",
+				"Precio",
+				"Hora de inicio",
+				"Duracion"
+			};
+
+			int opcionModificar = MenuListaCrearMenu(accionTexto, textoModificar, GET_CHARSMAX(textoModificar), 1);
+
+			if (opcionModificar == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			switch (opcionModificar)
+			{
+				case 0:
+				{
+					GymModificarClienteNombre(gym, idsClases[opcionClases]);
+
+					break;
+				}
+				case 1:
+				{
+					if (GymHayEntrenadores(gym) == 0)
+					{
+						printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+						return;
+					}
+
+					char textoModificarEntrenadores[][MAX_MENU_TEXT_SIZE] =
+					{
+						"Asignar",
+						"Eliminar"
+					};
+
+					char titulo[MAX_MENU_TEXT_SIZE];
+
+					snprintf(titulo, MAX_MENU_TEXT_SIZE, "%s %s", accionTexto, textoModificar[opcionModificar]);
+
+					int opcionModificarEntrenadores = MenuListaCrearMenu(titulo, textoModificarEntrenadores, GET_CHARSMAX(textoModificarEntrenadores), 1);
+
+					if (opcionModificarEntrenadores == MENU_EXIT_VALUE)
+					{
+						return;
+					}
+
+					switch (opcionModificarEntrenadores)
+					{
+						case 0:
+						{
+							int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
+							int opcionEntrenadores = MENU_EXIT_VALUE;
+
+							opcionEntrenadores = MenuListaEntrenadores(gym, "Entrenadores", idsEntrenadores);
+
+							if (opcionEntrenadores == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymAsignarEntrenadorClase(gym, idsClases[opcionClases], idsEntrenadores[opcionEntrenadores]);
+
+							break;
+						}
+						case 1:
+						{
+							GymEliminarEntrenadorClase(gym, idsClases[opcionClases]);
+
+							break;
+						}
+					}
+
+					break;
+				}
+				case 2:
+				{
+					if (GymHaySectores(gym) == 0)
+					{
+						printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+						return;
+					}
+
+					char textoModificarSectores[][MAX_MENU_TEXT_SIZE] =
+					{
+						"Asignar",
+						"Eliminar"
+					};
+
+					char titulo[MAX_MENU_TEXT_SIZE];
+
+					snprintf(titulo, MAX_MENU_TEXT_SIZE, "%s %s", accionTexto, textoModificar[opcionModificar]);
+
+					int opcionModificarSectores = MenuListaCrearMenu(titulo, textoModificarSectores, GET_CHARSMAX(textoModificarSectores), 1);
+
+					if (opcionModificarSectores == MENU_EXIT_VALUE)
+					{
+						return;
+					}
+
+					switch (opcionModificarSectores)
+					{
+						case 0:
+						{
+							int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
+							int opcionSectores = MENU_EXIT_VALUE;
+
+							opcionSectores = MenuListaSectores(gym, "Sectores", idsSectores);
+
+							if (opcionSectores == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymAsignarSectorClase(gym, idsClases[opcionClases], idsSectores[opcionSectores]);
+
+							break;
+						}
+						case 1:
+						{
+							GymEliminarSectorClase(gym, idsClases[opcionClases]);
+
+							break;
+						}
+					}
+
+					break;
+				}
+				case 3:
+				{
+					if (GymHayClientes(gym) == 0)
+					{
+						printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+						return;
+					}
+
+					char textoModificarClientes[][MAX_MENU_TEXT_SIZE] =
+					{
+						"Agregar",
+						"Eliminar"
+					};
+
+					char titulo[MAX_MENU_TEXT_SIZE];
+
+					snprintf(titulo, MAX_MENU_TEXT_SIZE, "%s %s", accionTexto, textoModificar[opcionModificar]);
+
+					int opcionModificarClientes = MenuListaCrearMenu(titulo, textoModificarClientes, GET_CHARSMAX(textoModificarClientes), 1);
+
+					if (opcionModificarClientes == MENU_EXIT_VALUE)
+					{
+						return;
+					}
+
+					switch (opcionModificarClientes)
+					{
+						case 0:
+						{
+							int idsClientes[MAX_MENU_ARRAY_SIZE] = { 0 };
+							int opcionClientes = MENU_EXIT_VALUE;
+
+							opcionClientes = MenuListaClientes(gym, "Clientes", idsClientes);
+
+							if (opcionClientes == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							break;
+						}
+						case 1:
+						{
+							if (GymHayClientesEnClase(gym, idsClases[opcionClases]) == 0)
+							{
+								printf("[ERROR] La clase no tiene ningun cliente asignado\n");
+
+								return;
+							}
+
+							char nombresClientes[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+							int idsClientes[MAX_ID_CLIENTE_SIZE] = { 0 };
+							int clientesSize = 0;
+							int opcionClientes = MENU_EXIT_VALUE;
+
+							clientesSize = GymObtenerClaseClientesNombresIds(gym, idsClases[opcionClases], nombresClientes, idsClientes);
+
+							opcionClientes = MenuListaCrearMenu("Clientes", nombresClientes, clientesSize, 1);
+
+							if (opcionClientes == MENU_EXIT_VALUE)
+							{
+								return;
+							}
+
+							GymEliminarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							break;
+						}
+					}
+
+					break;
+				}
+				case 4:
+				{
+					GymAsignarClasePrecio(gym, idsClases[opcionClases]);
+
+					break;
+				}
+				case 5:
+				{
+					GymModificarClaseHorario(gym, idsClases[opcionClases]);
+
+					break;
+				}
+				case 6:
+				{
+					GymModificarClaseDuracion(gym, idsClases[opcionClases]);
+
+					break;
+				}
+			}
+
+			break;
+		}
+		case 2:
+		{
+			if (GymHayClases(gym) == 0)
+			{
+				printf("[ERROR] No hay clases para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymMostrarClases(gym);
+
+			break;
+		}
+		case 3:
+		{
+			if (GymHayClases(gym) == 0)
+			{
+				printf("[ERROR] No hay clases para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsClases[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClases = MENU_EXIT_VALUE;
+
+			opcionClases = MenuListaClases(gym, "Clases", idsClases);
+
+			if (opcionClases == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymMostrarClase(gym, idsClases[opcionClases]);
+
+			break;
+		}
+		case 4:
+		{
+			if (GymHayClases(gym) == 0)
+			{
+				printf("[ERROR] No hay clases para %s\n", accionTexto);
+
+				return;
+			}
+
+			int idsClases[MAX_MENU_ARRAY_SIZE] = { 0 };
+			int opcionClases = MENU_EXIT_VALUE;
+
+			opcionClases = MenuListaClases(gym, "Clases", idsClases);
+
+			if (opcionClases == MENU_EXIT_VALUE)
+			{
+				return;
+			}
+
+			GymEliminarClase(gym, idsClases[opcionClases]);
+
+			break;
+		}
+		case 5:
+		{
+			if (GymHayClases(gym) == 0)
+			{
+				printf("[ERROR] No hay clases para %s\n", accionTexto);
+
+				return;
+			}
+
+			GymExportarClasesArchivoTexto(gym);
+
+			break;
+		}
+	}
 }
 
 static void MenuListaAgregarVolver(int pagina)
@@ -346,10 +876,6 @@ static void MenuListaAgregarVolver(int pagina)
 	if (pagina > 1)
 	{
 		printf("%d. Volver\n", MENU_PREV);
-	}
-	else
-	{
-		printf("\n");
 	}
 }
 
@@ -359,15 +885,11 @@ static void MenuListaAgregarSiguiente(int size, int pagina)
 	{
 		printf("%d. Siguiente\n", MENU_NEXT);
 	}
-	else
-	{
-		printf("\n");
-	}
 }
 
 static void MenuListaAgregarSalir(void)
 {
-	printf("\n%d. Salir\n\n", MENU_EXIT);
+	printf("%d. Salir\n\n", MENU_EXIT);
 }
 
 static int MenuListaObtenerOpcionValida(int size, int pagina)
@@ -434,8 +956,48 @@ static int MenuListaCrearMenu(const char* titulo, char texto[][64], int textoSiz
 	return inicio + opcion - 1;
 }
 
-static void Pausa(void)
+static void MenuPausa(void)
 {
 	printf("\nPresione enter para continuar\n");
 	system("pause");
+}
+
+static int MenuListaClientes(Gym* gym, char* titulo, int* idsClientes)
+{
+	char nombresClientes[MAX_MENU_ARRAY_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+	int clientesSize = 0;
+
+	clientesSize = GymObtenerClientesNombresIds(gym, nombresClientes, idsClientes);
+
+	return MenuListaCrearMenu(titulo, nombresClientes, clientesSize, 1);
+}
+
+static int MenuListaClases(Gym* gym, char* titulo, int* idsClases)
+{
+	char nombresClases[MAX_MENU_ARRAY_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+	int clasesSize = 0;
+
+	clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
+
+	return MenuListaCrearMenu(titulo, nombresClases, clasesSize, 1);
+}
+
+static int MenuListaEntrenadores(Gym* gym, char* titulo, int* idsEntrenadores)
+{
+	char nombresEntrenadores[MAX_MENU_ARRAY_SIZE][MAX_NOMBRE_ENTRENADOR_SIZE];
+	int entrenadoresSize = 0;
+
+	entrenadoresSize = GymObtenerEntrenadoresNombresIds(gym, nombresEntrenadores, idsEntrenadores);
+
+	return MenuListaCrearMenu(titulo, nombresEntrenadores, entrenadoresSize, 1);
+}
+
+static int MenuListaSectores(Gym* gym, char* titulo, int* idsSectores)
+{
+	char nombresSectores[MAX_MENU_ARRAY_SIZE][MAX_NOMBRE_ENTRENADOR_SIZE];
+	int sectoresSize = 0;
+
+	sectoresSize = GymObtenerSectoresNombresIds(gym, nombresSectores, idsSectores);
+
+	return MenuListaCrearMenu(titulo, nombresSectores, sectoresSize, 1);
 }

@@ -58,7 +58,7 @@ void EntrenadorMostrarEntrenador(Entrenador* entrenador)
 
 int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
 {
-	if (id < 0 || id >= size)
+	if (id < 0)
 	{
 		return ENTRENADOR_ID_INVALIDO;
 	}
