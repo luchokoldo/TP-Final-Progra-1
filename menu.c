@@ -49,6 +49,13 @@ static int MenuCrearClase(Gym* gym);
 
 static void MenuMostrarClases(Gym* gym);
 static void MenuMostrarClase(Gym* gym, int idClase);
+static void MenuMostrarSectores(Gym* gym);
+static void MenuMostrarSector(Gym* gym, int idSector);
+static void MenuMostrarEntrenadores(Gym* gym);
+static void MenuMostrarEntrenador(Gym* gym, int idEntrenador);
+static void MenuMostrarClientes(Gym* gym);
+static void MenuMostrarCliente(Gym* gym, int idCliente);
+static void MenuMostrarClasesDelDia(Gym* gym);
 
 void MenuMostrarMenu(Gym* gym)
 {
@@ -56,6 +63,7 @@ void MenuMostrarMenu(Gym* gym)
 
 	char texto[][MAX_MENU_TEXT_SIZE] =
 	{
+		"Mostrar Clases del dia",
 		"Clientes",
 		"Entrenadores",
 		"Sectores",
@@ -70,7 +78,21 @@ void MenuMostrarMenu(Gym* gym)
 
 		if (opcion != MENU_EXIT_VALUE)
 		{
-			int opcionSecundario = MenuMostrarMenuSecundario(gym, texto[opcion], opcion);
+			int opcionSecundario = 0;
+			
+			switch (opcion)
+			{
+				case 0:
+				{
+					MenuMostrarClasesDelDia(gym);
+
+					break;
+				}
+				default:
+				{
+					opcionSecundario = MenuMostrarMenuSecundario(gym, texto[opcion], opcion);
+				}
+			}
 
 			if (opcionSecundario != MENU_EXIT_VALUE)
 			{
@@ -98,16 +120,16 @@ static int MenuMostrarMenuSecundario(Gym* gym, char* textoAccion, int accion)
 
 	switch (accion)
 	{
-		case 0:
+		case 1:
 			MenuSecundarioAccionCliente(gym, texto[opcion], opcion);
 			break;
-		case 1:
+		case 2:
 			MenuSecundarioAccionEntrenador(gym, texto[opcion], opcion);
 			break;
-		case 2:
+		case 3:
 			MenuSecundarioAccionSector(gym, texto[opcion], opcion);
 			break;
-		case 3:
+		case 4:
 			MenuSecundarioAccionClase(gym, texto[opcion], opcion);
 			break;
 	}
@@ -166,11 +188,15 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 			switch (opcionModificar)
 			{
 				case 0: 
+				{
 					GymModificarClienteNombre(gym, idsClientes[opcionClientes]);
 					break;
+				}
 				case 1:
+				{
 					GymModificarClienteGenero(gym, idsClientes[opcionClientes]);
 					break;
+				}
 				case 2:
 				{
 					if (GymHayClases(gym) == 0)
@@ -245,6 +271,8 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 
 							GymEliminarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
 
+							printf("Clase eliminada con exito.\n");
+
 							break;
 						}
 					}
@@ -264,7 +292,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarClientes(gym);
+			MenuMostrarClientes(gym);
 
 			break;
 		}
@@ -287,7 +315,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarCliente(gym, idsClientes[opcionClientes]);
+			MenuMostrarCliente(gym, idsClientes[opcionClientes]);
 
 			break;
 		}
@@ -312,6 +340,8 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 
 			GymEliminarCliente(gym, idsClientes[opcionClientes]);
 
+			printf("Cliente eliminado con exito.\n");
+
 			break;
 		}
 		case 5:
@@ -324,6 +354,8 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 			}
 
 			GymExportarClientesArchivoTexto(gym);
+
+			printf("Cliente exportado con exito.\n");
 
 			break;
 		}
@@ -380,11 +412,43 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 			switch (opcionModificar)
 			{
 				case 0:
-					GymModificarEntrenadorNombre(gym, idsEntrenadores[opcionEntrenadores]);
+				{
+					char nombreViejo[MAX_NOMBRE_ENTRENADOR_SIZE];
+					char nombreNuevo[MAX_NOMBRE_ENTRENADOR_SIZE];
+
+					GymObtenerEntrenadorNombre(gym, idsEntrenadores[opcionEntrenadores], nombreViejo);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_ENTRENADOR_SIZE);
+
+					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+					{
+						return;
+					}
+					
+					GymModificarEntrenadorNombre(gym, idsEntrenadores[opcionEntrenadores], nombreNuevo);
+
+					printf("Nombre modificado con exito.\n");
+
 					break;
+				}
 				case 1:
-					GymModificarEntrenadorGenero(gym, idsEntrenadores[opcionEntrenadores]);
+				{
+					char generoViejo[MAX_GENERO_ENTRENADOR_SIZE];
+					char generoNuevo[MAX_GENERO_ENTRENADOR_SIZE];
+
+					GymObtenerEntrenadorGenero(gym, idsEntrenadores[opcionEntrenadores], generoViejo);
+					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_ENTRENADOR_SIZE);
+
+					if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
+					{
+						return;
+					}
+					
+					GymModificarEntrenadorGenero(gym, idsEntrenadores[opcionEntrenadores], generoNuevo);
+
+					printf("Genero modificado con exito.\n");
+
 					break;
+				}
 			}
 
 			break;
@@ -398,7 +462,7 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 				return;
 			}
 
-			GymMostrarEntrenadores(gym);
+			MenuMostrarEntrenadores(gym);
 
 			break;
 		}
@@ -421,7 +485,7 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 				return;
 			}
 
-			GymMostrarEntrenador(gym, idsEntrenadores[opcionEntrenadores]);
+			MenuMostrarEntrenador(gym, idsEntrenadores[opcionEntrenadores]);
 
 			break;
 		}
@@ -446,6 +510,8 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 
 			GymEliminarEntrenador(gym, idsEntrenadores[opcionEntrenadores]);
 
+			printf("Entrenador eliminado con exito.\n");
+
 			break;
 		}
 		case 5:
@@ -458,6 +524,8 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 			}
 
 			GymExportarEntrenadoresArchivoTexto(gym);
+
+			printf("Entrenador exportado con exito.\n");
 
 			break;
 		}
@@ -498,7 +566,20 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymModificarSectorNombre(gym, idsSectores[opcionSectores]);
+			char nombreViejo[MAX_NOMBRE_SECTOR_SIZE];
+			char nombreNuevo[MAX_NOMBRE_SECTOR_SIZE];
+
+			GymObtenerSectorNombre(gym, idsSectores[opcionSectores], nombreViejo);
+			MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SECTOR_SIZE);
+
+			if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+			{
+				return;
+			}
+
+			GymModificarSectorNombre(gym, idsSectores[opcionSectores], nombreNuevo);
+
+			printf("Nombre modificado con exito.\n");
 			
 			break;
 		}
@@ -511,7 +592,7 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarSectores(gym);
+			MenuMostrarSectores(gym);
 
 			break;
 		}
@@ -534,7 +615,7 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarSector(gym, idsSectores[opcionSectores]);
+			MenuMostrarSector(gym, idsSectores[opcionSectores]);
 
 			break;
 		}
@@ -559,6 +640,8 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 
 			GymEliminarSector(gym, idsSectores[opcionSectores]);
 
+			printf("Sector eliminado con exito.\n");
+
 			break;
 		}
 		case 5:
@@ -571,6 +654,8 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 			}
 
 			GymExportarSectoresArchivoTexto(gym);
+
+			printf("Sector exportado con exito.\n");
 
 			break;
 		}
@@ -672,6 +757,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 					char textoModificarEntrenadores[][MAX_MENU_TEXT_SIZE] =
 					{
+						"Nuevo",
 						"Asignar",
 						"Eliminar"
 					};
@@ -691,6 +777,21 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					{
 						case 0:
 						{
+							int idEntrenador = MenuCrearEntrenador(gym);
+
+							if (idEntrenador == ENTRENADOR_ID_INVALIDO)
+							{
+								return;
+							}
+
+							GymAsignarEntrenadorClase(gym, idsClases[opcionClases], idEntrenador);
+
+							printf("Entrenador asignado con exito.\n");
+
+							break;
+						}
+						case 1:
+						{
 							int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
 							int opcionEntrenadores = MENU_EXIT_VALUE;
 
@@ -707,7 +808,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							break;
 						}
-						case 1:
+						case 2:
 						{
 							GymEliminarEntrenadorClase(gym, idsClases[opcionClases]);
 
@@ -741,6 +842,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 					char textoModificarSectores[][MAX_MENU_TEXT_SIZE] =
 					{
+						"Nuevo",
 						"Asignar",
 						"Eliminar"
 					};
@@ -760,6 +862,21 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					{
 						case 0:
 						{
+							int idSector = MenuCrearSector(gym);
+
+							if (idSector == SECTOR_ID_INVALIDO)
+							{
+								return;
+							}
+
+							GymAsignarSectorClase(gym, idsClases[opcionClases], idSector);
+
+							printf("Sector asignado con exito.\n");
+
+							break;
+						}
+						case 1:
+						{
 							int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
 							int opcionSectores = MENU_EXIT_VALUE;
 
@@ -776,7 +893,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							break;
 						}
-						case 1:
+						case 2:
 						{
 							GymEliminarSectorClase(gym, idsClases[opcionClases]);
 
@@ -813,7 +930,8 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 					char textoModificarClientes[][MAX_MENU_TEXT_SIZE] =
 					{
-						"Agregar",
+						"Nuevo",
+						"Asignar",
 						"Eliminar"
 					};
 
@@ -831,6 +949,24 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					switch (opcionModificarClientes)
 					{
 						case 0:
+						{
+							int idCliente = MenuCrearCliente(gym);
+
+							if (idCliente == CLIENTE_ID_INVALIDO)
+							{
+								return;
+							}
+
+							int exito = GymAgregarClienteClase(gym, idCliente, idsClases[opcionClases]);
+
+							if (exito == 1)
+							{
+								printf("Cliente agregado con exito.\n");
+							}
+
+							break;
+						}
+						case 1:
 						{
 							int idsClientes[MAX_MENU_ARRAY_SIZE] = { 0 };
 							int opcionClientes = MENU_EXIT_VALUE;
@@ -851,7 +987,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							break;
 						}
-						case 1:
+						case 2:
 						{
 							if (GymHayClientesEnClase(gym, idsClases[opcionClases]) == 0)
 							{
@@ -1618,4 +1754,171 @@ static void MenuMostrarClase(Gym* gym, int idClase)
 	printf("Duracion: %02d:%02d\n", horaDuracion, minutosDuracion);
 
 	printf("\n--------------------------------------\n");
+}
+
+static void MenuMostrarSectores(Gym* gym)
+{
+	int idsSectores[MAX_VAR_ARRAY_SIZE] = { 0 };
+	char nombresSectores[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_SECTOR_SIZE];
+	int sectoresSize = 0;
+
+	sectoresSize = GymObtenerSectoresNombresIds(gym, nombresSectores, idsSectores);
+
+	printf("\n--------------------------------------\n\n");
+
+	for (int i = 0; i < sectoresSize; i++)
+	{
+		printf("ID: %d\n", idsSectores[i]);
+		printf("Nombre: %s\n\n", nombresSectores[i]);
+	}
+
+	printf("--------------------------------------\n");
+}
+
+static void MenuMostrarSector(Gym* gym, int idSector)
+{
+	char nombreSector[MAX_NOMBRE_SECTOR_SIZE];
+
+	GymObtenerSectorNombre(gym, idSector, nombreSector);
+	
+	printf("\n--------------------------------------\n\n");
+	printf("ID: %d\n", idSector);
+	printf("Nombre: %s\n", nombreSector);
+	printf("\n--------------------------------------\n");
+}
+
+static void MenuMostrarEntrenadores(Gym* gym)
+{
+	int idsEntrenadores[MAX_VAR_ARRAY_SIZE] = { 0 };
+	char nombresEntrenadores[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_ENTRENADOR_SIZE];
+	int entrenadoresSize = 0;
+	char generoEntrenador[MAX_NOMBRE_ENTRENADOR_SIZE];
+
+	entrenadoresSize = GymObtenerEntrenadoresNombresIds(gym, nombresEntrenadores, idsEntrenadores);
+
+	printf("\n--------------------------------------\n\n");
+	
+	for (int i = 0; i < entrenadoresSize; i++)
+	{
+		printf("ID: %d\n", idsEntrenadores[i]);
+		printf("Nombre: %s\n", nombresEntrenadores[i]);
+
+		GymObtenerEntrenadorGenero(gym, idsEntrenadores[i], generoEntrenador);
+
+		printf("Genero: %s\n\n", generoEntrenador);
+	}
+
+	printf("--------------------------------------\n");
+}
+
+static void MenuMostrarEntrenador(Gym* gym, int idEntrenador)
+{
+	char NombreEntrenador[MAX_NOMBRE_ENTRENADOR_SIZE];
+	char generoEntrenador[MAX_NOMBRE_ENTRENADOR_SIZE];
+
+	GymObtenerEntrenadorNombre(gym, idEntrenador, NombreEntrenador);
+	GymObtenerEntrenadorGenero(gym, idEntrenador, generoEntrenador);
+	
+	printf("\n--------------------------------------\n\n");
+
+	printf("ID: %d\n", idEntrenador);
+	printf("Nombre: %s\n", NombreEntrenador);
+	printf("Genero: %s\n", generoEntrenador);
+
+	printf("\n--------------------------------------\n");
+}
+
+static void MenuMostrarClientes(Gym* gym)
+{
+	int idsClientes[MAX_VAR_ARRAY_SIZE] = { 0 };
+	char nombresClientes[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+	int clientesSize = 0;
+
+	clientesSize = GymObtenerClientesNombresIds(gym, nombresClientes, idsClientes);
+
+	char generoCliente[MAX_GENERO_CLIENTE_SIZE];
+	char nombresClases[MAX_ID_CLASE_SIZE][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[MAX_ID_CLASE_SIZE] = { 0 };
+	int clasesSize = 0;
+	double MontoTotal = 0.0;
+
+	printf("\n--------------------------------------\n\n");
+
+	for (int i = 0; i < clientesSize; i++)
+	{
+		printf("ID: %d\n", idsClientes[i]);
+		printf("Nombre: %s\n", nombresClientes[i]);
+
+		GymObtenerClienteGenero(gym, idsClientes[i], generoCliente);
+
+		printf("Genero: %s\n", generoCliente);
+		printf("Clases: ");
+
+		clasesSize = GymObtenerClienteClasesNombresIds(gym, idsClientes[i], nombresClases, idsClases);
+
+		if (clasesSize > 0)
+		{
+			for (int j = 0; j < clasesSize; j++)
+			{
+				printf("%s, ", nombresClases[j]);
+			}
+
+			printf("\b\b. \n\n");
+		}
+		else
+		{
+			printf("Sin clases asignadas.\n\n");
+		}
+	}
+
+	
+	
+
+	printf("--------------------------------------\n");
+}
+
+static void MenuMostrarCliente(Gym* gym, int idCliente)
+{
+	char nombreCliente[MAX_NOMBRE_CLIENTE_SIZE];
+	char generoCliente[MAX_GENERO_CLIENTE_SIZE];
+	char nombresClases[MAX_ID_CLASE_SIZE][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[MAX_ID_CLASE_SIZE] = { 0 };
+	int clasesSize = 0;
+	double MontoTotal = 0.0;
+	
+	printf("\n--------------------------------------\n\n");
+
+	printf("ID: %d\n", idCliente);
+
+	GymObtenerClienteNombre(gym, idCliente, nombreCliente);
+
+	printf("Nombre: %s\n", nombreCliente);
+
+	GymObtenerClienteGenero(gym, idCliente, generoCliente);
+
+	printf("Genero: %s\n", generoCliente);
+	printf("Clases: ");
+
+	clasesSize = GymObtenerClienteClasesNombresIds(gym, idCliente, nombresClases, idsClases);
+
+	if (clasesSize > 0)
+	{
+		for (int j = 0; j < clasesSize; j++)
+		{
+			printf("%s, ", nombresClases[j]);
+		}
+
+		printf("\b\b. \n\n");
+	}
+	else
+	{
+		printf("Sin clases asignadas.\n\n");
+	}
+
+	printf("\n--------------------------------------\n");
+}
+
+static void MenuMostrarClasesDelDia(Gym* gym)
+{
+
 }
