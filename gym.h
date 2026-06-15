@@ -64,8 +64,6 @@ void GymObtenerClaseHorario(Gym* gym, int idClase, int* horas, int* minutos);
 void GymObtenerClaseDuracion(Gym* gym, int idClase, int* horas, int* minutos);
 int GymObtenerClaseEntrenadorId(Gym* gym, int idClase);
 int GymObtenerClaseSectorId(Gym* gym, int idClase);
-void GymMostrarClases(Gym* gym);
-void GymMostrarClase(Gym* gym, int idClase);
 void GymEliminarClase(Gym* gym, int idClase);
 void GymExportarClasesArchivoTexto(Gym* gym);
 int GymHayClientesEnClase(Gym* gym, int idClase);

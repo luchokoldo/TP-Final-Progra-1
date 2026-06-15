@@ -677,27 +677,6 @@ int GymObtenerClaseSectorId(Gym* gym, int idClase)
 	return ClaseObtenerSector(clase);
 }
 
-void GymMostrarClases(Gym* gym)
-{
-	ClaseMostrarClases(gym->clases, gym->clasesSize);
-}
-
-void GymMostrarClase(Gym* gym, int idClase)
-{
-	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
-
-	if (clase == NULL)
-	{
-		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
-
-		GymExit(gym);
-
-		return;
-	}
-
-	ClaseMostrarClase(clase);
-}
-
 void GymEliminarClase(Gym* gym, int idClase)
 {
 	int clientesSize = GymHayClientesEnClase(gym, idClase);
