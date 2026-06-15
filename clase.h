@@ -34,7 +34,7 @@ typedef struct Clase
 } Clase;
 
 Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int idEntrenador, int idSector, double precio, Horario inicio, Duracion duracion);
-int ClaseBuscarClaseId(Clase* clase, int size, int idClase);
+int ClaseBuscarClaseId(Clase* clases, int size, int idClase);
 int ClaseBuscarClaseEntrenadorId(Clase* clases, int size, int idEntrenador);
 int ClaseBuscarClaseSectorId(Clase* clases, int size, int idSector);
 Clase* ClaseEliminarClase(Clase* clases, int size, int idClase);

@@ -893,19 +893,6 @@ int GymAgregarCliente(Gym* gym, char* nombreCliente, char* generoCliente)
 
 void GymModificarClienteNombre(Gym* gym, int idCliente)
 {
-	char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
-	char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
-
-	ClienteObtenerClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
-		return;
-	}
-
-	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreNuevo);
-
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
 
 	if (cliente == NULL)
@@ -916,25 +903,25 @@ void GymModificarClienteNombre(Gym* gym, int idCliente)
 
 		return;
 	}
+	
+	char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
+	char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
+
+	ClienteObtenerClienteNombre(cliente, nombreViejo);
+	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
+
+	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+	{
+		return;
+	}
+
+	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreNuevo);
 
 	ArchivoModificarCliente(cliente);
 }
 
 void GymModificarClienteGenero(Gym* gym, int id)
 {
-	char generoViejo[MAX_GENERO_CLIENTE_SIZE];
-	char generoNuevo[MAX_GENERO_CLIENTE_SIZE];
-
-	ClienteObtenerClienteGenero(gym->clientes, gym->clientesSize, id, generoViejo);
-	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_CLIENTE_SIZE);
-
-	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
-	{
-		return;
-	}
-
-	ClienteModificarClienteGenero(gym->clientes, gym->clientesSize, id, generoNuevo);
-
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, id);
 
 	if (cliente == NULL)
@@ -945,6 +932,19 @@ void GymModificarClienteGenero(Gym* gym, int id)
 
 		return;
 	}
+	
+	char generoViejo[MAX_GENERO_CLIENTE_SIZE];
+	char generoNuevo[MAX_GENERO_CLIENTE_SIZE];
+
+	ClienteObtenerClienteGenero(cliente, generoViejo);
+	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_CLIENTE_SIZE);
+
+	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
+	{
+		return;
+	}
+
+	ClienteModificarClienteGenero(gym->clientes, gym->clientesSize, id, generoNuevo);
 
 	ArchivoModificarCliente(cliente);
 }

@@ -38,6 +38,16 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int
 	return aux;
 }
 
+int ClaseBuscarClaseId(Clase* clases, int size, int idClase)
+{
+	if (idClase < 0)
+	{
+		return CLASE_ID_INVALIDO;
+	}
+
+	return ClaseBuscarId(clases, size, idClase, 0);
+}
+
 int ClaseBuscarClaseEntrenadorId(Clase* clases, int size, int idEntrenador)
 {
 	if (idEntrenador < 0)
