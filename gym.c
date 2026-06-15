@@ -992,6 +992,38 @@ int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClase
 	return idsSize;
 }
 
+void GymObtenerClienteNombre(Gym* gym, int idCliente, char* nombreCliente)
+{
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] No se encontro el cliente %d\n", idCliente);
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ClienteObtenerClienteNombre(cliente, nombreCliente);
+}
+
+void GymObtenerClienteGenero(Gym* gym, int idCliente, char* generoCliente)
+{
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] No se encontro el cliente %d\n", idCliente);
+
+		GymExit(gym);
+
+		return;
+	}
+
+	ClienteObtenerClienteGenero(cliente, generoCliente);
+}
+
 void GymMostrarClientes(Gym* gym)
 {
 	char nombresClases[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_CLASE_SIZE];

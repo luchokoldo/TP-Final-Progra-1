@@ -84,6 +84,8 @@ void GymModificarClienteNombre(Gym* gym, int idCliente);
 void GymModificarClienteGenero(Gym* gym, int idCliente);
 int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
 int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
+void GymObtenerClienteNombre(Gym* gym, int idCliente, char* nombreCliente);
+void GymObtenerClienteGenero(Gym* gym, int idCliente, char* generoCliente);
 void GymMostrarClientes(Gym* gym);
 void GymMostrarCliente(Gym* gym, int idCliente);
 void GymEliminarCliente(Gym* gym, int idCliente);
