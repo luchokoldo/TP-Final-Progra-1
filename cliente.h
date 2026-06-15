@@ -5,6 +5,7 @@
 #define MAX_GENERO_CLIENTE_SIZE 32
 #define MAX_ID_CLASE_SIZE     32
 #define CLIENTE_ID_INVALIDO     -1
+#define MAX_NOMBRE_CLASE_SIZE 64
 
 
 typedef struct Cliente
@@ -17,8 +18,8 @@ typedef struct Cliente
 } Cliente;
 
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char *nombre, char *genero);
-void ClienteMostrarClientes(Cliente* clientes, int size);
-void ClienteMostrarCliente(Cliente* cliente);
+void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
+void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
 int ClienteBuscarClienteId(Cliente* clientes, int size, int idCliente);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente);
 

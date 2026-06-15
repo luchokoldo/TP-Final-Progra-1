@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include "utilidades.h"
 
+
 static int ClienteBuscarId(Cliente* clientes, int size, int idCliente, int i);
 
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char* nombre, char* genero)
@@ -32,14 +33,14 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char*
 	return aux;
 }
 
-void ClienteMostrarClientes(Cliente* clientes, int size)
+void ClienteMostrarClientes(Cliente* clientes, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize)
 {
 	if (size <= 0)
 	{
 		return;
 	}
 
-	ClienteMostrarClientes(clientes, size - 1);
+	ClienteMostrarClientes(clientes, size - 1, nombresClases, idsClases, clasesSize);
 
 	printf("\n--------------------------------------\n\n");
 	printf("ID: %d\n", clientes[size - 1].id);
@@ -51,7 +52,26 @@ void ClienteMostrarClientes(Cliente* clientes, int size)
 	{
 		for (int j = 0; j < clientes[size - 1].idClasesValidos; j++)
 		{
-			printf("%d, ", clientes[size - 1].idClases[j]);
+			int idClaseActual = clientes[size - 1].idClases[j];
+			int index = -1;
+
+			for (int k = 0; k < clasesSize; k++)
+			{
+				if (idsClases[k] == idClaseActual)
+				{
+					index = k;
+					break;
+				}
+			}
+
+			if (index != -1)
+			{
+				printf("%s, ", nombresClases[index]);
+			}
+			else
+			{
+				printf("%d, ", idClaseActual);
+			}
 		}
 
 		printf("\b\b. \n");
@@ -257,8 +277,13 @@ void ClienteModificarClienteGenero(Cliente* clientes, int size, int idCliente, c
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
 }
 
-void ClienteMostrarCliente(Cliente* cliente)
+void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize)
 {
+	if (cliente == NULL)
+	{
+		return;
+	}
+
 	printf("\n--------------------------------------\n\n");
 	printf("ID: %d\n", cliente->id);
 	printf("Nombre: %s\n", cliente->nombre);
@@ -269,10 +294,31 @@ void ClienteMostrarCliente(Cliente* cliente)
 	{
 		for (int j = 0; j < cliente->idClasesValidos; j++)
 		{
-			printf("%d, ", cliente->idClases[j]);
+			int idClaseActual = cliente->idClases[j];
+			int index = -1;
+
+			for (int k = 0; k < clasesSize; k++)
+			{
+				if (idsClases[k] == idClaseActual)
+				{
+					index = k;
+
+					break;
+				}
+			}
+
+			if (index != -1)
+			{
+				printf("%s, ", nombresClases[index]);
+			}
+			else
+			{
+				printf("%d, ", idClaseActual);
+			}
+
 		}
 
-		printf("\b\b.\n");
+		printf("\b\b. \n");
 	}
 	else
 	{

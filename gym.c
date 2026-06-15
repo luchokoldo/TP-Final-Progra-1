@@ -1002,7 +1002,11 @@ int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClase
 
 void GymMostrarClientes(Gym* gym)
 {
-	ClienteMostrarClientes(gym->clientes, gym->clientesSize);
+	char nombresClases[100][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[100] = { 0 };
+	int clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
+
+	ClienteMostrarClientes(gym->clientes, gym->clientesSize, nombresClases, idsClases, clasesSize);
 }
 
 void GymMostrarCliente(Gym* gym, int idCliente)
@@ -1017,8 +1021,11 @@ void GymMostrarCliente(Gym* gym, int idCliente)
 
 		return;
 	}
+	char nombresClases[100][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[100] = { 0 };
+	int clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
 
-	ClienteMostrarCliente(cliente);
+	ClienteMostrarCliente(cliente, nombresClases, idsClases, clasesSize);
 }
 
 void GymEliminarCliente(Gym* gym, int idCliente)
