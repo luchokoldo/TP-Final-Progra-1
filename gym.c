@@ -19,39 +19,15 @@ static Duracion GymModificarDuracion(Duracion duracionViejo);
 static void GymLiberarMemoria(Gym* gym);
 static void GymExit(Gym* gym);
 
-void GymAgregarEntrenador(Gym* gym)
+int GymAgregarEntrenador(Gym* gym, char* nombreEntrenador, char* generoEntrenador)
 {
-	char nombre[MAX_NOMBRE_ENTRENADOR_SIZE];
-	char genero[MAX_GENERO_ENTRENADOR_SIZE];
-
-	do
-	{
-		GymIngresarNombre(nombre, MAX_NOMBRE_ENTRENADOR_SIZE);
-
-		if (*nombre == '\0')
-		{
-			printf("[ERROR] El nombre no puede estar vacio\n");
-		}
-	} while (*nombre == '\0');
-
-	do
-	{
-		GymIngresarGenero(genero, MAX_GENERO_ENTRENADOR_SIZE);
-
-		if (*genero == '\0')
-		{
-			printf("[ERROR] El genero no puede estar vacio\n");
-		}
-	} while (*genero == '\0');
-
-
-	Entrenador* temp = EntrenadorAgregarEntrenador(gym->entrenadores, gym->entrenadoresSize, gym->ids.entrenador + 1, nombre, genero);
+	Entrenador* temp = EntrenadorAgregarEntrenador(gym->entrenadores, gym->entrenadoresSize, gym->ids.entrenador + 1, nombreEntrenador, generoEntrenador);
 
 	if (temp == NULL)
 	{
 		GymExit(gym);
 
-		return;
+		return ENTRENADOR_ID_INVALIDO;
 	}
 
 	gym->entrenadores = temp;
@@ -66,19 +42,32 @@ void GymAgregarEntrenador(Gym* gym)
 
 		GymExit(gym);
 
-		return;
+		return ENTRENADOR_ID_INVALIDO;
 	}
 
 	ArchivoAgregarEntrenador(entrenador);
 	ArchivoActualizarIds(&gym->ids);
+
+	return gym->ids.entrenador;
 }
 
 void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
 {
+	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
+
+	if (entrenador == NULL)
+	{
+		printf("[ERROR] EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador) devolvio NULL");
+
+		GymExit(gym);
+
+		return;
+	}
+	
 	char nombreViejo[MAX_NOMBRE_ENTRENADOR_SIZE];
 	char nombreNuevo[MAX_NOMBRE_ENTRENADOR_SIZE];
 
-	EntrenadorObtenerEntrenadorNombre(gym->entrenadores, gym->entrenadoresSize, idEntrenador, nombreViejo);
+	EntrenadorObtenerEntrenadorNombre(entrenador, nombreViejo);
 	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_ENTRENADOR_SIZE);
 
 	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
@@ -88,6 +77,11 @@ void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
 
 	EntrenadorModificarEntrenadorNombre(gym->entrenadores, gym->entrenadoresSize, idEntrenador, nombreNuevo);
 
+	ArchivoModificarEntrenador(entrenador);
+}
+
+void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador)
+{
 	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
 
 	if (entrenador == NULL)
@@ -98,16 +92,11 @@ void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
 
 		return;
 	}
-
-	ArchivoModificarEntrenador(entrenador);
-}
-
-void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador)
-{
+	
 	char generoViejo[MAX_GENERO_ENTRENADOR_SIZE];
 	char generoNuevo[MAX_GENERO_ENTRENADOR_SIZE];
 
-	EntrenadorObtenerEntrenadorGenero(gym->entrenadores, gym->entrenadoresSize, idEntrenador, generoViejo);
+	EntrenadorObtenerEntrenadorGenero(entrenador, generoViejo);
 	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_ENTRENADOR_SIZE);
 
 	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
@@ -117,17 +106,6 @@ void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador)
 
 	EntrenadorModificarEntrenadorGenero(gym->entrenadores, gym->entrenadoresSize, idEntrenador, generoNuevo);
 
-	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
-
-	if (entrenador == NULL)
-	{
-		printf("[ERROR] EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador) devolvio NULL");
-
-		GymExit(gym);
-
-		return;
-	}
-
 	ArchivoModificarEntrenador(entrenador);
 }
 
@@ -136,6 +114,38 @@ int GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NO
 	EntrenadorObtenerEntrenadoresNombresIds(gym->entrenadores, gym->entrenadoresSize, nombresEntrenadores, idsEntrenadores);
 
 	return gym->entrenadoresSize;
+}
+
+void GymObtenerEntrenadorNombre(Gym* gym, int idEntrenador, char* nombreEntrenador)
+{
+	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
+
+	if (entrenador == NULL)
+	{
+		printf("[ERROR] EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	EntrenadorObtenerEntrenadorNombre(entrenador, nombreEntrenador);
+}
+
+void GymObtenerEntrenadorGenero(Gym* gym, int idEntrenador, char* generoEntrenador)
+{
+	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
+
+	if (entrenador == NULL)
+	{
+		printf("[ERROR] EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	EntrenadorObtenerEntrenadorGenero(entrenador, generoEntrenador);
 }
 
 void GymMostrarEntrenadores(Gym* gym)
@@ -161,6 +171,13 @@ void GymMostrarEntrenador(Gym* gym, int idEntrenador)
 
 void GymEliminarEntrenador(Gym* gym, int idEntrenador)
 {
+	while (GymHayEntrenadorEnClases(gym, idEntrenador))
+	{
+		int index = ClaseBuscarClaseEntrenadorId(gym->clases, gym->clasesSize, idEntrenador);
+
+		ClaseEliminarEntrenador(&gym->clases[index]);
+	}
+	
 	Entrenador* temp = NULL;
 
 	temp = EntrenadorEliminarEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
@@ -212,27 +229,15 @@ int GymHayEntrenadores(Gym* gym)
 	return gym->entrenadoresSize;
 }
 
-void GymAgregarSector(Gym* gym)
+int GymAgregarSector(Gym* gym, char* nombreSector)
 {
-	char nombre[MAX_NOMBRE_SECTOR_SIZE];
-
-	do
-	{
-		GymIngresarNombre(nombre, MAX_NOMBRE_SECTOR_SIZE);
-
-		if (*nombre == '\0')
-		{
-			printf("[ERROR] El nombre no puede estar vacio\n");
-		}
-	} while (*nombre == '\0');
-
-	Sector* temp = SectorAgregarSector(gym->sectores, gym->sectoresSize, gym->ids.sector + 1, nombre);
+	Sector* temp = SectorAgregarSector(gym->sectores, gym->sectoresSize, gym->ids.sector + 1, nombreSector);
 
 	if (temp == NULL)
 	{
 		GymExit(gym);
 
-		return;
+		return SECTOR_ID_INVALIDO;
 	}
 
 	gym->sectores = temp;
@@ -247,28 +252,17 @@ void GymAgregarSector(Gym* gym)
 
 		GymExit(gym);
 
-		return;
+		return SECTOR_ID_INVALIDO;
 	}
 
 	ArchivoAgregarSector(sector);
 	ArchivoActualizarIds(&gym->ids);
+
+	return gym->ids.sector;
 }
 
 void GymModificarSectorNombre(Gym* gym, int idSector)
 {
-	char nombreViejo[MAX_NOMBRE_SECTOR_SIZE];
-	char nombreNuevo[MAX_NOMBRE_SECTOR_SIZE];
-
-	SectorObtenerSectorNombre(gym->sectores, gym->sectoresSize, idSector, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SECTOR_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
-		return;
-	}
-
-	SectorModificarSectorNombre(gym->sectores, gym->sectoresSize, idSector, nombreNuevo);
-
 	Sector* sector = SectorObtenerSector(gym->sectores, gym->sectoresSize, idSector);
 
 	if (sector == NULL)
@@ -279,6 +273,19 @@ void GymModificarSectorNombre(Gym* gym, int idSector)
 
 		return;
 	}
+	
+	char nombreViejo[MAX_NOMBRE_SECTOR_SIZE];
+	char nombreNuevo[MAX_NOMBRE_SECTOR_SIZE];
+
+	SectorObtenerSectorNombre(sector, nombreViejo);
+	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SECTOR_SIZE);
+
+	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+	{
+		return;
+	}
+
+	SectorModificarSectorNombre(gym->sectores, gym->sectoresSize, idSector, nombreNuevo);
 
 	ArchivoModificarSector(sector);
 }
@@ -288,6 +295,22 @@ int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SEC
 	SectorObtenerSectoresNombresIds(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
 
 	return gym->sectoresSize;
+}
+
+void GymObtenerSectorNombre(Gym* gym, int idSector, char* nombreSector)
+{
+	Sector* sector = SectorObtenerSector(gym->sectores, gym->sectoresSize, idSector);
+
+	if (sector == NULL)
+	{
+		printf("[ERROR] SectorObtenerSector(gym->sectores, gym->sectoresSize, idSector) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	SectorObtenerSectorNombre(sector, nombreSector);
 }
 
 void GymMostrarSectores(Gym* gym)
@@ -313,6 +336,13 @@ void GymMostrarSector(Gym* gym, int idSector)
 
 void GymEliminarSector(Gym* gym, int idSector)
 {
+	while (GymHaySectorEnClases(gym, idSector))
+	{
+		int index = ClaseBuscarClaseSectorId(gym->clases, gym->clasesSize, idSector);
+
+		ClaseEliminarSector(&gym->clases[index]);
+	}
+	
 	Sector* temp = NULL;
 
 	temp = SectorEliminarSector(gym->sectores, gym->sectoresSize, idSector);
@@ -364,82 +394,28 @@ int GymHaySectores(Gym* gym)
 	return gym->sectoresSize;
 }
 
-void GymAgregarClase(Gym* gym)
+int GymAgregarClase(Gym* gym, char* nombreClase, int idEntrenador, int idSector, int horaHorario, int minutosHorario, int horaDuracion, int minutosDuracion, double precio)
 {
-	char nombre[MAX_NOMBRE_SECTOR_SIZE];
-	double precio = 0.0;
-	Horario inicio = { 0 };
-	Duracion duracion = { 0 };
+	Horario inicio = { .horas = horaHorario, .minutos = minutosHorario };
+	Duracion duracion = { .horas = horaDuracion, .minutos = minutosDuracion };	
 
-	do
+	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, idEntrenador, idSector, inicio, duracion) == 1)
 	{
-		GymIngresarNombre(nombre, MAX_NOMBRE_SECTOR_SIZE);
+		printf("[ERROR] El horario se superpone con otra clase\n");
 
-		if (*nombre == '\0')
-		{
-			printf("[ERROR] El nombre no puede estar vacio\n");
-		}
-	} while (*nombre == '\0');
-
-	do
-	{
-		precio = GymIngresarPrecio();
-
-		if (precio < 0)
-		{
-			printf("[ERROR] El precio no puede ser menor a 0\n");
-		}
-	} while (precio < 0);
-
-	do
-	{
-		inicio = GymIngresarHorario();
-
-		inicio.horas += inicio.minutos / 60;
-		inicio.minutos %= 60;
-
-		if (inicio.horas < 0)
-		{
-			printf("[ERROR] La hora no pueden ser menor a 0\n");
-		}
-		else if (inicio.minutos < 0)
-		{
-			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
-		}
-		else if (inicio.horas > 24)
-		{
-			printf("[ERROR] La hora no pueden ser mayor a 24\n");
-		}
-	} while (inicio.horas < 0 || inicio.minutos < 0 || inicio.horas > 24);
+		return CLASE_ID_INVALIDO;
+	}
 
 	inicio.esValido = 1;
-
-	do
-	{
-		duracion = GymIngresarDuracion();
-
-		duracion.horas += duracion.minutos / 60;
-		duracion.minutos %= 60;
-
-		if (duracion.horas < 0)
-		{
-			printf("[ERROR] La hora no pueden ser menor a 0\n");
-		}
-		else if (duracion.minutos < 0)
-		{
-			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
-		}
-	} while (duracion.horas < 0 || duracion.minutos < 0);
-
 	duracion.esValido = 1;
 
-	Clase* temp = ClaseAgregarClase(gym->clases, gym->clasesSize, gym->ids.clase + 1, nombre, precio, inicio, duracion);
+	Clase* temp = ClaseAgregarClase(gym->clases, gym->clasesSize, gym->ids.clase + 1, nombreClase, idEntrenador, idSector, precio, inicio, duracion);
 
 	if (temp == NULL)
 	{
 		GymExit(gym);
 
-		return;
+		return CLASE_ID_INVALIDO;
 	}
 
 	gym->clases = temp;
@@ -454,26 +430,17 @@ void GymAgregarClase(Gym* gym)
 
 		GymExit(gym);
 
-		return;
+		return CLASE_ID_INVALIDO;
 	}
 
 	ArchivoAgregarClase(clase);
 	ArchivoActualizarIds(&gym->ids);
+
+	return gym->ids.clase;
 }
 
-void GymModificarClaseNombre(Gym* gym, int idClase)
+void GymModificarClaseNombre(Gym* gym, int idClase, char* nombreNuevo)
 {
-	char nombreViejo[MAX_NOMBRE_CLASE_SIZE];
-	char nombreNuevo[MAX_NOMBRE_CLASE_SIZE];
-
-	ClaseObtenerClaseNombre(gym->clases, gym->clasesSize, idClase, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLASE_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
-		return;
-	}
-
 	ClaseModificarClaseNombre(gym->clases, gym->clasesSize, idClase, nombreNuevo);
 
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
@@ -490,7 +457,7 @@ void GymModificarClaseNombre(Gym* gym, int idClase)
 	ArchivoModificarClase(clase);
 }
 
-void GymAsignarClasePrecio(Gym* gym, int idClase)
+void GymAsignarClasePrecio(Gym* gym, int idClase, double precioNuevo)
 {
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
 
@@ -500,24 +467,6 @@ void GymAsignarClasePrecio(Gym* gym, int idClase)
 
 		GymExit(gym);
 
-		return;
-	}
-
-	double precioViejo = ClaseObtenerClasePrecio(clase);
-	double precioNuevo = 0.0;
-
-	do
-	{
-		precioNuevo = GymModificarPrecio(precioViejo);
-
-		if (precioNuevo < 0 && precioNuevo != -1)
-		{
-			printf("[ERROR] El precio tiene que ser mayor o igual a 0\n");
-		}
-	} while (precioNuevo < 0 && precioNuevo != -1);
-
-	if (precioNuevo == -1)
-	{
 		return;
 	}
 
@@ -526,7 +475,7 @@ void GymAsignarClasePrecio(Gym* gym, int idClase)
 	ArchivoModificarClase(clase);
 }
 
-void GymModificarClaseHorario(Gym* gym, int idClase)
+int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minutosHorario)
 {
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
 
@@ -536,41 +485,31 @@ void GymModificarClaseHorario(Gym* gym, int idClase)
 
 		GymExit(gym);
 
-		return;
+		return CLASE_ID_INVALIDO;
 	}
 
-	Horario horarioViejo = ClaseObtenerClaseHorario(clase);
-	Horario horarioNuevo = { 0 };
+	Horario horarioNuevo = { .horas = horasHorario, .minutos = minutosHorario };
+	Duracion duracionActual = ClaseObtenerClaseDuracion(clase);
+	int idEntrenador = ClaseObtenerEntrenador(clase);
+	int idSector = ClaseObtenerSector(clase);
 
-	do
+	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, idEntrenador, idSector, horarioNuevo, duracionActual) == 1)
 	{
-		horarioNuevo = GymModificarHorario(horarioViejo);
+		printf("[ERROR] El horario se superpone con otra clase\n");
 
-		horarioNuevo.horas += horarioNuevo.minutos / 60;
-		horarioNuevo.minutos %= 60;
-
-		if (horarioNuevo.horas < 0)
-		{
-			printf("[ERROR] La hora no pueden ser menor a 0\n");
-		}
-		else if (horarioNuevo.minutos < 0)
-		{
-			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
-		}
-		else if (horarioNuevo.horas > 24)
-		{
-			printf("[ERROR] La hora no pueden ser mayor a 24\n");
-		}
-	} while (horarioNuevo.horas < 0 || horarioNuevo.minutos < 0 || horarioNuevo.horas > 24);
+		return CLASE_ID_INVALIDO;
+	}
 
 	horarioNuevo.esValido = 1;
 
 	ClaseModificarClaseHorario(clase, horarioNuevo);
 
 	ArchivoModificarClase(clase);
+
+	return idClase;
 }
 
-void GymModificarClaseDuracion(Gym* gym, int idClase)
+int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minutosDuracion)
 {
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
 
@@ -580,34 +519,28 @@ void GymModificarClaseDuracion(Gym* gym, int idClase)
 
 		GymExit(gym);
 
-		return;
+		return CLASE_ID_INVALIDO;
 	}
 
-	Duracion duracionViejo = ClaseObtenerClaseDuracion(clase);
-	Duracion duracionNuevo = { 0 };
+	Horario horarioActual = ClaseObtenerClaseHorario(clase);
+	Duracion duracionNuevo = { .horas = horasDuracion, .minutos = minutosDuracion };
+	int idEntrenador = ClaseObtenerEntrenador(clase);
+	int idSector = ClaseObtenerSector(clase);
 
-	do
+	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, idEntrenador, idSector, horarioActual, duracionNuevo) == 1)
 	{
-		duracionNuevo = GymModificarDuracion(duracionViejo);
+		printf("[ERROR] El horario se superpone con otra clase\n");
 
-		duracionNuevo.horas += duracionNuevo.minutos / 60;
-		duracionNuevo.minutos %= 60;
-
-		if (duracionNuevo.horas < 0)
-		{
-			printf("[ERROR] La hora no pueden ser menor a 0\n");
-		}
-		else if (duracionNuevo.minutos < 0)
-		{
-			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
-		}
-	} while (duracionNuevo.horas < 0 || duracionNuevo.minutos < 0);
+		return CLASE_ID_INVALIDO;
+	}
 
 	duracionNuevo.esValido = 1;
 
 	ClaseModificarClaseDuracion(clase, duracionNuevo);
 
 	ArchivoModificarClase(clase);
+
+	return idClase;
 }
 
 int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
@@ -627,7 +560,7 @@ int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresCliente
 
 		GymExit(gym);
 
-		return;
+		return CLASE_ID_INVALIDO;
 	}
 
 	int idsSize = ClaseObtenerClientesEnClase(clase);
@@ -636,7 +569,7 @@ int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresCliente
 
 	for (int i = 0; i < idsSize; i++)
 	{
-		Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idClase);
+		Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idsClientes[i]);
 
 		if (cliente == NULL)
 		{
@@ -644,13 +577,104 @@ int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresCliente
 
 			GymExit(gym);
 
-			return;
+			return CLASE_ID_INVALIDO;
 		}
 
 		snprintf(nombresClientes[i], MAX_NOMBRE_CLIENTE_SIZE, "%s", cliente->nombre);
 	}
 
 	return idsSize;
+}
+
+void GymObtenerClaseNombre(Gym* gym, int idClase, char* nombreViejo)
+{
+	ClaseObtenerClaseNombre(gym->clases, gym->clasesSize, idClase, nombreViejo);
+}
+
+double GymObtenerClasePrecio(Gym* gym, int idClase)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return 0;
+	}
+
+	return ClaseObtenerClasePrecio(clase);
+}
+
+void GymObtenerClaseHorario(Gym* gym, int idClase, int* horas, int* minutos)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+	
+	Horario horario = ClaseObtenerClaseHorario(clase);
+
+	*horas = horario.horas;
+	*minutos = horario.minutos;
+}
+
+void GymObtenerClaseDuracion(Gym* gym, int idClase, int* horas, int* minutos)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+
+	Duracion duracion= ClaseObtenerClaseDuracion(clase);
+
+	*horas = duracion.horas;
+	*minutos = duracion.minutos;
+}
+
+int GymObtenerClaseEntrenadorId(Gym* gym, int idClase)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return CLASE_ID_INVALIDO;
+	}
+
+	return ClaseObtenerEntrenador(clase);
+}
+
+int GymObtenerClaseSectorId(Gym* gym, int idClase)
+{
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return CLASE_ID_INVALIDO;
+	}
+
+	return ClaseObtenerSector(clase);
 }
 
 void GymMostrarClases(Gym* gym)
@@ -830,10 +854,20 @@ int GymHayClientesEnClase(Gym* gym, int idClase)
 
 		GymExit(gym);
 
-		return;
+		return 0;
 	}
 
 	return ClaseObtenerClientesEnClase(clase);
+}
+
+int GymHayEntrenadorEnClases(Gym* gym, int idEntrenador)
+{
+	return (ClaseBuscarClaseEntrenadorId(gym->clases, gym->clasesSize, idEntrenador) == CLASE_ID_INVALIDO) == 0;
+}
+
+int GymHaySectorEnClases(Gym* gym, int idSector)
+{
+	return (ClaseBuscarClaseSectorId(gym->clases, gym->clasesSize, idSector) == CLASE_ID_INVALIDO) == 0;
 }
 
 int GymHayClases(Gym* gym)
@@ -846,38 +880,15 @@ int GymHayClases(Gym* gym)
 	return gym->clasesSize;
 }
 
-void GymAgregarCliente(Gym* gym)
+int GymAgregarCliente(Gym* gym, char* nombreCliente, char* generoCliente)
 {
-	char nombre[MAX_NOMBRE_CLIENTE_SIZE];
-	char genero[MAX_GENERO_CLIENTE_SIZE];
-
-	do
-	{
-		GymIngresarNombre(nombre, MAX_NOMBRE_CLIENTE_SIZE);
-
-		if (*nombre == '\0')
-		{
-			printf("[ERROR] El nombre no puede estar vacio\n");
-		}
-	} while (*nombre == '\0');
-
-	do
-	{
-		GymIngresarGenero(genero, MAX_GENERO_CLIENTE_SIZE);
-
-		if (*genero == '\0')
-		{
-			printf("[ERROR] El genero no puede estar vacio\n");
-		}
-	} while (*genero == '\0');
-
-	Cliente* temp = ClienteAgregarCliente(gym->clientes, gym->clientesSize, gym->ids.cliente + 1, nombre, genero);
+	Cliente* temp = ClienteAgregarCliente(gym->clientes, gym->clientesSize, gym->ids.cliente + 1, nombreCliente, generoCliente);
 
 	if (temp == NULL)
 	{
 		GymExit(gym);
 
-		return;
+		return CLIENTE_ID_INVALIDO;
 	}
 
 	gym->clientes = temp;
@@ -892,19 +903,21 @@ void GymAgregarCliente(Gym* gym)
 
 		GymExit(gym);
 
-		return;
+		return CLIENTE_ID_INVALIDO;
 	}
 
 	ArchivoAgregarCliente(cliente);
 	ArchivoActualizarIds(&gym->ids);
+
+	return gym->ids.cliente;
 }
 
-void GymModificarClienteNombre(Gym* gym, int id)
+void GymModificarClienteNombre(Gym* gym, int idCliente)
 {
 	char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
 	char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
 
-	ClienteObtenerClienteNombre(gym->clientes, gym->clientesSize, id, nombreViejo);
+	ClienteObtenerClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreViejo);
 	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
 
 	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
@@ -912,13 +925,13 @@ void GymModificarClienteNombre(Gym* gym, int id)
 		return;
 	}
 
-	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, id, nombreNuevo);
+	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreNuevo);
 
-	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, id);
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
 
 	if (cliente == NULL)
 	{
-		printf("[ERROR] ClienteObtenerCliente(gym->clientes, gym->clientesSize, id) devolvio NULL\n");
+		printf("[ERROR] ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente) devolvio NULL\n");
 
 		GymExit(gym);
 
@@ -1002,8 +1015,8 @@ int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClase
 
 void GymMostrarClientes(Gym* gym)
 {
-	char nombresClases[100][MAX_NOMBRE_CLASE_SIZE];
-	int idsClases[100] = { 0 };
+	char nombresClases[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[MAX_VAR_ARRAY_SIZE] = { 0 };
 	int clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
 
 	ClienteMostrarClientes(gym->clientes, gym->clientesSize, nombresClases, idsClases, clasesSize);
@@ -1021,8 +1034,8 @@ void GymMostrarCliente(Gym* gym, int idCliente)
 
 		return;
 	}
-	char nombresClases[100][MAX_NOMBRE_CLASE_SIZE];
-	int idsClases[100] = { 0 };
+	char nombresClases[MAX_VAR_ARRAY_SIZE][MAX_NOMBRE_CLASE_SIZE];
+	int idsClases[MAX_VAR_ARRAY_SIZE] = { 0 };
 	int clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
 
 	ClienteMostrarCliente(cliente, nombresClases, idsClases, clasesSize);
@@ -1097,7 +1110,7 @@ void GymEliminarCliente(Gym* gym, int idCliente)
 	ArchivoBorrarCliente(idCliente);
 }
 
-void GymAgregarClienteClase(Gym* gym, int idCliente, int idClase)
+int GymAgregarClienteClase(Gym* gym, int idCliente, int idClase)
 {
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
 
@@ -1107,7 +1120,7 @@ void GymAgregarClienteClase(Gym* gym, int idCliente, int idClase)
 
 		GymExit(gym);
 
-		return;
+		return 0;
 	}
 
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
@@ -1118,14 +1131,27 @@ void GymAgregarClienteClase(Gym* gym, int idCliente, int idClase)
 
 		GymExit(gym);
 
-		return;
+		return 0;
 	}
 
-	ClienteAgregarClase(cliente, idClase);
-	ClaseAgregarCliente(clase, idCliente);
+	int exito = ClienteAgregarClase(cliente, idClase);
+
+	if (exito == 0)
+	{
+		return 0;
+	}
+
+	exito = ClaseAgregarCliente(clase, idCliente);
+
+	if (exito == 0)
+	{
+		return 0;
+	}
 
 	ArchivoModificarCliente(cliente);
 	ArchivoModificarClase(clase);
+
+	return 1;
 }
 
 void GymEliminarClienteClase(Gym* gym, int idCliente, int idClase)
@@ -1174,7 +1200,7 @@ int GymHayClasesEnCliente(Gym* gym, int idCliente)
 
 		GymExit(gym);
 
-		return;
+		return 0;
 	}
 	
 	return ClienteObtenerClasesEnCliente(cliente);

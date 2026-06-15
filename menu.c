@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "menu.h"
 #include "scanner.h"
 #include "utilidades.h"
@@ -25,9 +27,28 @@ static void MenuListaAgregarVolver(int pagina);
 static void MenuListaAgregarSiguiente(int size, int pagina);
 static void MenuListaAgregarSalir(void);
 static void MenuPausa(void);
+static int MenuListaEntrenadores(Gym* gym, char* titulo, int* idsEntrenadores);
 static int MenuListaClientes(Gym* gym, char* titulo, int* idsClientes);
 static int MenuListaClases(Gym* gym, char* titulo, int* idsClases);
 static int MenuListaSectores(Gym* gym, char* titulo, int* idsSectores);
+static void MenuIngresarNombre(char* nombre, int size);
+static void MenuIngresarGenero(char* genero, int size);
+static double MenuIngresarPrecio(void);
+static void MenuIngresarHorario(int* horas, int* minutos);
+static void MenuIngresarDuracion(int* horas, int* minutos);
+static void MenuModificarNombre(char* nombreViejo, char* nombreNuevo, int size);
+static void MenuModificarGenero(char* generoViejo, char* generoNuevo, int size);
+static double MenuModificarPrecio(double precioViejo);
+static void MenuModificarHorario(int horasViejo, int minutosViejo, int* horas, int* minutos);
+static void MenuModificarDuracion(int horasViejo, int minutosViejo, int* horas, int* minutos);
+
+static int MenuCrearEntrenador(Gym* gym);
+static int MenuCrearSector(Gym* gym);
+static int MenuCrearCliente(Gym* gym);
+static int MenuCrearClase(Gym* gym);
+
+static void MenuMostrarClases(Gym* gym);
+static void MenuMostrarClase(Gym* gym, int idClase);
 
 void MenuMostrarMenu(Gym* gym)
 {
@@ -100,7 +121,12 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 	{
 		case 0: 
 		{
-			GymAgregarCliente(gym);
+			int exito = MenuCrearCliente(gym);
+
+			if (exito)
+			{
+				printf("Cliente creado con exito.\n");
+			}
 
 			break;
 		}
@@ -185,7 +211,12 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 								return;
 							}
 
-							GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+							int exito = GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							if (exito == 1)
+							{
+								printf("Clase agregada con exito.\n");
+							}
 
 							break;
 						}
@@ -305,7 +336,12 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 	{
 		case 0:
 		{
-			GymAgregarEntrenador(gym);
+			int exito = MenuCrearEntrenador(gym);
+
+			if (exito)
+			{
+				printf("Entrenador creado con exito.\n");
+			}
 
 			break;
 		}
@@ -434,7 +470,12 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 	{
 		case 0:
 		{
-			GymAgregarSector(gym);
+			int exito = MenuCrearSector(gym);
+
+			if(exito)
+			{
+				printf("Sector creado con exito.\n");
+			}
 
 			break;
 		}
@@ -542,7 +583,12 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 	{
 		case 0:
 		{
-			GymAgregarClase(gym);
+			int exito = MenuCrearClase(gym);
+
+			if (exito && exito != CLASE_ID_INVALIDO)
+			{
+				printf("Clase creada con exito.\n");
+			}
 
 			break;
 		}
@@ -587,7 +633,20 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 			{
 				case 0:
 				{
-					GymModificarClienteNombre(gym, idsClases[opcionClases]);
+					char nombreViejo[MAX_NOMBRE_CLASE_SIZE];
+					char nombreNuevo[MAX_NOMBRE_CLASE_SIZE];
+
+					GymObtenerClaseNombre(gym, idsClases[opcionClases], nombreViejo);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLASE_SIZE);
+
+					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+					{
+						return;
+					}
+
+					GymModificarClaseNombre(gym, idsClases[opcionClases], nombreNuevo);
+
+					printf("Nombre modificado con exito.\n");
 
 					break;
 				}
@@ -596,6 +655,17 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					if (GymHayEntrenadores(gym) == 0)
 					{
 						printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+
+						int idEntrenador = MenuCrearEntrenador(gym);
+
+						if (idEntrenador == ENTRENADOR_ID_INVALIDO)
+						{
+							return;
+						}
+
+						GymAsignarEntrenadorClase(gym, idsClases[opcionClases], idEntrenador);
+
+						printf("Entrenador asignado con exito.\n");
 
 						return;
 					}
@@ -633,11 +703,15 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							GymAsignarEntrenadorClase(gym, idsClases[opcionClases], idsEntrenadores[opcionEntrenadores]);
 
+							printf("Entrenador asignado con exito.\n");
+
 							break;
 						}
 						case 1:
 						{
 							GymEliminarEntrenadorClase(gym, idsClases[opcionClases]);
+
+							printf("Entrenador removido con exito.\n");
 
 							break;
 						}
@@ -650,6 +724,17 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					if (GymHaySectores(gym) == 0)
 					{
 						printf("[ERROR] No hay sectores para %s\n", accionTexto);
+
+						int idSector = MenuCrearSector(gym);
+
+						if (idSector == SECTOR_ID_INVALIDO)
+						{
+							return;
+						}
+
+						GymAsignarSectorClase(gym, idsClases[opcionClases], idSector);
+
+						printf("Sector asignado con exito.\n");
 
 						return;
 					}
@@ -687,11 +772,15 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							GymAsignarSectorClase(gym, idsClases[opcionClases], idsSectores[opcionSectores]);
 
+							printf("Sector asignado con exito.\n");
+
 							break;
 						}
 						case 1:
 						{
 							GymEliminarSectorClase(gym, idsClases[opcionClases]);
+
+							printf("Sector removido con exito.\n");
 
 							break;
 						}
@@ -704,6 +793,20 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					if (GymHayClientes(gym) == 0)
 					{
 						printf("[ERROR] No hay clientes para %s\n", accionTexto);
+
+						int idCliente = MenuCrearCliente(gym);
+
+						if (idCliente == CLIENTE_ID_INVALIDO)
+						{
+							return;
+						}
+
+						int exito = GymAgregarClienteClase(gym, idCliente, idsClases[opcionClases]);
+
+						if (exito == 1)
+						{
+							printf("Cliente agregado con exito.\n");
+						}
 
 						return;
 					}
@@ -739,7 +842,12 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 								return;
 							}
 
-							GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+							int exito = GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
+
+							if(exito == 1)
+							{
+								printf("Cliente agregado con exito.\n");
+							}
 
 							break;
 						}
@@ -768,6 +876,8 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							GymEliminarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
 
+							printf("Cliente removido con exito.\n");
+
 							break;
 						}
 					}
@@ -776,19 +886,105 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				}
 				case 4:
 				{
-					GymAsignarClasePrecio(gym, idsClases[opcionClases]);
+					double precioViejo = GymObtenerClasePrecio(gym, idsClases[opcionClases]);
+					double precioNuevo = 0.0;
+
+					do
+					{
+						precioNuevo = MenuModificarPrecio(precioViejo);
+
+						if (precioNuevo < 0 && precioNuevo != -1)
+						{
+							printf("[ERROR] El precio tiene que ser mayor o igual a 0\n");
+						}
+					} while (precioNuevo < 0 && precioNuevo != -1);
+
+					if (precioNuevo == -1)
+					{
+						return;
+					}
+
+					GymAsignarClasePrecio(gym, idsClases[opcionClases], precioNuevo);
+
+					printf("Precio asignado con exito.\n");
 
 					break;
 				}
 				case 5:
 				{
-					GymModificarClaseHorario(gym, idsClases[opcionClases]);
+					int inicioHoras = 0;
+					int inicioMinutos = 0;
+					int inicioHorasViejo = 0;
+					int inicioMinutosViejo = 0;
+
+					GymObtenerClaseHorario(gym, idsClases[opcionClases], &inicioHorasViejo, &inicioMinutosViejo);
+
+					do
+					{
+						MenuModificarHorario(inicioHorasViejo, inicioMinutosViejo, &inicioHoras, &inicioMinutos);
+
+						inicioHoras += inicioMinutos / 60;
+						inicioMinutos %= 60;
+
+						if (inicioHoras < 0)
+						{
+							printf("[ERROR] La hora no pueden ser menor a 0\n");
+						}
+						else if (inicioMinutos < 0)
+						{
+							printf("[ERROR] Los minutos no pueden ser menor a 0\n");
+						}
+						else if (inicioHoras > 24)
+						{
+							printf("[ERROR] La hora no pueden ser mayor a 24\n");
+						}
+					} while (inicioHoras < 0 || inicioMinutos < 0 || inicioHoras > 24);
+					
+					int exito = GymModificarClaseHorario(gym, idsClases[opcionClases], inicioHoras, inicioMinutos);
+
+					if (exito)
+					{
+						printf("Horario modificado con exito.\n");
+					}
 
 					break;
 				}
 				case 6:
 				{
-					GymModificarClaseDuracion(gym, idsClases[opcionClases]);
+					int duracionHoras = 0;
+					int duracionMinutos = 0;
+					int horasViejo = 0;
+					int minutosViejo = 0;
+
+					GymObtenerClaseDuracion(gym, idsClases[opcionClases], &horasViejo, &minutosViejo);
+
+					do
+					{
+						MenuModificarDuracion(horasViejo, minutosViejo, &duracionHoras, &duracionMinutos);
+						
+						duracionHoras += duracionMinutos / 60;
+						duracionMinutos %= 60;
+
+						if (duracionHoras < 0)
+						{
+							printf("[ERROR] La hora no pueden ser menor a 0\n");
+						}
+						else if (duracionMinutos < 0)
+						{
+							printf("[ERROR] Los minutos no pueden ser menor a 0\n");
+						}
+						else if ((duracionHoras * 60 + duracionMinutos) < MIN_DURACION_CLASE)
+						{
+							printf("[ERROR] La duracion de la clase no puede ser menor a %d minutos\n", MIN_DURACION_CLASE);
+						}
+					} while (duracionHoras < 0 || duracionMinutos < 0 || (duracionHoras * 60 + duracionMinutos) < MIN_DURACION_CLASE);
+					
+					int exito = GymModificarClaseDuracion(gym, idsClases[opcionClases], duracionHoras, duracionMinutos);
+
+					if (exito)
+					{
+						printf("Duracion modificado con exito.\n");
+					}
 
 					break;
 				}
@@ -805,7 +1001,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarClases(gym);
+			MenuMostrarClases(gym);
 
 			break;
 		}
@@ -828,7 +1024,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			GymMostrarClase(gym, idsClases[opcionClases]);
+			MenuMostrarClase(gym, idsClases[opcionClases]);
 
 			break;
 		}
@@ -853,6 +1049,8 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 			GymEliminarClase(gym, idsClases[opcionClases]);
 
+			printf("Clase eliminada con exito.\n");
+
 			break;
 		}
 		case 5:
@@ -865,6 +1063,8 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 			}
 
 			GymExportarClasesArchivoTexto(gym);
+
+			printf("Archivo exportado con exito.\n");
 
 			break;
 		}
@@ -1000,4 +1200,422 @@ static int MenuListaSectores(Gym* gym, char* titulo, int* idsSectores)
 	sectoresSize = GymObtenerSectoresNombresIds(gym, nombresSectores, idsSectores);
 
 	return MenuListaCrearMenu(titulo, nombresSectores, sectoresSize, 1);
+}
+
+static void MenuIngresarNombre(char* nombre, int size)
+{
+	printf("\nIngrese nombre: ");
+	ScannerString(nombre, size);
+
+	snprintf(nombre, size, "%s", UtilidadesStringTrim(nombre));
+}
+
+static void MenuIngresarGenero(char* genero, int size)
+{
+	printf("\nIngrese genero: ");
+	ScannerString(genero, size);
+
+	snprintf(genero, size, "%s", UtilidadesStringTrim(genero));
+}
+
+static double MenuIngresarPrecio()
+{
+	printf("\nIngrese precio: $");
+	double precio = ScannerDouble();
+
+	return precio;
+}
+
+static void MenuIngresarHorario(int* horas, int* minutos)
+{
+	printf("\nIngrese hora de inicio: ");
+	*horas = ScannerInt();
+
+	printf("Ingrese minuto de inicio: ");
+	*minutos = ScannerInt();
+}
+
+static void MenuIngresarDuracion(int* horas, int* minutos)
+{
+	printf("\nIngrese horas de duracion: ");
+	*horas = ScannerInt();
+
+	printf("Ingrese minutos de duracion: ");
+	*minutos = ScannerInt();
+}
+
+static void MenuModificarNombre(char* nombreViejo, char* nombreNuevo, int size)
+{
+	printf("\nNombre actual: %s\n", nombreViejo);
+
+	printf("Ingresar nuevo nombre (vacio para cancelar): ");
+	ScannerString(nombreNuevo, size);
+
+	snprintf(nombreNuevo, size, "%s", UtilidadesStringTrim(nombreNuevo));
+}
+
+static void MenuModificarGenero(char* generoViejo, char* generoNuevo, int size)
+{
+	printf("\nGenero actual: %s\n", generoViejo);
+
+	printf("Ingresar nuevo genero (vacio para cancelar): ");
+	ScannerString(generoNuevo, size);
+
+	snprintf(generoNuevo, size, "%s", UtilidadesStringTrim(generoNuevo));
+}
+
+static double MenuModificarPrecio(double precioViejo)
+{
+	printf("\nPrecio actual: %.2f\n", precioViejo);
+
+	printf("Ingresar nuevo precio (-1 para cancelar): ");
+	double precio = ScannerDouble();
+
+	return precio;
+}
+
+static void MenuModificarHorario(int horasViejo, int minutosViejo, int* horas, int* minutos)
+{
+	printf("\nHorario actual: %d:%d\n", horasViejo, minutosViejo);
+
+	printf("Ingrese nueva hora de inicio: ");
+	*horas = ScannerInt();
+
+	printf("Ingrese minuto de inicio: ");
+	*minutos = ScannerInt();
+}
+
+static void MenuModificarDuracion(int horasViejo, int minutosViejo, int* horas, int* minutos)
+{
+	printf("\nDuracion actual: %d:%d\n", horasViejo, minutosViejo);
+
+	printf("Ingrese horas de duracion: ");
+	*horas = ScannerInt();
+
+	printf("Ingrese minutos de duracion: ");
+	*minutos = ScannerInt();
+}
+
+static int MenuCrearEntrenador(Gym* gym)
+{
+	char nombre[MAX_NOMBRE_ENTRENADOR_SIZE];
+	char genero[MAX_GENERO_ENTRENADOR_SIZE];
+
+	do
+	{
+		MenuIngresarNombre(nombre, MAX_NOMBRE_ENTRENADOR_SIZE);
+
+		if (*nombre == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombre == '\0');
+
+	do
+	{
+		MenuIngresarGenero(genero, MAX_GENERO_ENTRENADOR_SIZE);
+
+		if (*genero == '\0')
+		{
+			printf("[ERROR] El genero no puede estar vacio\n");
+		}
+	} while (*genero == '\0');
+
+	return GymAgregarEntrenador(gym, nombre, genero);
+}
+
+static int MenuCrearSector(Gym* gym)
+{
+	char nombre[MAX_NOMBRE_SECTOR_SIZE];
+
+	do
+	{
+		MenuIngresarNombre(nombre, MAX_NOMBRE_SECTOR_SIZE);
+
+		if (*nombre == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombre == '\0');
+
+	return GymAgregarSector(gym, nombre);
+}
+
+static int MenuCrearCliente(Gym* gym)
+{
+	char nombre[MAX_NOMBRE_CLIENTE_SIZE];
+	char genero[MAX_GENERO_CLIENTE_SIZE];
+
+	do
+	{
+		MenuIngresarNombre(nombre, MAX_NOMBRE_CLIENTE_SIZE);
+
+		if (*nombre == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombre == '\0');
+
+	do
+	{
+		MenuIngresarGenero(genero, MAX_GENERO_CLIENTE_SIZE);
+
+		if (*genero == '\0')
+		{
+			printf("[ERROR] El genero no puede estar vacio\n");
+		}
+	} while (*genero == '\0');
+
+	return GymAgregarCliente(gym, nombre, genero);
+}
+
+static int MenuCrearClase(Gym* gym)
+{
+	char nombreClase[MAX_NOMBRE_CLASE_SIZE];
+	int idEntrenador = ENTRENADOR_ID_INVALIDO;
+	int idSector = SECTOR_ID_INVALIDO;
+	double precio = 0.0;
+	int inicioHoras = 0;
+	int inicioMinutos = 0;
+	int duracionHoras = 0;
+	int duracionMinutos = 0;
+
+	do
+	{
+		MenuIngresarNombre(nombreClase, MAX_NOMBRE_CLASE_SIZE);
+
+		if (*nombreClase == '\0')
+		{
+			printf("[ERROR] El nombre no puede estar vacio\n");
+		}
+	} while (*nombreClase == '\0');
+
+	if (GymHayEntrenadores(gym) == 0)
+	{
+		idEntrenador = MenuCrearEntrenador(gym);
+	}
+	else
+	{
+		int idsEntrenadores[MAX_MENU_ARRAY_SIZE] = { 0 };
+		int opcionEntrenadores = MENU_EXIT_VALUE;
+
+		opcionEntrenadores = MenuListaEntrenadores(gym, "Asignar Entrenador", idsEntrenadores);
+
+		if (opcionEntrenadores == MENU_EXIT_VALUE)
+		{
+			return 0;
+		}
+
+		idEntrenador = idsEntrenadores[opcionEntrenadores];
+	}
+
+	if (GymHaySectores(gym) == 0)
+	{
+		idSector = MenuCrearSector(gym);
+	}
+	else
+	{
+		int idsSectores[MAX_MENU_ARRAY_SIZE] = { 0 };
+		int opcionSectores = MENU_EXIT_VALUE;
+
+		opcionSectores = MenuListaSectores(gym, "Asignar Sector", idsSectores);
+
+		if (opcionSectores == MENU_EXIT_VALUE)
+		{
+			return 0;
+		}
+
+		idSector = idsSectores[opcionSectores];
+	}
+
+	do
+	{
+		precio = MenuIngresarPrecio();
+
+		if (precio < 0)
+		{
+			printf("[ERROR] El precio no puede ser menor a 0\n");
+		}
+	} while (precio < 0);
+
+	do
+	{
+		MenuIngresarHorario(&inicioHoras, &inicioMinutos);
+
+		inicioHoras += inicioMinutos / 60;
+		inicioMinutos %= 60;
+
+		if (inicioHoras < 0)
+		{
+			printf("[ERROR] La hora no pueden ser menor a 0\n");
+		}
+		else if (inicioMinutos < 0)
+		{
+			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
+		}
+		else if (inicioHoras > 24)
+		{
+			printf("[ERROR] La hora no pueden ser mayor a 24\n");
+		}
+	} while (inicioHoras < 0 || inicioMinutos < 0 || inicioHoras > 24);
+
+	do
+	{
+		MenuIngresarDuracion(&duracionHoras, &duracionMinutos);
+
+		duracionHoras += duracionMinutos / 60;
+		duracionMinutos %= 60;
+
+		if (duracionHoras < 0)
+		{
+			printf("[ERROR] La hora no pueden ser menor a 0\n");
+		}
+		else if (duracionMinutos < 0)
+		{
+			printf("[ERROR] Los minutos no pueden ser menor a 0\n");
+		}
+		else if ((duracionHoras * 60 + duracionMinutos) < MIN_DURACION_CLASE)
+		{
+			printf("[ERROR] La duracion de la clase no puede ser menor a %d minutos\n", MIN_DURACION_CLASE);
+		}
+	} while (duracionHoras < 0 || duracionMinutos < 0 || (duracionHoras * 60 + duracionMinutos) < MIN_DURACION_CLASE);
+
+	return GymAgregarClase(gym, nombreClase, idEntrenador, idSector, inicioHoras, inicioMinutos, duracionHoras, duracionMinutos, precio);
+}
+
+static void MenuMostrarClases(Gym* gym)
+{
+	int idsClases[MAX_MENU_ARRAY_SIZE] = { 0 };
+	char nombresClases[MAX_MENU_ARRAY_SIZE][MAX_NOMBRE_CLASE_SIZE];
+	int clasesSize = 0;
+
+	clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
+	
+	int idEntrenador = ENTRENADOR_ID_INVALIDO;
+	int idSector = SECTOR_ID_INVALIDO;
+	int idsClientes[MAX_ID_CLIENTE_SIZE] = { 0 };
+	char nombreEntrenador[MAX_NOMBRE_ENTRENADOR_SIZE];
+	char nombreSector[MAX_NOMBRE_SECTOR_SIZE];
+	char nombresClientes[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+	int clientesSize = 0;
+	double precio = 0.0;
+	int horaInicio = 0;
+	int minutosInicio = 0;
+	int horaDuracion = 0;
+	int minutosDuracion = 0;
+
+	printf("\n-------------------------------------\n\n");
+
+	for (int i = 0; i < clasesSize; i++)
+	{
+		printf("Id de la clase: %d\n", idsClases[i]);
+		printf("Clase: %s\n", nombresClases[i]);
+
+		idEntrenador = GymObtenerClaseEntrenadorId(gym, idsClases[i]);
+		GymObtenerEntrenadorNombre(gym, idEntrenador, nombreEntrenador);
+
+		printf("Entrenador: %s\n", nombreEntrenador);
+		
+		idSector = GymObtenerClaseSectorId(gym, idsClases[i]);
+		GymObtenerSectorNombre(gym, idSector, nombreSector);
+
+		printf("Sector: %s\n", nombreSector);
+		printf("Clientes: ");
+
+		clientesSize = GymObtenerClaseClientesNombresIds(gym, idsClases[i], nombresClientes, idsClientes);
+
+		if (clientesSize > 0)
+		{
+			for (int j = 0; j < clientesSize; j++)
+			{
+				printf("%s, ", nombresClientes[j]);
+			}
+
+			printf("\b\b. \n");
+		}
+		else
+		{
+			printf("Sin clientes asignados.\n");
+		}
+
+		precio = GymObtenerClasePrecio(gym, idsClases[i]);
+
+		printf("Precio: $%.2f\n", precio);
+
+		GymObtenerClaseHorario(gym, idsClases[i], &horaInicio, &minutosInicio);
+
+		printf("Hora de inicio: %02d:%02d\n", horaInicio, minutosInicio);
+
+		GymObtenerClaseDuracion(gym, idsClases[i], &horaDuracion, &minutosDuracion);
+
+		printf("Duracion: %02d:%02d\n\n", horaDuracion, minutosDuracion);
+	}
+
+	printf("--------------------------------------\n");
+}
+
+static void MenuMostrarClase(Gym* gym, int idClase)
+{
+	char nombreClase[MAX_NOMBRE_CLASE_SIZE];
+	int idEntrenador = ENTRENADOR_ID_INVALIDO;
+	int idSector = SECTOR_ID_INVALIDO;
+	int idsClientes[MAX_ID_CLIENTE_SIZE] = { 0 };
+	char nombreEntrenador[MAX_NOMBRE_ENTRENADOR_SIZE];
+	char nombreSector[MAX_NOMBRE_SECTOR_SIZE];
+	char nombresClientes[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLIENTE_SIZE];
+	int clientesSize = 0;
+	double precio = 0.0;
+	int horaInicio = 0;
+	int minutosInicio = 0;
+	int horaDuracion = 0;
+	int minutosDuracion = 0;
+
+	printf("\n-------------------------------------\n\n");
+
+	printf("Id de la clase: %d\n", idClase);
+
+	GymObtenerClaseNombre(gym, idClase, nombreClase);
+
+	printf("Clase: %s\n", nombreClase);
+
+	idEntrenador = GymObtenerClaseEntrenadorId(gym, idClase);
+	GymObtenerEntrenadorNombre(gym, idEntrenador, nombreEntrenador);
+
+	printf("Entrenador: %s\n", nombreEntrenador);
+
+	idSector = GymObtenerClaseSectorId(gym, idClase);
+	GymObtenerSectorNombre(gym, idSector, nombreSector);
+
+	printf("Sector: %s\n", nombreSector);
+	printf("Clientes: ");
+
+	clientesSize = GymObtenerClaseClientesNombresIds(gym, idClase, nombresClientes, idsClientes);
+
+	if (clientesSize > 0)
+	{
+		for (int j = 0; j < clientesSize; j++)
+		{
+			printf("%s, ", nombresClientes[j]);
+		}
+
+		printf("\b\b. \n");
+	}
+	else
+	{
+		printf("Sin clientes asignados.\n");
+	}
+
+	precio = GymObtenerClasePrecio(gym, idClase);
+
+	printf("Precio: $%.2f\n", precio);
+
+	GymObtenerClaseHorario(gym, idClase, &horaInicio, &minutosInicio);
+
+	printf("Hora de inicio: %02d:%02d\n", horaInicio, minutosInicio);
+
+	GymObtenerClaseDuracion(gym, idClase, &horaDuracion, &minutosDuracion);
+
+	printf("Duracion: %02d:%02d\n", horaDuracion, minutosDuracion);
+
+	printf("\n--------------------------------------\n");
 }

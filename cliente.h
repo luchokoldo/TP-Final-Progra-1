@@ -18,17 +18,17 @@ typedef struct Cliente
 } Cliente;
 
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char *nombre, char *genero);
-void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
+void ClienteMostrarClientes(Cliente* clientes, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
 void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
 int ClienteBuscarClienteId(Cliente* clientes, int size, int idCliente);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente);
 
-void ClienteAgregarClase(Cliente* cliente, int idClase);
+int ClienteAgregarClase(Cliente* cliente, int idClase);
 void ClienteEliminarClase(Cliente* cliente, int idClase);
 
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente);
-void ClienteObtenerClienteNombre(Cliente* clientes, int size, int idCliente, char* nombre);
-void ClienteObtenerClienteGenero(Cliente* clientes, int size, int idCliente, char* genero);
+void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente);
+void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente);
 void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
 void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases);
 int ClienteObtenerClasesEnCliente(Cliente* cliente);

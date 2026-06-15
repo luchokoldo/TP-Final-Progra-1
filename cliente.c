@@ -133,27 +133,29 @@ Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente)
 	return aux;
 }
 
-void ClienteAgregarClase(Cliente* cliente, int idClase)
+int ClienteAgregarClase(Cliente* cliente, int idClase)
 {
 	if (cliente->idClasesValidos >= MAX_ID_CLASE_SIZE)
 	{
 		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas\n", cliente->nombre);
 
-		return;
+		return 0;
 	}
 
 	for (int i = 0; i < cliente->idClasesValidos; i++)
 	{
 		if (cliente->idClases[i] == idClase)
 		{
-			printf("El cliente '%s' ya se encuentra inscripto en la clase ID %d\n", cliente->nombre, idClase);
+			printf("[ERROR] El cliente '%s' ya se encuentra inscripto en la clase\n", cliente->nombre);
 
-			return;
+			return 0;
 		}
 	}
 
 	cliente->idClases[cliente->idClasesValidos] = idClase;
 	cliente->idClasesValidos++;
+
+	return 1;
 }
 
 void ClienteEliminarClase(Cliente* cliente, int idClase)
@@ -199,32 +201,14 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente)
 	return &clientes[index];
 }
 
-void ClienteObtenerClienteNombre(Cliente* clientes, int size, int idCliente, char* nombre)
+void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente)
 {
-	int index = ClienteBuscarClienteId(clientes, size, idCliente);
-
-	if (index == CLIENTE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d\n", idCliente);
-
-		return;
-	}
-
-	snprintf(nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", clientes[index].nombre);
+	snprintf(nombreCliente, MAX_NOMBRE_CLIENTE_SIZE, "%s", cliente->nombre);
 }
 
-void ClienteObtenerClienteGenero(Cliente* clientes, int size, int idCliente, char* genero)
+void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente)
 {
-	int index = ClienteBuscarClienteId(clientes, size, idCliente);
-
-	if (index == CLIENTE_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d\n", idCliente);
-
-		return;
-	}
-
-	snprintf(genero, MAX_GENERO_CLIENTE_SIZE, "%s", clientes[index].genero);
+	snprintf(generoCliente, MAX_GENERO_CLIENTE_SIZE, "%s", cliente->genero);
 }
 
 void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes)

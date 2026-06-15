@@ -119,32 +119,14 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 	return &entrenadores[index];
 }
 
-void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombre)
+void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenador, char* nombreEntrenador)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
-
-	if (index == ENTRENADOR_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d", id);
-
-		return;
-	}
-
-	snprintf(nombre, MAX_NOMBRE_ENTRENADOR_SIZE, "%s", entrenadores[index].nombre);
+	snprintf(nombreEntrenador, MAX_NOMBRE_ENTRENADOR_SIZE, "%s", entrenador->nombre);
 }
 
-void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* genero)
+void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenador, char* generoEntrenador)
 {
-	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
-
-	if (index == ENTRENADOR_ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d", id);
-
-		return;
-	}
-
-	snprintf(genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", entrenadores[index].genero);
+	snprintf(generoEntrenador, MAX_GENERO_ENTRENADOR_SIZE, "%s", entrenador->genero);
 }
 
 void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores)
