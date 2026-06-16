@@ -145,7 +145,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 		{
 			int exito = MenuCrearCliente(gym);
 
-			if (exito)
+			if (exito && exito != ID_INVALIDO)
 			{
 				printf("Cliente creado con exito.\n");
 			}
@@ -267,7 +267,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 
 							int exito = GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
 
-							if (exito == 1)
+							if (exito && exito != ID_INVALIDO)
 							{
 								printf("Clase agregada con exito.\n");
 							}
@@ -398,7 +398,7 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 		{
 			int exito = MenuCrearEntrenador(gym);
 
-			if (exito)
+			if (exito && exito != ID_INVALIDO)
 			{
 				printf("Entrenador creado con exito.\n");
 			}
@@ -568,7 +568,7 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 		{
 			int exito = MenuCrearSector(gym);
 
-			if(exito)
+			if(exito && exito != ID_INVALIDO)
 			{
 				printf("Sector creado con exito.\n");
 			}
@@ -948,7 +948,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 						int exito = GymAgregarClienteClase(gym, idCliente, idsClases[opcionClases]);
 
-						if (exito == 1)
+						if (exito && exito != ID_INVALIDO)
 						{
 							printf("Cliente agregado con exito.\n");
 						}
@@ -987,7 +987,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							int exito = GymAgregarClienteClase(gym, idCliente, idsClases[opcionClases]);
 
-							if (exito == 1)
+							if (exito && exito != ID_INVALIDO)
 							{
 								printf("Cliente agregado con exito.\n");
 							}
@@ -1008,7 +1008,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 
 							int exito = GymAgregarClienteClase(gym, idsClientes[opcionClientes], idsClases[opcionClases]);
 
-							if(exito == 1)
+							if(exito && exito != ID_INVALIDO)
 							{
 								printf("Cliente agregado con exito.\n");
 							}
@@ -1106,7 +1106,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					
 					int exito = GymModificarClaseHorario(gym, idsClases[opcionClases], inicioHoras, inicioMinutos);
 
-					if (exito)
+					if (exito && exito != ID_INVALIDO)
 					{
 						printf("Horario modificado con exito.\n");
 					}
@@ -1145,7 +1145,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 					
 					int exito = GymModificarClaseDuracion(gym, idsClases[opcionClases], duracionHoras, duracionMinutos);
 
-					if (exito)
+					if (exito && exito != ID_INVALIDO)
 					{
 						printf("Duracion modificado con exito.\n");
 					}
