@@ -30,8 +30,8 @@ typedef struct Gym
 } Gym;
 
 int GymAgregarEntrenador(Gym* gym, char* nombreEntrenador, char* generoEntrenador);
-void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador);
-void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador);
+void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador, const char nombreNuevo);
+void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador, const char generoNuevo);
 void GymMostrarEntrenadores(Gym* gym);
 void GymMostrarEntrenador(Gym* gym, int idEntrenador);
 void GymEliminarEntrenador(Gym* gym, int idEntrenador);
@@ -42,7 +42,7 @@ void GymExportarEntrenadoresArchivoTexto(Gym* gym);
 int GymHayEntrenadores(Gym* gym);
 
 int GymAgregarSector(Gym* gym, char* nombreSector);
-void GymModificarSectorNombre(Gym* gym, int idSector);
+void GymModificarSectorNombre(Gym* gym, int idSector, const char nombreNuevo);
 int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores);
 void GymObtenerSectorNombre(Gym* gym, int idSector, char* nombreSector);
 void GymMostrarSectores(Gym* gym);
@@ -80,8 +80,8 @@ int GymAgregarClienteClase(Gym* gym, int idCliente, int idClase);
 void GymEliminarClienteClase(Gym* gym, int idCliente, int idClase);
 
 int GymAgregarCliente(Gym* gym, char* nombreCliente, char* generoCliente);
-void GymModificarClienteNombre(Gym* gym, int idCliente);
-void GymModificarClienteGenero(Gym* gym, int idCliente);
+void GymModificarClienteNombre(Gym* gym, int idCliente, const char* nombreNuevo);
+void GymModificarClienteGenero(Gym* gym, int idCliente, const char* generoNuevo);
 int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
 int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
 void GymObtenerClienteNombre(Gym* gym, int idCliente, char* nombreCliente);

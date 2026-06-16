@@ -148,6 +148,8 @@ void ArchivoModificarEntrenador(Entrenador* entrenador)
 		{
 			printf("[ERROR] No se encontro el entrenador %s\n", entrenador->nombre);
 
+			fclose(f);
+
 			return;
 		}
 	} while (buffer.id != entrenador->id);
@@ -177,6 +179,8 @@ void ArchivoModificarSector(Sector* sector)
 		if (fread(&buffer, sizeof(Sector), 1, f) <= 0)
 		{
 			printf("[ERROR] No se encontro el sector %s\n", sector->nombre);
+
+			fclose(f);
 
 			return;
 		}
@@ -208,6 +212,8 @@ void ArchivoModificarClase(Clase* clase)
 		{
 			printf("[ERROR] No se encontro la clase %s\n", clase->nombre);
 
+			fclose(f);
+
 			return;
 		}
 	} while (buffer.id != clase->id);
@@ -237,6 +243,8 @@ void ArchivoModificarCliente(Cliente* cliente)
 		if (fread(&buffer, sizeof(Cliente), 1, f) <= 0)
 		{
 			printf("[ERROR] No se encontro el cliente %s\n", cliente->nombre);
+
+			fclose(f);
 
 			return;
 		}

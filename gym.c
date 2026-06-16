@@ -51,7 +51,7 @@ int GymAgregarEntrenador(Gym* gym, char* nombreEntrenador, char* generoEntrenado
 	return gym->ids.entrenador;
 }
 
-void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
+void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador, const char* nombreNuevo)
 {
 	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
 
@@ -61,17 +61,6 @@ void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
 
 		GymExit(gym);
 
-		return;
-	}
-	
-	char nombreViejo[MAX_NOMBRE_ENTRENADOR_SIZE];
-	char nombreNuevo[MAX_NOMBRE_ENTRENADOR_SIZE];
-
-	EntrenadorObtenerEntrenadorNombre(entrenador, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_ENTRENADOR_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
 		return;
 	}
 
@@ -80,7 +69,7 @@ void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador)
 	ArchivoModificarEntrenador(entrenador);
 }
 
-void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador)
+void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador, const char* generoNuevo)
 {
 	Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
 
@@ -90,17 +79,6 @@ void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador)
 
 		GymExit(gym);
 
-		return;
-	}
-	
-	char generoViejo[MAX_GENERO_ENTRENADOR_SIZE];
-	char generoNuevo[MAX_GENERO_ENTRENADOR_SIZE];
-
-	EntrenadorObtenerEntrenadorGenero(entrenador, generoViejo);
-	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_ENTRENADOR_SIZE);
-
-	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
-	{
 		return;
 	}
 
@@ -261,7 +239,7 @@ int GymAgregarSector(Gym* gym, char* nombreSector)
 	return gym->ids.sector;
 }
 
-void GymModificarSectorNombre(Gym* gym, int idSector)
+void GymModificarSectorNombre(Gym* gym, int idSector, const char* nombreNuevo)
 {
 	Sector* sector = SectorObtenerSector(gym->sectores, gym->sectoresSize, idSector);
 
@@ -271,17 +249,6 @@ void GymModificarSectorNombre(Gym* gym, int idSector)
 
 		GymExit(gym);
 
-		return;
-	}
-	
-	char nombreViejo[MAX_NOMBRE_SECTOR_SIZE];
-	char nombreNuevo[MAX_NOMBRE_SECTOR_SIZE];
-
-	SectorObtenerSectorNombre(sector, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SECTOR_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
 		return;
 	}
 
@@ -439,9 +406,8 @@ int GymAgregarClase(Gym* gym, char* nombreClase, int idEntrenador, int idSector,
 	return gym->ids.clase;
 }
 
-void GymModificarClaseNombre(Gym* gym, int idClase, char* nombreNuevo)
+void GymModificarClaseNombre(Gym* gym, int idClase, const char* nombreNuevo)
 {
-	ClaseModificarClaseNombre(gym->clases, gym->clasesSize, idClase, nombreNuevo);
 
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
 
@@ -454,6 +420,7 @@ void GymModificarClaseNombre(Gym* gym, int idClase, char* nombreNuevo)
 		return;
 	}
 
+	ClaseModificarClaseNombre(gym->clases, gym->clasesSize, idClase, nombreNuevo);
 	ArchivoModificarClase(clase);
 }
 
@@ -891,7 +858,7 @@ int GymAgregarCliente(Gym* gym, char* nombreCliente, char* generoCliente)
 	return gym->ids.cliente;
 }
 
-void GymModificarClienteNombre(Gym* gym, int idCliente)
+void GymModificarClienteNombre(Gym* gym, int idCliente, const char* nombreNuevo)
 {
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
 
@@ -903,24 +870,13 @@ void GymModificarClienteNombre(Gym* gym, int idCliente)
 
 		return;
 	}
-	
-	char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
-	char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
-
-	ClienteObtenerClienteNombre(cliente, nombreViejo);
-	GymModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
-
-	if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
-	{
-		return;
-	}
 
 	ClienteModificarClienteNombre(gym->clientes, gym->clientesSize, idCliente, nombreNuevo);
 
 	ArchivoModificarCliente(cliente);
 }
 
-void GymModificarClienteGenero(Gym* gym, int id)
+void GymModificarClienteGenero(Gym* gym, int id,const char* generoNuevo )
 {
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, id);
 
@@ -930,17 +886,6 @@ void GymModificarClienteGenero(Gym* gym, int id)
 
 		GymExit(gym);
 
-		return;
-	}
-	
-	char generoViejo[MAX_GENERO_CLIENTE_SIZE];
-	char generoNuevo[MAX_GENERO_CLIENTE_SIZE];
-
-	ClienteObtenerClienteGenero(cliente, generoViejo);
-	GymModificarGenero(generoViejo, generoNuevo, MAX_GENERO_CLIENTE_SIZE);
-
-	if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
-	{
 		return;
 	}
 

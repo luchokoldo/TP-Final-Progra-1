@@ -189,12 +189,40 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 			{
 				case 0: 
 				{
-					GymModificarClienteNombre(gym, idsClientes[opcionClientes]);
+					char nombreViejo[MAX_NOMBRE_CLIENTE_SIZE];
+					char nombreNuevo[MAX_NOMBRE_CLIENTE_SIZE];
+
+					GymObtenerClienteNombre(gym, idsClientes[opcionClientes], nombreViejo);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_CLIENTE_SIZE);
+
+					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
+					{
+						return;
+					}
+
+					GymModificarClienteNombre(gym, idsClientes[opcionClientes], nombreNuevo);
+
+					printf("Nombre modificado con exito.\n");
+
 					break;
 				}
 				case 1:
 				{
-					GymModificarClienteGenero(gym, idsClientes[opcionClientes]);
+					char generoViejo[MAX_GENERO_CLIENTE_SIZE];
+					char generoNuevo[MAX_GENERO_CLIENTE_SIZE];
+
+					GymObtenerClienteGenero(gym, idsClientes[opcionClientes], generoViejo);
+					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_CLIENTE_SIZE);
+
+					if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
+					{
+						return;
+					}
+
+					GymModificarClienteGenero(gym, idsClientes[opcionClientes], generoNuevo);
+
+					printf("Genero modificado con exito.\n");
+
 					break;
 				}
 				case 2:
