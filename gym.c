@@ -345,6 +345,8 @@ void GymExportarSectoresArchivoTexto(Gym* gym)
 	int sectoresSize = gym->sectoresSize;
 	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
 	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+
+	SectorObtenerSectoresNombresIds(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
 	
 	ArchivoExportarSectores(sectoresSize, idsSectores, nombresSectores);
 }
@@ -1035,6 +1037,53 @@ void GymObtenerClienteGenero(Gym* gym, int idCliente, char* generoCliente)
 	ClienteObtenerClienteGenero(cliente, generoCliente);
 }
 
+void GymObtenerClientesMontoTotalClases(Gym* gym, int size, int* idsClientes, double* montoTotalClases)
+{
+	for (int i = 0; i < size; i++)
+	{
+		montoTotalClases[i] = GymObtenerClienteMontoTotalClases(gym, idsClientes[i]);
+	}
+}
+
+double GymObtenerClienteMontoTotalClases(Gym* gym, int idCliente)
+{
+	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
+
+	if (cliente == NULL)
+	{
+		printf("[ERROR] No se encontro el cliente %d\n", idCliente);
+
+		GymExit(gym);
+
+		return 0;
+	}
+
+	int clienteClasesSize = 0;
+	int idsClienteClases[MAX_IDS] = { 0 };
+	double montoTotalClases = 0.0;
+
+	clienteClasesSize = ClienteObtenerCantidadClasesEnCliente(cliente);
+	ClienteObtenerClienteClasesIds(cliente, idsClienteClases);
+
+	for (int i = 0; i < clienteClasesSize; i++)
+	{
+		Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idsClienteClases[i]);
+
+		if (clase == NULL)
+		{
+			printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idsClienteClases[i]) devolvio NULL\n");
+
+			GymExit(gym);
+
+			return 0;
+		}
+
+		montoTotalClases += ClaseObtenerClasePrecio(clase);
+	}
+
+	return montoTotalClases;
+}
+
 void GymEliminarCliente(Gym* gym, int idCliente)
 {
 	int clasesSize = GymHayClasesEnCliente(gym, idCliente);
@@ -1181,7 +1230,28 @@ void GymEliminarClienteClase(Gym* gym, int idCliente, int idClase)
 
 void GymExportarClientesArchivoTexto(Gym* gym)
 {
-	ArchivoExportarClientes(gym->clientes, gym->clientesSize);
+	int clientesSize = gym->clientesSize;
+	int clasesSize = gym->clasesSize;
+	int idsClientes[MAX_ARRAY_SIZE] = { 0 };
+	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char generosClientes[MAX_ARRAY_SIZE][MAX_GENERO_TEXT] = { 0 };
+	int idsClientesClases[MAX_ARRAY_SIZE][MAX_IDS] = { 0 };
+	int clientesClasesValidos[MAX_ARRAY_SIZE] = { 0 };
+	double montosTotalClases[MAX_ARRAY_SIZE] = { 0 };
+	int idsClases[MAX_ARRAY_SIZE] = { 0 };
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+
+	ClienteObtenerClientesIds(gym->clientes, gym->clientesSize, idsClientes);
+	ClienteObtenerClientesNombres(gym->clientes, gym->clientesSize, nombresClientes);
+	ClienteObtenerClientesGeneros(gym->clientes, gym->clientesSize, generosClientes);
+	ClienteObtenerClientesClases(gym->clientes, gym->clientesSize, idsClientesClases, clientesClasesValidos);
+	
+	GymObtenerClientesMontoTotalClases(gym, gym->clientesSize, idsClientes, montosTotalClases);
+
+	ClaseObtenerClasesNombresIds(gym->clases, gym->clasesSize, nombresClases, idsClases);
+
+	ArchivoExportarClientes(clientesSize, idsClientes, nombresClientes, generosClientes, idsClientesClases, clientesClasesValidos, montosTotalClases, 
+		clasesSize, idsClases, nombresClases);
 }
 
 int GymHayClasesEnCliente(Gym* gym, int idCliente)

@@ -70,8 +70,8 @@ int GymHaySectorEnClases(Gym* gym, int idSector);
 int GymHayClases(Gym* gym);
 
 void GymAsignarEntrenadorClase(Gym* gym, int idClase, int idEntrenador);
-void GymEliminarEntrenadorClase(Gym* gym, int idClase);
 void GymAsignarSectorClase(Gym* gym, int idClase, int idSector);
+void GymEliminarEntrenadorClase(Gym* gym, int idClase);
 void GymEliminarSectorClase(Gym* gym, int idClase);
 
 int GymAgregarClienteClase(Gym* gym, int idCliente, int idClase);
@@ -84,6 +84,8 @@ int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_TEX
 int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT], int* idsClases);
 void GymObtenerClienteNombre(Gym* gym, int idCliente, char* nombreCliente);
 void GymObtenerClienteGenero(Gym* gym, int idCliente, char* generoCliente);
+void GymObtenerClientesMontoTotalClases(Gym* gym, int size, int* idsClientes, double* montoTotalClases);
+double GymObtenerClienteMontoTotalClases(Gym* gym, int idCliente);
 void GymEliminarCliente(Gym* gym, int idCliente);
 void GymExportarClientesArchivoTexto(Gym* gym);
 int GymHayClasesEnCliente(Gym* gym, int idCliente);

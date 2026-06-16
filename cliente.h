@@ -23,8 +23,12 @@ void ClienteEliminarClase(Cliente* cliente, int idClase);
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente);
 void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente);
 void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente);
-void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes);
 void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases);
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes);
+void ClienteObtenerClientesIds(Cliente* clientes, int size, int* idsClientes);
+void ClienteObtenerClientesNombres(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT]);
+void ClienteObtenerClientesGeneros(Cliente* clientes, int size, char generosClientes[][MAX_GENERO_TEXT]);
+void ClienteObtenerClientesClases(Cliente* clientes, int size, int idsClientesClases[][MAX_IDS], int* clientesClasesValidos);
 int ClienteObtenerCantidadClasesEnCliente(Cliente* cliente);
 
 void ClienteModificarClienteNombre(Cliente* clientes, int size, int idCliente, char* nombreNuevo);

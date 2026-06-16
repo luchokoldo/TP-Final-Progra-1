@@ -568,7 +568,7 @@ void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, cha
 	fclose(f);
 }
 
-void ArchivoExportarSectores(int sectoresSize, char* idsSectores, char nombresSectores[][MAX_NOMBRE_TEXT])
+void ArchivoExportarSectores(int sectoresSize, int* idsSectores, char nombresSectores[][MAX_NOMBRE_TEXT])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -708,7 +708,8 @@ void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][
 	fclose(f);
 }
 
-void ArchivoExportarClientes(Cliente* clientes, int size)
+void ArchivoExportarClientes(int clientesSize, int* idsClientes, char nombresClientes[][MAX_NOMBRE_TEXT], char generosClientes[][MAX_GENERO_TEXT], int idsClientesClases[][MAX_IDS],
+								int* clientesClasesValidos, double* montosTotalClases, int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_TEXT])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -742,23 +743,41 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 	}
 
 	fprintf(f, "\t%s\n", ARCHIVO_CLIENTES_TXT);
+
 	fprintf(f, "\n--------------------------------------\n\n");
 	
-	for (int i = 0; i < size; i++)
+	int index = 0;
+
+	for (int i = 0; i < clientesSize; i++)
 	{
-		
-		fprintf(f, "ID: %d\n", clientes[i].id);
-		fprintf(f, "Nombre: %s\n", clientes[i].nombre);
-		fprintf(f, "Genero: %s\n", clientes[i].genero);
+		fprintf(f, "ID: %d\n", idsClientes[i]);
+		fprintf(f, "Nombre: %s\n", nombresClientes[i]);
+		fprintf(f, "Genero: %s\n", generosClientes[i]);
 		fprintf(f, "Clases: ");
 		
-		if (clientes[i].idClasesValidos > 0)
+		if (clientesClasesValidos[i] > 0)
 		{
-			fprintf(f, "%d", clientes[i].idClases[0]);
-			
-			for (int j = 1; j < clientes[i].idClasesValidos; j++)
+			for (index = 0; index < clasesSize; index++)
 			{
-				fprintf(f, ", %d", clientes[i].idClases[j]);
+				if (idsClientesClases[i][0] == idsClases[index])
+				{
+					break;
+				}
+			}
+			
+			fprintf(f, "%s", nombresClases[index]);
+			
+			for (int j = 1; j < clientesClasesValidos[i]; j++)
+			{
+				for (index = 0; index < clasesSize; index++)
+				{
+					if (idsClientesClases[i][j] == idsClases[index])
+					{
+						break;
+					}
+				}
+				
+				fprintf(f, ", %s", nombresClases[index]);
 			}
 
 			fprintf(f, ".\n");
@@ -767,9 +786,11 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 		{
 			fprintf(f, "Sin clases asignadas.\n");
 		}
+
+		fprintf(f, "Monto a abonar: $%.2f\n\n", montosTotalClases[i]);
 	}
 
-	fprintf(f, "\n--------------------------------------\n");
+	fprintf(f, "--------------------------------------\n");
 
 	fclose(f);
 }

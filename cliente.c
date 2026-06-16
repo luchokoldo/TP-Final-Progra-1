@@ -166,6 +166,14 @@ void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente)
 	snprintf(generoCliente, MAX_GENERO_TEXT, "%s", cliente->genero);
 }
 
+void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases)
+{
+	for (int i = 0; i < cliente->idClasesValidos; i++)
+	{
+		idsClases[i] = cliente->idClases[i];
+	}
+}
+
 void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes)
 {
 	for (int i = 0; i < size; i++)
@@ -175,11 +183,40 @@ void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresC
 	}
 }
 
-void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases)
+void ClienteObtenerClientesIds(Cliente* clientes, int size, int* idsClientes)
 {
-	for (int i = 0; i < cliente->idClasesValidos; i++)
+	for (int i = 0; i < size; i++)
 	{
-		idsClases[i] = cliente->idClases[i];
+		idsClientes[i] = clientes[i].id;
+	}
+}
+
+void ClienteObtenerClientesNombres(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT])
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(nombresClientes[i], MAX_NOMBRE_TEXT, "%s", clientes[i].nombre);
+	}
+}
+
+void ClienteObtenerClientesGeneros(Cliente* clientes, int size, char generosClientes[][MAX_GENERO_TEXT])
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(generosClientes[i], MAX_GENERO_TEXT, "%s", clientes[i].genero);
+	}
+}
+
+void ClienteObtenerClientesClases(Cliente* clientes, int size, int idsClientesClases[][MAX_IDS], int* clientesClasesValidos)
+{
+	for (int i = 0; i < size; i++)
+	{
+		clientesClasesValidos[i] = clientes[i].idClasesValidos;
+
+		for (int j = 0; j < clientesClasesValidos[i]; j++)
+		{
+			idsClientesClases[i][j] = clientes[i].idClases[j];
+		}
 	}
 }
 
