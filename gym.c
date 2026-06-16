@@ -342,7 +342,11 @@ void GymEliminarSector(Gym* gym, int idSector)
 
 void GymExportarSectoresArchivoTexto(Gym* gym)
 {
-	ArchivoExportarSectores(gym->sectores, gym->sectoresSize);
+	int sectoresSize = gym->sectoresSize;
+	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	
+	ArchivoExportarSectores(sectoresSize, idsSectores, nombresSectores);
 }
 
 int GymHaySectores(Gym* gym)
