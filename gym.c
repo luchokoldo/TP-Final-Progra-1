@@ -473,7 +473,7 @@ int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minuto
 		return ID_INVALIDO;
 	}
 
-	Horario horarioNuevo = { .horas = horasHorario, .minutos = minutosHorario };
+	Horario horarioNuevo = ClaseCrearHorario(horasHorario, minutosHorario);
 	Duracion duracionActual = ClaseObtenerClaseDuracion(clase);
 	int idEntrenador = ClaseObtenerClaseEntrenador(clase);
 	int idSector = ClaseObtenerClaseSector(clase);
@@ -484,8 +484,6 @@ int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minuto
 
 		return ID_INVALIDO;
 	}
-
-	horarioNuevo.esValido = 1;
 
 	ClaseModificarClaseHorario(clase, horarioNuevo);
 
@@ -508,7 +506,7 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 	}
 
 	Horario horarioActual = ClaseObtenerClaseHorario(clase);
-	Duracion duracionNuevo = { .horas = horasDuracion, .minutos = minutosDuracion };
+	Duracion duracionNuevo = ClaseCrearDuracion(horasDuracion, minutosDuracion);
 	int idEntrenador = ClaseObtenerClaseEntrenador(clase);
 	int idSector = ClaseObtenerClaseSector(clase);
 
@@ -518,8 +516,6 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 
 		return ID_INVALIDO;
 	}
-
-	duracionNuevo.esValido = 1;
 
 	ClaseModificarClaseDuracion(clase, duracionNuevo);
 

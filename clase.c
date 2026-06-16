@@ -438,6 +438,20 @@ void ClaseOrdenarClases(Clase* clases, int size)
 	}
 }
 
+Horario ClaseCrearHorario(int horasHorario, int minutosHorario)
+{
+	Horario nuevo = { .horas = horasHorario, .minutos = minutosHorario, .esValido = 1 };
+
+	return nuevo;
+}
+
+Duracion ClaseCrearDuracion(int horasDuracion, int minutosDuracion)
+{
+	Duracion nuevo = { .horas = horasDuracion, .minutos = minutosDuracion, .esValido = 1 };
+
+	return nuevo;
+}
+
 static int ClaseBuscarId(Clase* clases, int size, int idClase, int i)
 {
 	if (i == size)

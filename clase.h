@@ -75,4 +75,7 @@ int ClaseChequearClaseHorarioDuracion(Clase* clases, int size, int idClase, int 
 
 void ClaseOrdenarClases(Clase* clases, int size);
 
+Horario ClaseCrearHorario(int horasHorario, int minutosHorario);
+Duracion ClaseCrearDuracion(int horasDuracion, int minutosDuracion);
+
 #endif
