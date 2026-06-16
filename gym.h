@@ -54,7 +54,7 @@ void GymAsignarClasePrecio(Gym* gym, int idClase, double precioNuevo);
 int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minutosHorario);
 int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minutosDuracion);
 int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases);
-int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases, char nombresEntrenadores[][MAX_NOMBRE_SIZE], char clasesHorario[][MAX_TIEMPO_SIZE], char clasesDuracion[][MAX_TIEMPO_SIZE]);
+int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_SIZE], char nombresEntrenadores[][MAX_NOMBRE_SIZE], char clasesHorario[][MAX_TIEMPO_SIZE], char clasesDuracion[][MAX_TIEMPO_SIZE]);
 int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresClientes[MAX_IDS][MAX_NOMBRE_SIZE], int* idsClientes);
 void GymObtenerClaseNombre(Gym* gym, int idClase, char* nombreViejo);
 double GymObtenerClasePrecio(Gym* gym, int idClase);

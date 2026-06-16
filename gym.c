@@ -510,9 +510,9 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 	return idClase;
 }
 
-int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases, char nombresEntrenadores[][MAX_NOMBRE_SIZE], char clasesHorario[][MAX_TIEMPO_SIZE], char clasesDuracion[][MAX_TIEMPO_SIZE])
+int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_SIZE], char nombresEntrenadores[][MAX_NOMBRE_SIZE], char clasesHorario[][MAX_TIEMPO_SIZE], char clasesDuracion[][MAX_TIEMPO_SIZE])
 {
-	int _idsClases[MAX_ARRAY_SIZE] = { 0 };
+	int idsClases[MAX_ARRAY_SIZE] = { 0 };
 	int horasHorario[MAX_ARRAY_SIZE] = { 0 };
 	int minutosHorario[MAX_ARRAY_SIZE] = { 0 };
 	int horasDuracion[MAX_ARRAY_SIZE] = { 0 };
@@ -520,11 +520,11 @@ int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMB
 	int size = 0;
 	int idEntrenador = ID_INVALIDO;
 
-	ClaseObtenerClasesIds(gym->clases, gym->clasesSize, _idsClases);
+	ClaseObtenerClasesIds(gym->clases, gym->clasesSize, idsClases);
 	
 	for (int i = 0; i < gym->clasesSize; i++)
 	{
-		Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, _idsClases[i]);
+		Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idsClases[i]);
 
 		if (clase == NULL)
 		{
@@ -558,7 +558,6 @@ int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMB
 			return 0;
 		}
 
-		idsClases[size] = _idsClases[i];
 		ClaseObtenerClaseNombre(clase, nombresClases[size]);
 		EntrenadorObtenerEntrenadorNombre(entrenador, nombresEntrenadores[size]);
 		ClaseObtenerClaseHorarioInt(clase, &horasHorario[size], &minutosHorario[size]);
@@ -589,11 +588,6 @@ int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMB
 			continue;
 		}
 
-		int idAux = idsClases[i];
-
-		idsClases[i] = idsClases[indexMenor];
-		idsClases[indexMenor] = idAux;
-
 		char nombreAux[MAX_NOMBRE_SIZE] = { 0 };
 
 		snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresClases[i]);
@@ -623,7 +617,10 @@ int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMB
 
 		minutosDuracion[i] = minutosDuracion[indexMenor];
 		minutosDuracion[indexMenor] = valorAux;
+	}
 
+	for (int i = 0; i < size; i++)
+	{
 		snprintf(clasesHorario[i], MAX_TIEMPO_SIZE, "%02d:%02d", horasHorario[i], minutosHorario[i]);
 		snprintf(clasesDuracion[i], MAX_TIEMPO_SIZE, "%02d:%02d", horasDuracion[i], minutosDuracion[i]);
 	}

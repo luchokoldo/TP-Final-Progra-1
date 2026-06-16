@@ -1957,5 +1957,48 @@ static void MenuMostrarCliente(Gym* gym, int idCliente)
 
 static void MenuMostrarClasesDelDia(Gym* gym)
 {
+	int sectoresSize = gym->sectoresSize;
 
+	if (sectoresSize == 0)
+	{
+		printf("[ERROR] No hay sectores.\n");
+
+		return;
+	}
+
+	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
+
+	SectorObtenerSectoresNombresIds(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
+
+	int sectorClasesSize = 0;
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = {0};
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
+	char clasesHorario[MAX_ARRAY_SIZE][MAX_TIEMPO_SIZE] = { 0 };
+	char clasesDuracion[MAX_ARRAY_SIZE][MAX_TIEMPO_SIZE] = { 0 };
+
+	printf("\nHorario (Duracion) Clase (Entrenador)\n\n");
+
+	for (int i = 0; i < sectoresSize; i++)
+	{
+		sectorClasesSize = GymObtenerClasesDelDia(gym, idsSectores[i], nombresClases, nombresEntrenadores, clasesHorario, clasesDuracion);
+
+		printf("\t%s\n", nombresSectores[i]);
+
+		printf("--------------------------------------\n");
+
+		if (sectorClasesSize > 0)
+		{
+			for (int j = 0; j < sectorClasesSize; j++)
+			{
+				printf("%s (%s) %s (%s)\n", clasesHorario[j], clasesDuracion[j], nombresClases[j], nombresEntrenadores[j]);
+			}
+		}
+		else
+		{
+			printf("Sin clases asignadas.\n");
+		}		
+
+		printf("--------------------------------------\n\n");
+	}	
 }
