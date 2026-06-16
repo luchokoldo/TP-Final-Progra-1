@@ -119,6 +119,14 @@ void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size,
 	}
 }
 
+void EntrenadorObtenerEntrenadoresGeneros(Entrenador* entrenadores, int size, char generosEntrenadores[][MAX_GENERO_TEXT])
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(generosEntrenadores[i], MAX_GENERO_TEXT, "%s", entrenadores[i].genero);
+	}
+}
+
 void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombreNuevo)
 {
 	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);

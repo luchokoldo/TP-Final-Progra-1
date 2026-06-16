@@ -18,6 +18,7 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenador, char* nombreEntrenador);
 void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenador, char* generoEntrenador);
 void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_TEXT], int* idsEntrenadores);
+void EntrenadorObtenerEntrenadoresGeneros(Entrenador* entrenadores, int size, char generosEntrenadores[][MAX_GENERO_TEXT]);
 
 void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombreNuevo);
 void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* generoNuevo);

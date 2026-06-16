@@ -519,7 +519,7 @@ void ArchivoBorrarCliente(int idCliente)
 	free(aux);
 }
 
-void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size)
+void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, char nombresEntrenadores[][MAX_NOMBRE_TEXT], char generosEntrenadores[][MAX_GENERO_TEXT])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -554,19 +554,21 @@ void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size)
 
 	fprintf(f, "\t%s\n", ARCHIVO_ENTRENADORES_TXT);
 
-	for (int i = 0; i < size; i++)
+	fprintf(f, "\n--------------------------------------\n\n");
+
+	for (int i = 0; i < entrenadoresSize; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n\n");
-		fprintf(f, "ID: %d\n", entrenadores[i].id);
-		fprintf(f, "Nombre: %s\n", entrenadores[i].nombre);
-		fprintf(f, "Genero: %s\n", entrenadores[i].genero);
-		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "ID: %d\n", idsEntrenadores[i]);
+		fprintf(f, "Nombre: %s\n", nombresEntrenadores[i]);
+		fprintf(f, "Genero: %s\n\n", generosEntrenadores[i]);		
 	}
+
+	fprintf(f, "--------------------------------------\n");
 
 	fclose(f);
 }
 
-void ArchivoExportarSectores(Sector* sectores, int size)
+void ArchivoExportarSectores(int sectoresSize, char* idsSectores, char nombresSectores[][MAX_NOMBRE_TEXT])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -601,13 +603,15 @@ void ArchivoExportarSectores(Sector* sectores, int size)
 
 	fprintf(f, "\t%s\n", ARCHIVO_SECTORES_TXT);
 
-	for (int i = 0; i < size; i++)
+	fprintf(f, "\n--------------------------------------\n\n");
+
+	for (int i = 0; i < sectoresSize; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n\n");
-		fprintf(f, "ID: %d\n", sectores[i].id);
-		fprintf(f, "Nombre: %s\n", sectores[i].nombre);
-		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "ID: %d\n", idsSectores[i]);
+		fprintf(f, "Nombre: %s\n\n", nombresSectores[i]);
 	}
+
+	fprintf(f, "--------------------------------------\n");
 
 	fclose(f);
 }
