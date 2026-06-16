@@ -1556,6 +1556,8 @@ static int MenuCrearClase(Gym* gym)
 
 	if (GymHayEntrenadores(gym) == 0)
 	{
+		printf("[ERROR] No hay entrenadores.\nCreando nuevo entrenador");
+		
 		idEntrenador = MenuCrearEntrenador(gym);
 	}
 	else
@@ -1575,6 +1577,8 @@ static int MenuCrearClase(Gym* gym)
 
 	if (GymHaySectores(gym) == 0)
 	{
+		printf("[ERROR] No hay sectores.\nCreando nuevo sector");
+		
 		idSector = MenuCrearSector(gym);
 	}
 	else
