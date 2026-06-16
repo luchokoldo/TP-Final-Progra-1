@@ -510,6 +510,12 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 	return idClase;
 }
 
+int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
+{
+
+
+}
+
 int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
 {
 	ClaseObtenerClasesNombresIds(gym->clases, gym->clasesSize, nombresClases, idsClases);
