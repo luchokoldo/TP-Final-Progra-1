@@ -767,7 +767,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				{
 					if (GymHayEntrenadores(gym) == 0)
 					{
-						printf("[ERROR] No hay entrenadores para %s\n", accionTexto);
+						printf("[ERROR] No hay entrenadores.\nCreando entrenador nuevo.\n");
 
 						int idEntrenador = MenuCrearEntrenador(gym);
 
@@ -852,7 +852,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				{
 					if (GymHaySectores(gym) == 0)
 					{
-						printf("[ERROR] No hay sectores para %s\n", accionTexto);
+						printf("[ERROR] No hay sectores.\n");
 
 						int idSector = MenuCrearSector(gym);
 
@@ -937,7 +937,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 				{
 					if (GymHayClientes(gym) == 0)
 					{
-						printf("[ERROR] No hay clientes para %s\n", accionTexto);
+						printf("[ERROR] No hay clientes.\n");
 
 						int idCliente = MenuCrearCliente(gym);
 
@@ -1462,6 +1462,8 @@ static void MenuModificarDuracion(int horasViejo, int minutosViejo, int* horas, 
 
 static int MenuCrearEntrenador(Gym* gym)
 {
+	printf("--- Creando nuevo entrenador. ---\n");
+	
 	char nombre[MAX_NOMBRE_SIZE];
 	char genero[MAX_GENERO_SIZE];
 
@@ -1490,6 +1492,8 @@ static int MenuCrearEntrenador(Gym* gym)
 
 static int MenuCrearSector(Gym* gym)
 {
+	printf("--- Creando nuevo sector. ---\n");
+	
 	char nombre[MAX_NOMBRE_SIZE];
 
 	do
@@ -1507,6 +1511,8 @@ static int MenuCrearSector(Gym* gym)
 
 static int MenuCrearCliente(Gym* gym)
 {
+	printf("--- Creando nuevo cliente. ---\n");
+	
 	char nombre[MAX_NOMBRE_SIZE];
 	char genero[MAX_GENERO_SIZE];
 
@@ -1535,6 +1541,8 @@ static int MenuCrearCliente(Gym* gym)
 
 static int MenuCrearClase(Gym* gym)
 {
+	printf("--- Creando nueva clase. ---\n");
+	
 	char nombreClase[MAX_NOMBRE_SIZE];
 	int idEntrenador = ID_INVALIDO;
 	int idSector = ID_INVALIDO;
@@ -1556,44 +1564,118 @@ static int MenuCrearClase(Gym* gym)
 
 	if (GymHayEntrenadores(gym) == 0)
 	{
-		printf("[ERROR] No hay entrenadores.\nCreando nuevo entrenador");
+		printf("[ERROR] No hay entrenadores.\n");
 		
 		idEntrenador = MenuCrearEntrenador(gym);
+
+		if (idEntrenador == ID_INVALIDO)
+		{
+			return;
+		}
 	}
 	else
 	{
-		int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
-		int opcionEntrenadores = MENU_EXIT_VALUE;
-
-		opcionEntrenadores = MenuListaEntrenadores(gym, "Asignar Entrenador", idsEntrenadores);
-
-		if (opcionEntrenadores == MENU_EXIT_VALUE)
+		char textoModificarEntrenadores[][MAX_MENU_TEXT_SIZE] =
 		{
-			return 0;
+			"Nuevo",
+			"Asignar"
+		};
+
+		int opcionModificarEntrenadores = MenuListaCrearMenu("Entrenadores", textoModificarEntrenadores, GET_CHARSMAX(textoModificarEntrenadores), 1);
+
+		if (opcionModificarEntrenadores == MENU_EXIT_VALUE)
+		{
+			return;
 		}
 
-		idEntrenador = idsEntrenadores[opcionEntrenadores];
+		switch (opcionModificarEntrenadores)
+		{
+			case 0:
+			{
+				idEntrenador = MenuCrearEntrenador(gym);
+
+				if (idEntrenador == ID_INVALIDO)
+				{
+					return;
+				}
+
+				break;
+			}
+			case 1:
+			{
+				int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
+				int opcionEntrenadores = MENU_EXIT_VALUE;
+
+				opcionEntrenadores = MenuListaEntrenadores(gym, "Asignar Entrenador", idsEntrenadores);
+
+				if (opcionEntrenadores == MENU_EXIT_VALUE)
+				{
+					return 0;
+				}
+
+				idEntrenador = idsEntrenadores[opcionEntrenadores];
+
+				break;
+			}
+		}
 	}
 
 	if (GymHaySectores(gym) == 0)
 	{
-		printf("[ERROR] No hay sectores.\nCreando nuevo sector");
+		printf("[ERROR] No hay sectores.\n");
 		
 		idSector = MenuCrearSector(gym);
+
+		if (idSector == ID_INVALIDO)
+		{
+			return;
+		}
 	}
 	else
 	{
-		int idsSectores[MAX_ARRAY_SIZE] = { 0 };
-		int opcionSectores = MENU_EXIT_VALUE;
-
-		opcionSectores = MenuListaSectores(gym, "Asignar Sector", idsSectores);
-
-		if (opcionSectores == MENU_EXIT_VALUE)
+		char textoModificarSectores[][MAX_MENU_TEXT_SIZE] =
 		{
-			return 0;
+			"Nuevo",
+			"Asignar"
+		};
+
+		int opcionModificarSectores = MenuListaCrearMenu("Sectores", textoModificarSectores, GET_CHARSMAX(textoModificarSectores), 1);
+
+		if (opcionModificarSectores == MENU_EXIT_VALUE)
+		{
+			return;
 		}
 
-		idSector = idsSectores[opcionSectores];
+		switch (opcionModificarSectores)
+		{
+			case 0:
+			{
+				idSector = MenuCrearSector(gym);
+
+				if (idSector == ID_INVALIDO)
+				{
+					return;
+				}
+
+				break;
+			}
+			case 1:
+			{
+				int idsSectores[MAX_ARRAY_SIZE] = { 0 };
+				int opcionSectores = MENU_EXIT_VALUE;
+
+				opcionSectores = MenuListaSectores(gym, "Asignar Sector", idsSectores);
+
+				if (opcionSectores == MENU_EXIT_VALUE)
+				{
+					return 0;
+				}
+
+				idSector = idsSectores[opcionSectores];
+				
+				break;
+			}
+		}
 	}
 
 	do
