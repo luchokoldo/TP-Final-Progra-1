@@ -18,7 +18,7 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int
 	Clase nuevo = { 0 };
 
 	nuevo.id = idClase;
-	snprintf(nuevo.nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombre);
+	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
 	nuevo.idEntrenador = idEntrenador;
 	nuevo.idSector = idSector;
 	nuevo.precio = precio;
@@ -48,7 +48,7 @@ int ClaseBuscarClaseId(Clase* clases, int size, int idClase)
 {
 	if (idClase < 0)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return ClaseBuscarId(clases, size, idClase, 0);
@@ -58,7 +58,7 @@ int ClaseBuscarClaseEntrenadorId(Clase* clases, int size, int idEntrenador)
 {
 	if (idEntrenador < 0)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return ClaseBuscarEntrenadorId(clases, size, idEntrenador, 0);
@@ -68,7 +68,7 @@ int ClaseBuscarClaseSectorId(Clase* clases, int size, int idSector)
 {
 	if (idSector < 0)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return ClaseBuscarSectorId(clases, size, idSector, 0);
@@ -78,7 +78,7 @@ Clase* ClaseEliminarClase(Clase* clases, int size, int idClase)
 {
 	int posicion = ClaseBuscarClaseId(clases, size, idClase);
 
-	if (posicion == CLASE_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro la clase con el id: %d\n", idClase);
 
@@ -117,7 +117,7 @@ Clase* ClaseObtenerClase(Clase* clases, int size, int idClase)
 {
 	int index = ClaseBuscarClaseId(clases, size, idClase);
 
-	if (index == CLASE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", idClase);
 
@@ -131,21 +131,21 @@ void ClaseObtenerClaseNombre(Clase* clases, int size, int idClase, char* nombre)
 {
 	int index = ClaseBuscarClaseId(clases, size, idClase);
 
-	if (index == CLASE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", idClase);
 
 		return;
 	}
 
-	snprintf(nombre, MAX_NOMBRE_CLASE_SIZE, "%s", clases[index].nombre);
+	snprintf(nombre, MAX_NOMBRE_TEXT, "%s", clases[index].nombre);
 }
 
-void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases)
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresClases[i], MAX_NOMBRE_CLASE_SIZE, "%s", clases[i].nombre);
+		snprintf(nombresClases[i], MAX_NOMBRE_TEXT, "%s", clases[i].nombre);
 		idsClases[i] = clases[i].id;
 	}
 }
@@ -158,11 +158,11 @@ void ClaseObtenerClasesIds(Clase* clases, int size, int* idsClases)
 	}
 }
 
-void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE])
+void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT])
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresClases[i], MAX_NOMBRE_CLASE_SIZE, "%s", clases[i].nombre);
+		snprintf(nombresClases[i], MAX_NOMBRE_TEXT, "%s", clases[i].nombre);
 	}
 }
 
@@ -182,7 +182,7 @@ void ClaseObtenerClasesSectores(Clase* clases, int size, int* idsClasesSectores)
 	}
 }
 
-void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_ID_CLIENTE_SIZE], int* clasesClientesValidos)
+void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_IDS], int* clasesClientesValidos)
 {
 	for (int i = 0; i < size; i++)
 	{
@@ -233,9 +233,9 @@ int ClaseObtenerSector(Clase* clase)
 
 int ClaseAgregarCliente(Clase* clase, int idCliente)
 {
-	if (clase->idClientesValidos >= MAX_ID_CLIENTE_SIZE)
+	if (clase->idClientesValidos >= MAX_IDS)
 	{
-		printf("[ERROR] La clase '%s' ya alcanzo el limite maximo de clientes (%d)\n",clase->nombre, MAX_ID_CLIENTE_SIZE);
+		printf("[ERROR] La clase '%s' ya alcanzo el limite maximo de clientes (%d)\n",clase->nombre, MAX_IDS);
 
 		return 0;
 	}
@@ -265,7 +265,7 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 		return;
 	}
 
-	int posicion = CLASE_ID_INVALIDO;
+	int posicion = ID_INVALIDO;
 
 	for (int i = 0; i < clase->idClientesValidos; i++)
 	{
@@ -277,7 +277,7 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 		}
 	}
 
-	if (posicion == CLASE_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro al cliente %d en la clase '%s'\n", idCliente, clase->nombre);
 
@@ -309,7 +309,7 @@ void ClaseEliminarEntrenador(Clase* clase)
 		return;
 	}
 
-	clase->idEntrenador = CLASE_ID_INVALIDO;
+	clase->idEntrenador = ID_INVALIDO;
 }
 
 void ClaseAsignarSector(Clase* clase, int idSector)
@@ -329,21 +329,21 @@ void ClaseEliminarSector(Clase* clase)
 		return;
 	}
 
-	clase->idSector = CLASE_ID_INVALIDO;
+	clase->idSector = ID_INVALIDO;
 }
 
 void ClaseModificarClaseNombre(Clase* clases,int size, int idClase, char* nombreNuevo)
 {
 	int index = ClaseBuscarClaseId(clases, size, idClase);
 
-	if (index == CLASE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", idClase);
 
 		return;
 	}
 
-	snprintf(clases[index].nombre, MAX_NOMBRE_CLASE_SIZE, "%s", nombreNuevo);
+	snprintf(clases[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
 }
 
 Horario ClaseObtenerClaseHorario(Clase* clase)
@@ -439,7 +439,7 @@ static int ClaseBuscarId(Clase* clases, int size, int idClase, int i)
 {
 	if (i == size)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	if (clases[i].id == idClase)
@@ -456,7 +456,7 @@ static int ClaseBuscarEntrenadorId(Clase* clases, int size, int idEntrenador, in
 {
 	if (i == size)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	if (clases[i].idEntrenador == idEntrenador)
@@ -473,7 +473,7 @@ static int ClaseBuscarSectorId(Clase* clases, int size, int idSector, int i)
 {
 	if (i == size)
 	{
-		return CLASE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	if (clases[i].idSector == idSector)
@@ -488,7 +488,7 @@ static int ClaseBuscarSectorId(Clase* clases, int size, int idSector, int i)
 
 static int ClaseChequearHorarioDuracion(Clase* clase, int idEntrenador, int idSector, Horario horario, Duracion duracion)
 {
-	if (clase->idEntrenador == CLASE_ID_INVALIDO || clase->idSector == CLASE_ID_INVALIDO || (clase->idSector != idSector && clase->idEntrenador != idEntrenador))
+	if (clase->idEntrenador == ID_INVALIDO || clase->idSector == ID_INVALIDO || (clase->idSector != idSector && clase->idEntrenador != idEntrenador))
 	{
 		return 0;
 	}

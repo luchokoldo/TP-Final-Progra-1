@@ -1,10 +1,7 @@
 #ifndef _CLASE_H_INCLUDED
 #define _CLASE_H_INCLUDED
 
-#define MAX_NOMBRE_CLASE_SIZE   64
-#define MAX_ID_CLIENTE_SIZE     32
-#define CLASE_ID_INVALIDO       -1
-#define MIN_DURACION_CLASE      15 //minutos
+#include "constgym.h"
 
 typedef struct Horario
 {
@@ -23,10 +20,10 @@ typedef struct Duracion
 typedef struct Clase
 {
     int id;
-    char nombre[MAX_NOMBRE_CLASE_SIZE];
+    char nombre[MAX_NOMBRE_TEXT];
     int idEntrenador;
     int idSector;
-    int idClientes[MAX_ID_CLIENTE_SIZE];
+    int idClientes[MAX_IDS];
     int idClientesValidos;
     double precio;
     Horario inicio;
@@ -48,12 +45,12 @@ int ClaseObtenerSector(Clase* clase);
 Horario ClaseObtenerClaseHorario(Clase* clase);
 Duracion ClaseObtenerClaseDuracion(Clase* clase);
 double ClaseObtenerClasePrecio(Clase* clase);
-void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases);
 void ClaseObtenerClasesIds(Clase* clases, int size, int* idsClases);
-void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE]);
+void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT]);
 void ClaseObtenerClasesEntrenadores(Clase* clases, int size, int* idsClasesEntrenadores);
 void ClaseObtenerClasesSectores(Clase* clases, int size, int* idsClasesSectores);
-void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_ID_CLIENTE_SIZE], int* clasesClientesValidos);
+void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_IDS], int* clasesClientesValidos);
 void ClaseObtenerClasesPrecios(Clase* clases, int size, double* preciosClases);
 void ClaseObtenerClasesHorarios(Clase* clases, int size, int* clasesHorariosHoras, int* clasesHorariosMinutos);
 void ClaseObtenerClasesDuracion(Clase* clases, int size, int* clasesDuracionHoras, int* clasesDuracionMinutos);

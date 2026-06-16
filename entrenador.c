@@ -16,8 +16,8 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int 
 
 	nuevo.id = id;
 
-	snprintf(nuevo.nombre, MAX_NOMBRE_ENTRENADOR_SIZE, "%s", nombre);
-	snprintf(nuevo.genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", genero);
+	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
+	snprintf(nuevo.genero, MAX_GENERO_TEXT, "%s", genero);
 
 	Entrenador* aux = NULL;
 
@@ -41,7 +41,7 @@ int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
 {
 	if (id < 0)
 	{
-		return ENTRENADOR_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return EntrenadorBuscarId(entrenadores, size, id, 0);
@@ -51,7 +51,7 @@ Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int
 {
 	int posicion = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
-	if (posicion == ENTRENADOR_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		printf("No se encontro el entrenador con el Id: %d\n", id);
 
@@ -90,7 +90,7 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 {
 	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
-	if (index == ENTRENADOR_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
 
@@ -102,19 +102,19 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 
 void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenador, char* nombreEntrenador)
 {
-	snprintf(nombreEntrenador, MAX_NOMBRE_ENTRENADOR_SIZE, "%s", entrenador->nombre);
+	snprintf(nombreEntrenador, MAX_NOMBRE_TEXT, "%s", entrenador->nombre);
 }
 
 void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenador, char* generoEntrenador)
 {
-	snprintf(generoEntrenador, MAX_GENERO_ENTRENADOR_SIZE, "%s", entrenador->genero);
+	snprintf(generoEntrenador, MAX_GENERO_TEXT, "%s", entrenador->genero);
 }
 
-void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores)
+void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_TEXT], int* idsEntrenadores)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresEntrenadores[i], MAX_NOMBRE_ENTRENADOR_SIZE, "%s", entrenadores[i].nombre);
+		snprintf(nombresEntrenadores[i], MAX_NOMBRE_TEXT, "%s", entrenadores[i].nombre);
 		idsEntrenadores[i] = entrenadores[i].id;
 	}
 }
@@ -123,28 +123,28 @@ void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int
 {
 	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
-	if (index == ENTRENADOR_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
 
 		return;
 	}
 
-	snprintf(entrenadores[index].nombre, MAX_NOMBRE_ENTRENADOR_SIZE, "%s", nombreNuevo);
+	snprintf(entrenadores[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
 }
 
 void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* generoNuevo)
 {
 	int index = EntrenadorBuscarEntrenadorId(entrenadores, size, id);
 
-	if (index == ENTRENADOR_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d", id);
 
 		return;
 	}
 
-	snprintf(entrenadores[index].genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", generoNuevo);
+	snprintf(entrenadores[index].genero, MAX_GENERO_TEXT, "%s", generoNuevo);
 }
 
 void EntrenadorOrdenarEntrenadores(Entrenador* entrenadores, int size)
@@ -179,7 +179,7 @@ static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
 {
 	if (i == size)
 	{
-		return ENTRENADOR_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	if (entrenadores[i].id == id)

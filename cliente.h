@@ -1,19 +1,15 @@
 #ifndef _CLIENTE_H_INCLUDED
 #define _CLIENTE_H_INCLUDED
 
-#define MAX_NOMBRE_CLIENTE_SIZE 64
-#define MAX_GENERO_CLIENTE_SIZE 32
-#define MAX_ID_CLASE_SIZE     32
-#define CLIENTE_ID_INVALIDO     -1
-#define MAX_NOMBRE_CLASE_SIZE 64
+#include "constgym.h"
 
 
 typedef struct Cliente
 {
     int id;
-    char nombre[MAX_NOMBRE_CLIENTE_SIZE];
-    char genero[MAX_GENERO_CLIENTE_SIZE];
-    int idClases[MAX_ID_CLASE_SIZE];
+    char nombre[MAX_NOMBRE_TEXT];
+    char genero[MAX_GENERO_TEXT];
+    int idClases[MAX_IDS];
     int idClasesValidos;
 } Cliente;
 
@@ -27,7 +23,7 @@ void ClienteEliminarClase(Cliente* cliente, int idClase);
 Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente);
 void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente);
 void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente);
-void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes);
 void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases);
 int ClienteObtenerCantidadClasesEnCliente(Cliente* cliente);
 

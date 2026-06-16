@@ -6,4 +6,7 @@
 #define MAX_IDS			32
 #define MAX_ARRAY_SIZE	256
 
+#define ID_INVALIDO       -1
+#define MIN_DURACION_CLASE      15 //minutos
+
 #endif

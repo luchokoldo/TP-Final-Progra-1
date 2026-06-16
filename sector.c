@@ -16,7 +16,7 @@ Sector* SectorAgregarSector(Sector* sectores, int size, int id, char *nombre)
 
 	nuevo.id = id;
 
-	snprintf(nuevo.nombre, MAX_NOMBRE_SECTOR_SIZE, "%s", nombre);
+	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
 	
 	Sector* aux = NULL;
 
@@ -42,7 +42,7 @@ int SectorBuscarSectorId(Sector* sectores, int size, int id)
 {
 	if (id < 0)
 	{
-		return SECTOR_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return SectorBuscarId(sectores, size, id, 0);
@@ -52,7 +52,7 @@ Sector *SectorEliminarSector(Sector* sectores, int size, int id)
 {
 	int posicion = SectorBuscarSectorId(sectores, size, id);
 
-	if (posicion == SECTOR_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el sector con el Id: %d", id);
 
@@ -90,7 +90,7 @@ Sector* SectorObtenerSector(Sector* sectores, int size, int id)
 {
 	int index = SectorBuscarSectorId(sectores, size, id);
 
-	if (index == SECTOR_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d\n", id);
 
@@ -102,14 +102,14 @@ Sector* SectorObtenerSector(Sector* sectores, int size, int id)
 
 void SectorObtenerSectorNombre(Sector* sector, char* nombreSector)
 {
-	snprintf(nombreSector, MAX_NOMBRE_SECTOR_SIZE, "%s", sector->nombre);
+	snprintf(nombreSector, MAX_NOMBRE_TEXT, "%s", sector->nombre);
 }
 
-void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores)
+void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_TEXT], int* idsSectores)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresSectores[i], MAX_NOMBRE_SECTOR_SIZE, "%s", sectores[i].nombre);
+		snprintf(nombresSectores[i], MAX_NOMBRE_TEXT, "%s", sectores[i].nombre);
 		idsSectores[i] = sectores[i].id;
 	}
 }
@@ -118,14 +118,14 @@ void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombr
 {
 	int index = SectorBuscarSectorId(sectores, size, id);
 
-	if (index == SECTOR_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d\n", id);
 
 		return;
 	}
 
-	snprintf(sectores[index].nombre, MAX_NOMBRE_SECTOR_SIZE, "%s", nombreNuevo);
+	snprintf(sectores[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
 }
 
 void SectorOrdenarSectores(Sector* sectores, int size)
@@ -160,7 +160,7 @@ static int SectorBuscarId(Sector* sectores, int size, int id, int i)
 {
 	if (i == size)
 	{
-		return SECTOR_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	if (sectores[i].id == id)

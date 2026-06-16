@@ -7,8 +7,6 @@
 #include "sector.h"
 #include "cliente.h"
 
-#define MAX_VAR_ARRAY_SIZE	256
-
 typedef struct GymIds
 {
 	int entrenador;

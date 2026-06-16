@@ -17,8 +17,8 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char*
 
 	nuevo.id = idCliente;
 
-	snprintf(nuevo.nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", nombre);
-	snprintf(nuevo.genero, MAX_GENERO_CLIENTE_SIZE, "%s", genero);
+	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
+	snprintf(nuevo.genero, MAX_GENERO_TEXT, "%s", genero);
 
 	nuevo.idClasesValidos = 0;
 
@@ -43,7 +43,7 @@ int ClienteBuscarClienteId(Cliente* clientes, int size, int idCliente)
 {
 	if (idCliente < 0)
 	{
-		return CLIENTE_ID_INVALIDO;
+		return ID_INVALIDO;
 	}
 
 	return ClienteBuscarId(clientes, size, idCliente, 0);
@@ -53,7 +53,7 @@ Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente)
 {
 	int posicion = ClienteBuscarClienteId(clientes, size, idCliente);
 
-	if (posicion == CLIENTE_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		printf("No se encontro al cliente con el Id: %d\n", idCliente);
 
@@ -90,7 +90,7 @@ Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente)
 
 int ClienteAgregarClase(Cliente* cliente, int idClase)
 {
-	if (cliente->idClasesValidos >= MAX_ID_CLASE_SIZE)
+	if (cliente->idClasesValidos >= MAX_IDS)
 	{
 		printf("[ERROR] El cliente '%s' ya alcanzo el limite maximo de clases asignadas\n", cliente->nombre);
 
@@ -117,7 +117,7 @@ void ClienteEliminarClase(Cliente* cliente, int idClase)
 {
 	if (cliente == NULL || cliente->idClasesValidos == 0) return;
 
-	int posicion = CLIENTE_ID_INVALIDO;
+	int posicion = ID_INVALIDO;
 
 	for (int i = 0; i < cliente->idClasesValidos; i++)
 	{
@@ -129,7 +129,7 @@ void ClienteEliminarClase(Cliente* cliente, int idClase)
 		}
 	}
 
-	if (posicion == CLIENTE_ID_INVALIDO)
+	if (posicion == ID_INVALIDO)
 	{
 		return;
 	}
@@ -146,7 +146,7 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente)
 {
 	int index = ClienteBuscarClienteId(clientes, size, idCliente);
 
-	if (index == CLIENTE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d\n", idCliente);
 
@@ -158,19 +158,19 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente)
 
 void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente)
 {
-	snprintf(nombreCliente, MAX_NOMBRE_CLIENTE_SIZE, "%s", cliente->nombre);
+	snprintf(nombreCliente, MAX_NOMBRE_TEXT, "%s", cliente->nombre);
 }
 
 void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente)
 {
-	snprintf(generoCliente, MAX_GENERO_CLIENTE_SIZE, "%s", cliente->genero);
+	snprintf(generoCliente, MAX_GENERO_TEXT, "%s", cliente->genero);
 }
 
-void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes)
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresClientes[i], MAX_NOMBRE_CLIENTE_SIZE, "%s", clientes[i].nombre);
+		snprintf(nombresClientes[i], MAX_NOMBRE_TEXT, "%s", clientes[i].nombre);
 		idsClientes[i] = clientes[i].id;
 	}
 }
@@ -192,28 +192,28 @@ void ClienteModificarClienteNombre(Cliente* clientes, int size, int idCliente, c
 {
 	int index = ClienteBuscarClienteId(clientes, size, idCliente);
 
-	if (index == CLIENTE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d\n", idCliente);
 
 		return;
 	}
 
-	snprintf(clientes[index].nombre, MAX_NOMBRE_CLIENTE_SIZE, "%s", nombreNuevo);
+	snprintf(clientes[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
 }
 
 void ClienteModificarClienteGenero(Cliente* clientes, int size, int idCliente, char* generoNuevo)
 {
 	int index = ClienteBuscarClienteId(clientes, size, idCliente);
 
-	if (index == CLIENTE_ID_INVALIDO)
+	if (index == ID_INVALIDO)
 	{
 		printf("[ERROR] No se encontro el id %d\n", idCliente);
 
 		return;
 	}
 
-	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
+	snprintf(clientes[index].genero, MAX_GENERO_TEXT, "%s", generoNuevo);
 }
 
 void ClienteOrdenarClientes(Cliente* cliente, int size)
@@ -250,7 +250,7 @@ static int ClienteBuscarId(Cliente* clientes, int size, int idCliente, int i)
 	{
 		return	
 
-			CLIENTE_ID_INVALIDO;
+			ID_INVALIDO;
 	}
 
 	if (clientes[i].id == idCliente)
