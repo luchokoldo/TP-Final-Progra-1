@@ -547,7 +547,7 @@ void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, cha
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -596,7 +596,7 @@ void ArchivoExportarSectores(int sectoresSize, int* idsSectores, char nombresSec
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -647,7 +647,7 @@ void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -737,7 +737,7 @@ void ArchivoExportarClientes(int clientesSize, int* idsClientes, char nombresCli
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -1018,7 +1018,7 @@ static void ArchivoGuardarEntrenadores(char* nombreArchivo, Entrenador* entrenad
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -1034,7 +1034,7 @@ static void ArchivoGuardarSectores(char* nombreArchivo, Sector* sectores, int si
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -1050,7 +1050,7 @@ static void ArchivoGuardarClases(char* nombreArchivo, Clase* clases, int size)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -1066,7 +1066,7 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
@@ -1082,7 +1082,7 @@ static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids)
 
 	if (f == NULL)
 	{
-		printf("[ERROR] No se pudro crear el archivo %s\n", nombreArchivo);
+		printf("[ERROR] No se pudo crear el archivo %s\n", nombreArchivo);
 
 		return;
 	}
