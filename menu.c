@@ -1891,12 +1891,16 @@ static void MenuMostrarClientes(Gym* gym)
 				printf("%s, ", nombresClases[j]);
 			}
 
-			printf("\b\b. \n\n");
+			printf("\b\b. \n");
 		}
 		else
 		{
-			printf("Sin clases asignadas.\n\n");
+			printf("Sin clases asignadas.\n");
 		}
+
+		MontoTotal = GymObtenerClienteMontoTotalClases(gym, idsClientes[i]);
+
+		printf("Monto a Abonar: $%.2f\n\n", MontoTotal);
 	}
 
 	printf("--------------------------------------\n");
@@ -1933,12 +1937,16 @@ static void MenuMostrarCliente(Gym* gym, int idCliente)
 			printf("%s, ", nombresClases[j]);
 		}
 
-		printf("\b\b. \n\n");
+		printf("\b\b. \n");
 	}
 	else
 	{
-		printf("Sin clases asignadas.\n\n");
+		printf("Sin clases asignadas.\n");
 	}
+
+	MontoTotal = GymObtenerClienteMontoTotalClases(gym, idCliente);
+
+	printf("Monto a Abonar: $%.2f\n\n", MontoTotal);
 
 	printf("\n--------------------------------------\n");
 }
