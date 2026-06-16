@@ -160,6 +160,15 @@ void GymEliminarEntrenador(Gym* gym, int idEntrenador)
 	{
 		int index = ClaseBuscarClaseEntrenadorId(gym->clases, gym->clasesSize, idEntrenador);
 
+		if (index == ID_INVALIDO)
+		{
+			printf("[ERROR] ClaseBuscarClaseEntrenadorId(gym->clases, gym->clasesSize, idEntrenador) devolvio ID_INVALIDO\n");
+
+			GymExit(gym);
+
+			return;
+		}
+
 		ClaseEliminarEntrenador(&gym->clases[index]);
 	}
 	
@@ -300,6 +309,15 @@ void GymEliminarSector(Gym* gym, int idSector)
 	while (GymHaySectorEnClases(gym, idSector))
 	{
 		int index = ClaseBuscarClaseSectorId(gym->clases, gym->clasesSize, idSector);
+
+		if (index == ID_INVALIDO)
+		{
+			printf("[ERROR] ClaseBuscarClaseSectorId(gym->clases, gym->clasesSize, idSector) devolvio ID_INVALIDO\n");
+
+			GymExit(gym);
+
+			return;
+		}
 
 		ClaseEliminarSector(&gym->clases[index]);
 	}

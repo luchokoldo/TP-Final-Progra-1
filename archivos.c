@@ -33,31 +33,6 @@ static void ArchivoGuardarClientes(char* nombreArchivo, Cliente* clientes, int s
 static void ArchivoGuardarIds(char* nombreArchivo, GymIds* ids);
 static void ArchivoBorrarArchivo(char* nombreArchivo);
 
-void ArchivoGuardarGym(Gym* gym)
-{
-	if (gym->entrenadores != NULL)
-	{
-		ArchivoGuardarEntrenadores(ARCHIVO_ENTRENADORES, gym->entrenadores, gym->entrenadoresSize);
-	}
-
-	if (gym->sectores != NULL)
-	{
-		ArchivoGuardarSectores(ARCHIVO_SECTORES, gym->sectores, gym->sectoresSize);
-	}
-	
-	if (gym->clases != NULL)
-	{
-		ArchivoGuardarClases(ARCHIVO_CLASES, gym->clases, gym->clasesSize);
-	}
-	
-	if (gym->clientes != NULL)
-	{
-		ArchivoGuardarClientes(ARCHIVO_CLIENTES, gym->clientes, gym->clientesSize);
-	}
-
-	ArchivoGuardarIds(ARCHIVO_IDS, &gym->ids);
-}
-
 void ArchivoCargarGym(Gym* gym)
 {
 	gym->entrenadores = ArchivoCargarEntrenadores(ARCHIVO_ENTRENADORES, &gym->entrenadoresSize);

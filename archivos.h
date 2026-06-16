@@ -4,7 +4,6 @@
 #include "constgym.h"
 #include "gym.h"
 
-void ArchivoGuardarGym(Gym* gym);
 void ArchivoCargarGym(Gym* gym);
 
 void ArchivoAgregarEntrenador(Entrenador* entrenador);
