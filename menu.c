@@ -189,11 +189,11 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 			{
 				case 0: 
 				{
-					char nombreViejo[MAX_NOMBRE_TEXT];
-					char nombreNuevo[MAX_NOMBRE_TEXT];
+					char nombreViejo[MAX_NOMBRE_SIZE];
+					char nombreNuevo[MAX_NOMBRE_SIZE];
 
 					GymObtenerClienteNombre(gym, idsClientes[opcionClientes], nombreViejo);
-					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_TEXT);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SIZE);
 
 					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
 					{
@@ -208,11 +208,11 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 				}
 				case 1:
 				{
-					char generoViejo[MAX_GENERO_TEXT];
-					char generoNuevo[MAX_GENERO_TEXT];
+					char generoViejo[MAX_GENERO_SIZE];
+					char generoNuevo[MAX_GENERO_SIZE];
 
 					GymObtenerClienteGenero(gym, idsClientes[opcionClientes], generoViejo);
-					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_TEXT);
+					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_SIZE);
 
 					if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
 					{
@@ -283,7 +283,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* accionTexto, int accion)
 								return;
 							}
 
-							char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT];
+							char nombresClases[MAX_IDS][MAX_NOMBRE_SIZE];
 							int idsClases[MAX_IDS] = { 0 };
 							int clasesSize = 0;
 							int opcionClases = MENU_EXIT_VALUE;
@@ -441,11 +441,11 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 			{
 				case 0:
 				{
-					char nombreViejo[MAX_NOMBRE_TEXT];
-					char nombreNuevo[MAX_NOMBRE_TEXT];
+					char nombreViejo[MAX_NOMBRE_SIZE];
+					char nombreNuevo[MAX_NOMBRE_SIZE];
 
 					GymObtenerEntrenadorNombre(gym, idsEntrenadores[opcionEntrenadores], nombreViejo);
-					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_TEXT);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SIZE);
 
 					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
 					{
@@ -460,11 +460,11 @@ static void MenuSecundarioAccionEntrenador(Gym* gym, char* accionTexto, int acci
 				}
 				case 1:
 				{
-					char generoViejo[MAX_GENERO_TEXT];
-					char generoNuevo[MAX_GENERO_TEXT];
+					char generoViejo[MAX_GENERO_SIZE];
+					char generoNuevo[MAX_GENERO_SIZE];
 
 					GymObtenerEntrenadorGenero(gym, idsEntrenadores[opcionEntrenadores], generoViejo);
-					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_TEXT);
+					MenuModificarGenero(generoViejo, generoNuevo, MAX_GENERO_SIZE);
 
 					if (*generoNuevo == '\0' || strcmp(generoNuevo, generoViejo) == 0)
 					{
@@ -594,11 +594,11 @@ static void MenuSecundarioAccionSector(Gym* gym, char* accionTexto, int accion)
 				return;
 			}
 
-			char nombreViejo[MAX_NOMBRE_TEXT];
-			char nombreNuevo[MAX_NOMBRE_TEXT];
+			char nombreViejo[MAX_NOMBRE_SIZE];
+			char nombreNuevo[MAX_NOMBRE_SIZE];
 
 			GymObtenerSectorNombre(gym, idsSectores[opcionSectores], nombreViejo);
-			MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_TEXT);
+			MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SIZE);
 
 			if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
 			{
@@ -746,11 +746,11 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 			{
 				case 0:
 				{
-					char nombreViejo[MAX_NOMBRE_TEXT];
-					char nombreNuevo[MAX_NOMBRE_TEXT];
+					char nombreViejo[MAX_NOMBRE_SIZE];
+					char nombreNuevo[MAX_NOMBRE_SIZE];
 
 					GymObtenerClaseNombre(gym, idsClases[opcionClases], nombreViejo);
-					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_TEXT);
+					MenuModificarNombre(nombreViejo, nombreNuevo, MAX_NOMBRE_SIZE);
 
 					if (*nombreNuevo == '\0' || strcmp(nombreNuevo, nombreViejo) == 0)
 					{
@@ -1024,7 +1024,7 @@ static void MenuSecundarioAccionClase(Gym* gym, char* accionTexto, int accion)
 								return;
 							}
 
-							char nombresClientes[MAX_IDS][MAX_NOMBRE_TEXT];
+							char nombresClientes[MAX_IDS][MAX_NOMBRE_SIZE];
 							int idsClientes[MAX_IDS] = { 0 };
 							int clientesSize = 0;
 							int opcionClientes = MENU_EXIT_VALUE;
@@ -1328,7 +1328,7 @@ static void MenuPausa(void)
 
 static int MenuListaClientes(Gym* gym, char* titulo, int* idsClientes)
 {
-	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int clientesSize = 0;
 
 	clientesSize = GymObtenerClientesNombresIds(gym, nombresClientes, idsClientes);
@@ -1338,7 +1338,7 @@ static int MenuListaClientes(Gym* gym, char* titulo, int* idsClientes)
 
 static int MenuListaClases(Gym* gym, char* titulo, int* idsClases)
 {
-	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int clasesSize = 0;
 
 	clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
@@ -1348,7 +1348,7 @@ static int MenuListaClases(Gym* gym, char* titulo, int* idsClases)
 
 static int MenuListaEntrenadores(Gym* gym, char* titulo, int* idsEntrenadores)
 {
-	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int entrenadoresSize = 0;
 
 	entrenadoresSize = GymObtenerEntrenadoresNombresIds(gym, nombresEntrenadores, idsEntrenadores);
@@ -1358,7 +1358,7 @@ static int MenuListaEntrenadores(Gym* gym, char* titulo, int* idsEntrenadores)
 
 static int MenuListaSectores(Gym* gym, char* titulo, int* idsSectores)
 {
-	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int sectoresSize = 0;
 
 	sectoresSize = GymObtenerSectoresNombresIds(gym, nombresSectores, idsSectores);
@@ -1462,12 +1462,12 @@ static void MenuModificarDuracion(int horasViejo, int minutosViejo, int* horas, 
 
 static int MenuCrearEntrenador(Gym* gym)
 {
-	char nombre[MAX_NOMBRE_TEXT];
-	char genero[MAX_GENERO_TEXT];
+	char nombre[MAX_NOMBRE_SIZE];
+	char genero[MAX_GENERO_SIZE];
 
 	do
 	{
-		MenuIngresarNombre(nombre, MAX_NOMBRE_TEXT);
+		MenuIngresarNombre(nombre, MAX_NOMBRE_SIZE);
 
 		if (*nombre == '\0')
 		{
@@ -1477,7 +1477,7 @@ static int MenuCrearEntrenador(Gym* gym)
 
 	do
 	{
-		MenuIngresarGenero(genero, MAX_GENERO_TEXT);
+		MenuIngresarGenero(genero, MAX_GENERO_SIZE);
 
 		if (*genero == '\0')
 		{
@@ -1490,11 +1490,11 @@ static int MenuCrearEntrenador(Gym* gym)
 
 static int MenuCrearSector(Gym* gym)
 {
-	char nombre[MAX_NOMBRE_TEXT];
+	char nombre[MAX_NOMBRE_SIZE];
 
 	do
 	{
-		MenuIngresarNombre(nombre, MAX_NOMBRE_TEXT);
+		MenuIngresarNombre(nombre, MAX_NOMBRE_SIZE);
 
 		if (*nombre == '\0')
 		{
@@ -1507,12 +1507,12 @@ static int MenuCrearSector(Gym* gym)
 
 static int MenuCrearCliente(Gym* gym)
 {
-	char nombre[MAX_NOMBRE_TEXT];
-	char genero[MAX_GENERO_TEXT];
+	char nombre[MAX_NOMBRE_SIZE];
+	char genero[MAX_GENERO_SIZE];
 
 	do
 	{
-		MenuIngresarNombre(nombre, MAX_NOMBRE_TEXT);
+		MenuIngresarNombre(nombre, MAX_NOMBRE_SIZE);
 
 		if (*nombre == '\0')
 		{
@@ -1522,7 +1522,7 @@ static int MenuCrearCliente(Gym* gym)
 
 	do
 	{
-		MenuIngresarGenero(genero, MAX_GENERO_TEXT);
+		MenuIngresarGenero(genero, MAX_GENERO_SIZE);
 
 		if (*genero == '\0')
 		{
@@ -1535,7 +1535,7 @@ static int MenuCrearCliente(Gym* gym)
 
 static int MenuCrearClase(Gym* gym)
 {
-	char nombreClase[MAX_NOMBRE_TEXT];
+	char nombreClase[MAX_NOMBRE_SIZE];
 	int idEntrenador = ID_INVALIDO;
 	int idSector = ID_INVALIDO;
 	double precio = 0.0;
@@ -1546,7 +1546,7 @@ static int MenuCrearClase(Gym* gym)
 
 	do
 	{
-		MenuIngresarNombre(nombreClase, MAX_NOMBRE_TEXT);
+		MenuIngresarNombre(nombreClase, MAX_NOMBRE_SIZE);
 
 		if (*nombreClase == '\0')
 		{
@@ -1654,7 +1654,7 @@ static int MenuCrearClase(Gym* gym)
 static void MenuMostrarClases(Gym* gym)
 {
 	int idsClases[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int clasesSize = 0;
 
 	clasesSize = GymObtenerClasesNombresIds(gym, nombresClases, idsClases);
@@ -1662,9 +1662,9 @@ static void MenuMostrarClases(Gym* gym)
 	int idEntrenador = ID_INVALIDO;
 	int idSector = ID_INVALIDO;
 	int idsClientes[MAX_IDS] = { 0 };
-	char nombreEntrenador[MAX_NOMBRE_TEXT];
-	char nombreSector[MAX_NOMBRE_TEXT];
-	char nombresClientes[MAX_IDS][MAX_NOMBRE_TEXT];
+	char nombreEntrenador[MAX_NOMBRE_SIZE];
+	char nombreSector[MAX_NOMBRE_SIZE];
+	char nombresClientes[MAX_IDS][MAX_NOMBRE_SIZE];
 	int clientesSize = 0;
 	double precio = 0.0;
 	int horaInicio = 0;
@@ -1724,13 +1724,13 @@ static void MenuMostrarClases(Gym* gym)
 
 static void MenuMostrarClase(Gym* gym, int idClase)
 {
-	char nombreClase[MAX_NOMBRE_TEXT];
+	char nombreClase[MAX_NOMBRE_SIZE];
 	int idEntrenador = ID_INVALIDO;
 	int idSector = ID_INVALIDO;
 	int idsClientes[MAX_IDS] = { 0 };
-	char nombreEntrenador[MAX_NOMBRE_TEXT];
-	char nombreSector[MAX_NOMBRE_TEXT];
-	char nombresClientes[MAX_IDS][MAX_NOMBRE_TEXT];
+	char nombreEntrenador[MAX_NOMBRE_SIZE];
+	char nombreSector[MAX_NOMBRE_SIZE];
+	char nombresClientes[MAX_IDS][MAX_NOMBRE_SIZE];
 	int clientesSize = 0;
 	double precio = 0.0;
 	int horaInicio = 0;
@@ -1791,7 +1791,7 @@ static void MenuMostrarClase(Gym* gym, int idClase)
 static void MenuMostrarSectores(Gym* gym)
 {
 	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int sectoresSize = 0;
 
 	sectoresSize = GymObtenerSectoresNombresIds(gym, nombresSectores, idsSectores);
@@ -1809,7 +1809,7 @@ static void MenuMostrarSectores(Gym* gym)
 
 static void MenuMostrarSector(Gym* gym, int idSector)
 {
-	char nombreSector[MAX_NOMBRE_TEXT];
+	char nombreSector[MAX_NOMBRE_SIZE];
 
 	GymObtenerSectorNombre(gym, idSector, nombreSector);
 	
@@ -1822,9 +1822,9 @@ static void MenuMostrarSector(Gym* gym, int idSector)
 static void MenuMostrarEntrenadores(Gym* gym)
 {
 	int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int entrenadoresSize = 0;
-	char generoEntrenador[MAX_NOMBRE_TEXT];
+	char generoEntrenador[MAX_NOMBRE_SIZE];
 
 	entrenadoresSize = GymObtenerEntrenadoresNombresIds(gym, nombresEntrenadores, idsEntrenadores);
 
@@ -1845,8 +1845,8 @@ static void MenuMostrarEntrenadores(Gym* gym)
 
 static void MenuMostrarEntrenador(Gym* gym, int idEntrenador)
 {
-	char NombreEntrenador[MAX_NOMBRE_TEXT];
-	char generoEntrenador[MAX_NOMBRE_TEXT];
+	char NombreEntrenador[MAX_NOMBRE_SIZE];
+	char generoEntrenador[MAX_NOMBRE_SIZE];
 
 	GymObtenerEntrenadorNombre(gym, idEntrenador, NombreEntrenador);
 	GymObtenerEntrenadorGenero(gym, idEntrenador, generoEntrenador);
@@ -1863,13 +1863,13 @@ static void MenuMostrarEntrenador(Gym* gym, int idEntrenador)
 static void MenuMostrarClientes(Gym* gym)
 {
 	int idsClientes[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT];
+	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE];
 	int clientesSize = 0;
 
 	clientesSize = GymObtenerClientesNombresIds(gym, nombresClientes, idsClientes);
 
-	char generoCliente[MAX_GENERO_TEXT];
-	char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT];
+	char generoCliente[MAX_GENERO_SIZE];
+	char nombresClases[MAX_IDS][MAX_NOMBRE_SIZE];
 	int idsClases[MAX_IDS] = { 0 };
 	int clasesSize = 0;
 	double MontoTotal = 0.0;
@@ -1912,9 +1912,9 @@ static void MenuMostrarClientes(Gym* gym)
 
 static void MenuMostrarCliente(Gym* gym, int idCliente)
 {
-	char nombreCliente[MAX_NOMBRE_TEXT];
-	char generoCliente[MAX_GENERO_TEXT];
-	char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT];
+	char nombreCliente[MAX_NOMBRE_SIZE];
+	char generoCliente[MAX_GENERO_SIZE];
+	char nombresClases[MAX_IDS][MAX_NOMBRE_SIZE];
 	int idsClases[MAX_IDS] = { 0 };
 	int clasesSize = 0;
 	double MontoTotal = 0.0;

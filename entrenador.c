@@ -16,8 +16,8 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int 
 
 	nuevo.id = id;
 
-	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
-	snprintf(nuevo.genero, MAX_GENERO_TEXT, "%s", genero);
+	snprintf(nuevo.nombre, MAX_NOMBRE_SIZE, "%s", nombre);
+	snprintf(nuevo.genero, MAX_GENERO_SIZE, "%s", genero);
 
 	Entrenador* aux = NULL;
 
@@ -102,28 +102,28 @@ Entrenador* EntrenadorObtenerEntrenador(Entrenador* entrenadores, int size, int 
 
 void EntrenadorObtenerEntrenadorNombre(Entrenador* entrenador, char* nombreEntrenador)
 {
-	snprintf(nombreEntrenador, MAX_NOMBRE_TEXT, "%s", entrenador->nombre);
+	snprintf(nombreEntrenador, MAX_NOMBRE_SIZE, "%s", entrenador->nombre);
 }
 
 void EntrenadorObtenerEntrenadorGenero(Entrenador* entrenador, char* generoEntrenador)
 {
-	snprintf(generoEntrenador, MAX_GENERO_TEXT, "%s", entrenador->genero);
+	snprintf(generoEntrenador, MAX_GENERO_SIZE, "%s", entrenador->genero);
 }
 
-void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_TEXT], int* idsEntrenadores)
+void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size, char nombresEntrenadores[][MAX_NOMBRE_SIZE], int* idsEntrenadores)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresEntrenadores[i], MAX_NOMBRE_TEXT, "%s", entrenadores[i].nombre);
+		snprintf(nombresEntrenadores[i], MAX_NOMBRE_SIZE, "%s", entrenadores[i].nombre);
 		idsEntrenadores[i] = entrenadores[i].id;
 	}
 }
 
-void EntrenadorObtenerEntrenadoresGeneros(Entrenador* entrenadores, int size, char generosEntrenadores[][MAX_GENERO_TEXT])
+void EntrenadorObtenerEntrenadoresGeneros(Entrenador* entrenadores, int size, char generosEntrenadores[][MAX_GENERO_SIZE])
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(generosEntrenadores[i], MAX_GENERO_TEXT, "%s", entrenadores[i].genero);
+		snprintf(generosEntrenadores[i], MAX_GENERO_SIZE, "%s", entrenadores[i].genero);
 	}
 }
 
@@ -138,7 +138,7 @@ void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int
 		return;
 	}
 
-	snprintf(entrenadores[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
+	snprintf(entrenadores[index].nombre, MAX_NOMBRE_SIZE, "%s", nombreNuevo);
 }
 
 void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* generoNuevo)
@@ -152,7 +152,7 @@ void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int
 		return;
 	}
 
-	snprintf(entrenadores[index].genero, MAX_GENERO_TEXT, "%s", generoNuevo);
+	snprintf(entrenadores[index].genero, MAX_GENERO_SIZE, "%s", generoNuevo);
 }
 
 void EntrenadorOrdenarEntrenadores(Entrenador* entrenadores, int size)

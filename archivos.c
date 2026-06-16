@@ -519,7 +519,7 @@ void ArchivoBorrarCliente(int idCliente)
 	free(aux);
 }
 
-void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, char nombresEntrenadores[][MAX_NOMBRE_TEXT], char generosEntrenadores[][MAX_GENERO_TEXT])
+void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, char nombresEntrenadores[][MAX_NOMBRE_SIZE], char generosEntrenadores[][MAX_GENERO_SIZE])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -568,7 +568,7 @@ void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, cha
 	fclose(f);
 }
 
-void ArchivoExportarSectores(int sectoresSize, int* idsSectores, char nombresSectores[][MAX_NOMBRE_TEXT])
+void ArchivoExportarSectores(int sectoresSize, int* idsSectores, char nombresSectores[][MAX_NOMBRE_SIZE])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -616,9 +616,9 @@ void ArchivoExportarSectores(int sectoresSize, int* idsSectores, char nombresSec
 	fclose(f);
 }
 
-void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_TEXT], char nombresEntrenadores[][MAX_NOMBRE_TEXT],
-							char nombresSectores[][MAX_NOMBRE_TEXT], int idsClasesClientes[][MAX_IDS], int clientesSize, int* idsClientes, 
-							char nombresClientes[][MAX_NOMBRE_TEXT], int* clasesClientesValidos, double* preciosClases, int* inicioHorasClases, 
+void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_SIZE], char nombresEntrenadores[][MAX_NOMBRE_SIZE],
+							char nombresSectores[][MAX_NOMBRE_SIZE], int idsClasesClientes[][MAX_IDS], int clientesSize, int* idsClientes, 
+							char nombresClientes[][MAX_NOMBRE_SIZE], int* clasesClientesValidos, double* preciosClases, int* inicioHorasClases, 
 							int* inicioMinutosClases, int* duracionHorasClases, int* duracionMinutosClases)
 {
 	time_t now = time(NULL);
@@ -708,8 +708,8 @@ void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][
 	fclose(f);
 }
 
-void ArchivoExportarClientes(int clientesSize, int* idsClientes, char nombresClientes[][MAX_NOMBRE_TEXT], char generosClientes[][MAX_GENERO_TEXT], int idsClientesClases[][MAX_IDS],
-								int* clientesClasesValidos, double* montosTotalClases, int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_TEXT])
+void ArchivoExportarClientes(int clientesSize, int* idsClientes, char nombresClientes[][MAX_NOMBRE_SIZE], char generosClientes[][MAX_GENERO_SIZE], int idsClientesClases[][MAX_IDS],
+								int* clientesClasesValidos, double* montosTotalClases, int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_SIZE])
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);

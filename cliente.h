@@ -7,8 +7,8 @@
 typedef struct Cliente
 {
     int id;
-    char nombre[MAX_NOMBRE_TEXT];
-    char genero[MAX_GENERO_TEXT];
+    char nombre[MAX_NOMBRE_SIZE];
+    char genero[MAX_GENERO_SIZE];
     int idClases[MAX_IDS];
     int idClasesValidos;
 } Cliente;
@@ -24,10 +24,10 @@ Cliente* ClienteObtenerCliente(Cliente* clientes, int size, int idCliente);
 void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente);
 void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente);
 void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases);
-void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes);
+void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_SIZE], int* idsClientes);
 void ClienteObtenerClientesIds(Cliente* clientes, int size, int* idsClientes);
-void ClienteObtenerClientesNombres(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_TEXT]);
-void ClienteObtenerClientesGeneros(Cliente* clientes, int size, char generosClientes[][MAX_GENERO_TEXT]);
+void ClienteObtenerClientesNombres(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_SIZE]);
+void ClienteObtenerClientesGeneros(Cliente* clientes, int size, char generosClientes[][MAX_GENERO_SIZE]);
 void ClienteObtenerClientesClases(Cliente* clientes, int size, int idsClientesClases[][MAX_IDS], int* clientesClasesValidos);
 int ClienteObtenerCantidadClasesEnCliente(Cliente* cliente);
 

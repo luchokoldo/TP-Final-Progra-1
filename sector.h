@@ -6,7 +6,7 @@
 typedef struct Sector
 {
     int id;
-    char nombre[MAX_NOMBRE_TEXT];
+    char nombre[MAX_NOMBRE_SIZE];
 } Sector;
 
 Sector* SectorAgregarSector(Sector* sectores, int size, int id, char* nombre);
@@ -15,7 +15,7 @@ Sector* SectorEliminarSector(Sector* sectores, int size, int id);
 
 Sector* SectorObtenerSector(Sector* sectores, int size, int id);
 void SectorObtenerSectorNombre(Sector* sector, char* nombreSector);
-void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_TEXT], int* idsSectores);
+void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_SIZE], int* idsSectores);
 
 void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombreNuevo);
 

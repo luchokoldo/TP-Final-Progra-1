@@ -20,7 +20,7 @@ typedef struct Duracion
 typedef struct Clase
 {
     int id;
-    char nombre[MAX_NOMBRE_TEXT];
+    char nombre[MAX_NOMBRE_SIZE];
     int idEntrenador;
     int idSector;
     int idClientes[MAX_IDS];
@@ -38,16 +38,18 @@ int ClaseBuscarClaseSectorId(Clase* clases, int size, int idSector);
 
 Clase* ClaseObtenerClase(Clase* clases, int size, int idClase);
 int ClaseObtenerCantidadClientesEnClase(Clase* clase);
-void ClaseObtenerClaseNombre(Clase* clases, int size, int idClase, char* nombre);
+void ClaseObtenerClaseNombre(Clase* clase, char* nombreClase);
 void ClaseObtenerClaseClientesIds(Clase* clase, int* idsClientes);
-int ClaseObtenerEntrenador(Clase* clase);
-int ClaseObtenerSector(Clase* clase);
+int ClaseObtenerClaseEntrenador(Clase* clase);
+int ClaseObtenerClaseSector(Clase* clase);
 Horario ClaseObtenerClaseHorario(Clase* clase);
+void ClaseObtenerClaseHorarioInt(Clase* clase, int* horasHorario, int* minutosHorario);
 Duracion ClaseObtenerClaseDuracion(Clase* clase);
+void ClaseObtenerClaseDuracionInt(Clase* clase, int* horasDuracion, int* minutosDuracion);
 double ClaseObtenerClasePrecio(Clase* clase);
-void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases);
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases);
 void ClaseObtenerClasesIds(Clase* clases, int size, int* idsClases);
-void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT]);
+void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_SIZE]);
 void ClaseObtenerClasesEntrenadores(Clase* clases, int size, int* idsClasesEntrenadores);
 void ClaseObtenerClasesSectores(Clase* clases, int size, int* idsClasesSectores);
 void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_IDS], int* clasesClientesValidos);

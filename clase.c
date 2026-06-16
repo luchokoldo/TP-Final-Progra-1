@@ -18,7 +18,7 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int
 	Clase nuevo = { 0 };
 
 	nuevo.id = idClase;
-	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
+	snprintf(nuevo.nombre, MAX_NOMBRE_SIZE, "%s", nombre);
 	nuevo.idEntrenador = idEntrenador;
 	nuevo.idSector = idSector;
 	nuevo.precio = precio;
@@ -127,25 +127,16 @@ Clase* ClaseObtenerClase(Clase* clases, int size, int idClase)
 	return &clases[index];
 }
 
-void ClaseObtenerClaseNombre(Clase* clases, int size, int idClase, char* nombre)
+void ClaseObtenerClaseNombre(Clase* clase, char* nombreClase)
 {
-	int index = ClaseBuscarClaseId(clases, size, idClase);
-
-	if (index == ID_INVALIDO)
-	{
-		printf("[ERROR] No se encontro el id %d", idClase);
-
-		return;
-	}
-
-	snprintf(nombre, MAX_NOMBRE_TEXT, "%s", clases[index].nombre);
+	snprintf(nombreClase, MAX_NOMBRE_SIZE, "%s", clase->nombre);
 }
 
-void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases)
+void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresClases[i], MAX_NOMBRE_TEXT, "%s", clases[i].nombre);
+		snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", clases[i].nombre);
 		idsClases[i] = clases[i].id;
 	}
 }
@@ -158,11 +149,11 @@ void ClaseObtenerClasesIds(Clase* clases, int size, int* idsClases)
 	}
 }
 
-void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_TEXT])
+void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_SIZE])
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresClases[i], MAX_NOMBRE_TEXT, "%s", clases[i].nombre);
+		snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", clases[i].nombre);
 	}
 }
 
@@ -221,12 +212,12 @@ void ClaseObtenerClasesDuracion(Clase* clases, int size, int* clasesDuracionHora
 	}
 }
 
-int ClaseObtenerEntrenador(Clase* clase)
+int ClaseObtenerClaseEntrenador(Clase* clase)
 {
 	return clase->idEntrenador;
 }
 
-int ClaseObtenerSector(Clase* clase)
+int ClaseObtenerClaseSector(Clase* clase)
 {
 	return clase->idSector;
 }
@@ -343,12 +334,18 @@ void ClaseModificarClaseNombre(Clase* clases,int size, int idClase, char* nombre
 		return;
 	}
 
-	snprintf(clases[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
+	snprintf(clases[index].nombre, MAX_NOMBRE_SIZE, "%s", nombreNuevo);
 }
 
 Horario ClaseObtenerClaseHorario(Clase* clase)
 {
 	return clase->inicio;
+}
+
+void ClaseObtenerClaseHorarioInt(Clase* clase, int* horasHorario, int* minutosHorario)
+{
+	*horasHorario = clase->inicio.horas;
+	*minutosHorario = clase->inicio.minutos;
 }
 
 void ClaseModificarClaseHorario(Clase* clase, Horario horarioNuevo)
@@ -359,6 +356,12 @@ void ClaseModificarClaseHorario(Clase* clase, Horario horarioNuevo)
 Duracion ClaseObtenerClaseDuracion(Clase* clase)
 {
 	return clase->duracion;
+}
+
+void ClaseObtenerClaseDuracionInt(Clase* clase, int* horasDuracion, int* minutosDuracion)
+{
+	*horasDuracion = clase->duracion.horas;
+	*minutosDuracion = clase->duracion.minutos;
 }
 
 void ClaseModificarClaseDuracion(Clase* clase, Duracion duracionNueva)

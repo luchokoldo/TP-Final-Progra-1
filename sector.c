@@ -16,7 +16,7 @@ Sector* SectorAgregarSector(Sector* sectores, int size, int id, char *nombre)
 
 	nuevo.id = id;
 
-	snprintf(nuevo.nombre, MAX_NOMBRE_TEXT, "%s", nombre);
+	snprintf(nuevo.nombre, MAX_NOMBRE_SIZE, "%s", nombre);
 	
 	Sector* aux = NULL;
 
@@ -102,14 +102,14 @@ Sector* SectorObtenerSector(Sector* sectores, int size, int id)
 
 void SectorObtenerSectorNombre(Sector* sector, char* nombreSector)
 {
-	snprintf(nombreSector, MAX_NOMBRE_TEXT, "%s", sector->nombre);
+	snprintf(nombreSector, MAX_NOMBRE_SIZE, "%s", sector->nombre);
 }
 
-void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_TEXT], int* idsSectores)
+void SectorObtenerSectoresNombresIds(Sector* sectores, int size, char nombresSectores[][MAX_NOMBRE_SIZE], int* idsSectores)
 {
 	for (int i = 0; i < size; i++)
 	{
-		snprintf(nombresSectores[i], MAX_NOMBRE_TEXT, "%s", sectores[i].nombre);
+		snprintf(nombresSectores[i], MAX_NOMBRE_SIZE, "%s", sectores[i].nombre);
 		idsSectores[i] = sectores[i].id;
 	}
 }
@@ -125,7 +125,7 @@ void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombr
 		return;
 	}
 
-	snprintf(sectores[index].nombre, MAX_NOMBRE_TEXT, "%s", nombreNuevo);
+	snprintf(sectores[index].nombre, MAX_NOMBRE_SIZE, "%s", nombreNuevo);
 }
 
 void SectorOrdenarSectores(Sector* sectores, int size)

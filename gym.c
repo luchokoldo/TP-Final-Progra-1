@@ -115,7 +115,7 @@ void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador, char* generoNuevo)
 	ArchivoModificarEntrenador(entrenador);
 }
 
-int GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_TEXT], int* idsEntrenadores)
+int GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_SIZE], int* idsEntrenadores)
 {
 	EntrenadorObtenerEntrenadoresNombresIds(gym->entrenadores, gym->entrenadoresSize, nombresEntrenadores, idsEntrenadores);
 
@@ -203,8 +203,8 @@ void GymExportarEntrenadoresArchivoTexto(Gym* gym)
 {
 	int entrenadoresSize = gym->entrenadoresSize;
 	int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
-	char generoEntrenadores[MAX_ARRAY_SIZE][MAX_GENERO_TEXT] = { 0 };
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
+	char generoEntrenadores[MAX_ARRAY_SIZE][MAX_GENERO_SIZE] = { 0 };
 
 	EntrenadorObtenerEntrenadoresNombresIds(gym->entrenadores, gym->entrenadoresSize, nombresEntrenadores, idsEntrenadores);
 	EntrenadorObtenerEntrenadoresGeneros(gym->entrenadores, gym->entrenadoresSize, generoEntrenadores);
@@ -272,7 +272,7 @@ void GymModificarSectorNombre(Gym* gym, int idSector, char* nombreNuevo)
 	ArchivoModificarSector(sector);
 }
 
-int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_TEXT], int* idsSectores)
+int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SIZE], int* idsSectores)
 {
 	SectorObtenerSectoresNombresIds(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
 
@@ -344,7 +344,7 @@ void GymExportarSectoresArchivoTexto(Gym* gym)
 {
 	int sectoresSize = gym->sectoresSize;
 	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 
 	SectorObtenerSectoresNombresIds(gym->sectores, gym->sectoresSize, nombresSectores, idsSectores);
 	
@@ -457,8 +457,8 @@ int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minuto
 
 	Horario horarioNuevo = { .horas = horasHorario, .minutos = minutosHorario };
 	Duracion duracionActual = ClaseObtenerClaseDuracion(clase);
-	int idEntrenador = ClaseObtenerEntrenador(clase);
-	int idSector = ClaseObtenerSector(clase);
+	int idEntrenador = ClaseObtenerClaseEntrenador(clase);
+	int idSector = ClaseObtenerClaseSector(clase);
 
 	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, idClase, idEntrenador, idSector, horarioNuevo, duracionActual) == 1)
 	{
@@ -491,8 +491,8 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 
 	Horario horarioActual = ClaseObtenerClaseHorario(clase);
 	Duracion duracionNuevo = { .horas = horasDuracion, .minutos = minutosDuracion };
-	int idEntrenador = ClaseObtenerEntrenador(clase);
-	int idSector = ClaseObtenerSector(clase);
+	int idEntrenador = ClaseObtenerClaseEntrenador(clase);
+	int idSector = ClaseObtenerClaseSector(clase);
 
 	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, idClase, idEntrenador, idSector, horarioActual, duracionNuevo) == 1)
 	{
@@ -510,20 +510,135 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 	return idClase;
 }
 
-int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases)
+int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases, char nombresEntrenadores[][MAX_NOMBRE_SIZE], char clasesHorario[][MAX_TIEMPO_SIZE], char clasesDuracion[][MAX_TIEMPO_SIZE])
 {
+	int _idsClases[MAX_ARRAY_SIZE] = { 0 };
+	int horasHorario[MAX_ARRAY_SIZE] = { 0 };
+	int minutosHorario[MAX_ARRAY_SIZE] = { 0 };
+	int horasDuracion[MAX_ARRAY_SIZE] = { 0 };
+	int minutosDuracion[MAX_ARRAY_SIZE] = { 0 };
+	int size = 0;
+	int idEntrenador = ID_INVALIDO;
 
-	return 1;
+	ClaseObtenerClasesIds(gym->clases, gym->clasesSize, _idsClases);
+	
+	for (int i = 0; i < gym->clasesSize; i++)
+	{
+		Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, _idsClases[i]);
+
+		if (clase == NULL)
+		{
+			printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+			GymExit(gym);
+
+			return 0;
+		}
+
+		if (ClaseObtenerClaseSector(clase) != idSector)
+		{
+			continue;
+		}
+
+		idEntrenador = ClaseObtenerClaseEntrenador(clase);
+
+		if (idEntrenador == ID_INVALIDO)
+		{
+			continue;
+		}
+
+		Entrenador* entrenador = EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador);
+
+		if (entrenador == NULL)
+		{
+			printf("[ERROR] EntrenadorObtenerEntrenador(gym->entrenadores, gym->entrenadoresSize, idEntrenador) devolvio NULL\n");
+
+			GymExit(gym);
+
+			return 0;
+		}
+
+		idsClases[size] = _idsClases[i];
+		ClaseObtenerClaseNombre(clase, nombresClases[size]);
+		EntrenadorObtenerEntrenadorNombre(entrenador, nombresEntrenadores[size]);
+		ClaseObtenerClaseHorarioInt(clase, &horasHorario[size], &minutosHorario[size]);
+		ClaseObtenerClaseDuracionInt(clase, &horasDuracion[size], &minutosDuracion[size]);
+
+		size++;
+	}
+
+	if (size <= 1)
+	{
+		return size;
+	}
+
+	for (int i = 0; i < size - 1; i++)
+	{
+		int indexMenor = i;
+
+		for (int j = i + 1; j < size; j++)
+		{
+			if (COMPARAR_HORARIO(horasHorario[indexMenor], minutosHorario[indexMenor], horasHorario[j], minutosHorario[j]) > 0)
+			{
+				indexMenor = j;
+			}
+		}
+
+		if (indexMenor == i)
+		{
+			continue;
+		}
+
+		int idAux = idsClases[i];
+
+		idsClases[i] = idsClases[indexMenor];
+		idsClases[indexMenor] = idAux;
+
+		char nombreAux[MAX_NOMBRE_SIZE] = { 0 };
+
+		snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresClases[i]);
+		snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", nombresClases[indexMenor]);
+		snprintf(nombresClases[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
+
+		snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[i]);
+		snprintf(nombresEntrenadores[i], MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[indexMenor]);
+		snprintf(nombresEntrenadores[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
+
+		int valorAux = horasHorario[i];
+
+		horasHorario[i] = horasHorario[indexMenor];
+		horasHorario[indexMenor] = valorAux;
+
+		valorAux = minutosHorario[i];
+
+		minutosHorario[i] = minutosHorario[indexMenor];
+		minutosHorario[indexMenor] = valorAux;
+
+		valorAux = horasDuracion[i];
+
+		horasDuracion[i] = horasDuracion[indexMenor];
+		horasDuracion[indexMenor] = valorAux;
+
+		valorAux = minutosDuracion[i];
+
+		minutosDuracion[i] = minutosDuracion[indexMenor];
+		minutosDuracion[indexMenor] = valorAux;
+
+		snprintf(clasesHorario[i], MAX_TIEMPO_SIZE, "%02d:%02d", horasHorario[i], minutosHorario[i]);
+		snprintf(clasesDuracion[i], MAX_TIEMPO_SIZE, "%02d:%02d", horasDuracion[i], minutosDuracion[i]);
+	}
+
+	return size;
 }
 
-int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases)
+int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_SIZE], int* idsClases)
 {
 	ClaseObtenerClasesNombresIds(gym->clases, gym->clasesSize, nombresClases, idsClases);
 
 	return gym->clasesSize;
 }
 
-int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresClientes[MAX_IDS][MAX_NOMBRE_TEXT], int* idsClientes)
+int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresClientes[MAX_IDS][MAX_NOMBRE_SIZE], int* idsClientes)
 {
 	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
 
@@ -553,7 +668,7 @@ int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresCliente
 			return ID_INVALIDO;
 		}
 
-		snprintf(nombresClientes[i], MAX_NOMBRE_TEXT, "%s", cliente->nombre);
+		snprintf(nombresClientes[i], MAX_NOMBRE_SIZE, "%s", cliente->nombre);
 	}
 
 	return idsSize;
@@ -561,7 +676,18 @@ int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresCliente
 
 void GymObtenerClaseNombre(Gym* gym, int idClase, char* nombreViejo)
 {
-	ClaseObtenerClaseNombre(gym->clases, gym->clasesSize, idClase, nombreViejo);
+	Clase* clase = ClaseObtenerClase(gym->clases, gym->clasesSize, idClase);
+
+	if (clase == NULL)
+	{
+		printf("[ERROR] ClaseObtenerClase(gym->clases, gym->clasesSize, idClase) devolvio NULL\n");
+
+		GymExit(gym);
+
+		return;
+	}
+	
+	ClaseObtenerClaseNombre(clase, nombreViejo);
 }
 
 double GymObtenerClasePrecio(Gym* gym, int idClase)
@@ -612,7 +738,7 @@ void GymObtenerClaseDuracion(Gym* gym, int idClase, int* horas, int* minutos)
 		return;
 	}
 
-	Duracion duracion= ClaseObtenerClaseDuracion(clase);
+	Duracion duracion = ClaseObtenerClaseDuracion(clase);
 
 	*horas = duracion.horas;
 	*minutos = duracion.minutos;
@@ -631,7 +757,7 @@ int GymObtenerClaseEntrenadorId(Gym* gym, int idClase)
 		return ID_INVALIDO;
 	}
 
-	return ClaseObtenerEntrenador(clase);
+	return ClaseObtenerClaseEntrenador(clase);
 }
 
 int GymObtenerClaseSectorId(Gym* gym, int idClase)
@@ -647,7 +773,7 @@ int GymObtenerClaseSectorId(Gym* gym, int idClase)
 		return ID_INVALIDO;
 	}
 
-	return ClaseObtenerSector(clase);
+	return ClaseObtenerClaseSector(clase);
 }
 
 void GymEliminarClase(Gym* gym, int idClase)
@@ -796,14 +922,14 @@ void GymExportarClasesArchivoTexto(Gym* gym)
 	int clasesSize = gym->clasesSize;
 	int clientesSize = gym->clientesSize;
 	int idsClases[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 	int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 	int idsSectores[MAX_ARRAY_SIZE] = { 0 };
-	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresSectores[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 	int idsClasesClientes[MAX_ARRAY_SIZE][MAX_IDS] = { 0 };
 	int idsClientes[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 	int clasesClientesValidos[MAX_ARRAY_SIZE] = { 0 };
 	double preciosClases[MAX_ARRAY_SIZE] = { 0 };
 	int inicioHorasClases[MAX_ARRAY_SIZE] = { 0 };
@@ -962,14 +1088,14 @@ void GymModificarClienteGenero(Gym* gym, int id, char* generoNuevo )
 	ArchivoModificarCliente(cliente);
 }
 
-int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes)
+int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_SIZE], int* idsClientes)
 {
 	ClienteObtenerClientesNombresIds(gym->clientes, gym->clientesSize, nombresClientes, idsClientes);
 
 	return gym->clientesSize;
 }
 
-int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT], int* idsClases)
+int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_IDS][MAX_NOMBRE_SIZE], int* idsClases)
 {
 	Cliente* cliente = ClienteObtenerCliente(gym->clientes, gym->clientesSize, idCliente);
 
@@ -999,7 +1125,7 @@ int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClase
 			return 0;
 		}
 
-		snprintf(nombresClases[i], MAX_NOMBRE_TEXT, "%s", clase->nombre);
+		snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", clase->nombre);
 	}
 
 	return idsSize;
@@ -1233,13 +1359,13 @@ void GymExportarClientesArchivoTexto(Gym* gym)
 	int clientesSize = gym->clientesSize;
 	int clasesSize = gym->clasesSize;
 	int idsClientes[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
-	char generosClientes[MAX_ARRAY_SIZE][MAX_GENERO_TEXT] = { 0 };
+	char nombresClientes[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
+	char generosClientes[MAX_ARRAY_SIZE][MAX_GENERO_SIZE] = { 0 };
 	int idsClientesClases[MAX_ARRAY_SIZE][MAX_IDS] = { 0 };
 	int clientesClasesValidos[MAX_ARRAY_SIZE] = { 0 };
 	double montosTotalClases[MAX_ARRAY_SIZE] = { 0 };
 	int idsClases[MAX_ARRAY_SIZE] = { 0 };
-	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char nombresClases[MAX_ARRAY_SIZE][MAX_NOMBRE_SIZE] = { 0 };
 
 	ClienteObtenerClientesIds(gym->clientes, gym->clientesSize, idsClientes);
 	ClienteObtenerClientesNombres(gym->clientes, gym->clientesSize, nombresClientes);
