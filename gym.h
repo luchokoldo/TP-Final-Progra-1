@@ -1,6 +1,7 @@
 #ifndef _GYM_H_INCLUDED
 #define _GYM_H_INCLUDED
 
+#include "constgym.h"
 #include "entrenador.h"
 #include "clase.h"
 #include "sector.h"
@@ -29,24 +30,22 @@ typedef struct Gym
 	GymIds ids;
 } Gym;
 
+void GymCargarDatos(Gym* gym);
+
 int GymAgregarEntrenador(Gym* gym, char* nombreEntrenador, char* generoEntrenador);
-void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador, const char nombreNuevo);
-void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador, const char generoNuevo);
-void GymMostrarEntrenadores(Gym* gym);
-void GymMostrarEntrenador(Gym* gym, int idEntrenador);
+void GymModificarEntrenadorNombre(Gym* gym, int idEntrenador, char* nombreNuevo);
+void GymModificarEntrenadorGenero(Gym* gym, int idEntrenador, char* generoNuevo);
 void GymEliminarEntrenador(Gym* gym, int idEntrenador);
-int GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_ENTRENADOR_SIZE], int* idsEntrenadores);
+int GymObtenerEntrenadoresNombresIds(Gym* gym, char nombresEntrenadores[][MAX_NOMBRE_TEXT], int* idsEntrenadores);
 void GymObtenerEntrenadorNombre(Gym* gym, int idEntrenador, char* nombreEntrenador);
 void GymObtenerEntrenadorGenero(Gym* gym, int idEntrenador, char* generoEntrenador);
 void GymExportarEntrenadoresArchivoTexto(Gym* gym);
 int GymHayEntrenadores(Gym* gym);
 
 int GymAgregarSector(Gym* gym, char* nombreSector);
-void GymModificarSectorNombre(Gym* gym, int idSector, const char nombreNuevo);
-int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_SECTOR_SIZE], int* idsSectores);
+void GymModificarSectorNombre(Gym* gym, int idSector, char* nombreNuevo);
+int GymObtenerSectoresNombresIds(Gym* gym, char nombresSectores[][MAX_NOMBRE_TEXT], int* idsSectores);
 void GymObtenerSectorNombre(Gym* gym, int idSector, char* nombreSector);
-void GymMostrarSectores(Gym* gym);
-void GymMostrarSector(Gym* gym, int idSector);
 void GymEliminarSector(Gym* gym, int idSector);
 void GymExportarSectoresArchivoTexto(Gym* gym);
 int GymHaySectores(Gym* gym);
@@ -56,9 +55,9 @@ void GymModificarClaseNombre(Gym* gym, int idClase, char* nombreNuevo);
 void GymAsignarClasePrecio(Gym* gym, int idClase, double precioNuevo);
 int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minutosHorario);
 int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minutosDuracion);
-int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
-int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
-int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresClientes[MAX_ID_CLASE_SIZE][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
+int GymObtenerClasesNombresIds(Gym* gym, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases);
+int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMBRE_TEXT], int* idsClases);
+int GymObtenerClaseClientesNombresIds(Gym* gym, int idClase, char nombresClientes[MAX_IDS][MAX_NOMBRE_TEXT], int* idsClientes);
 void GymObtenerClaseNombre(Gym* gym, int idClase, char* nombreViejo);
 double GymObtenerClasePrecio(Gym* gym, int idClase);
 void GymObtenerClaseHorario(Gym* gym, int idClase, int* horas, int* minutos);
@@ -81,14 +80,12 @@ int GymAgregarClienteClase(Gym* gym, int idCliente, int idClase);
 void GymEliminarClienteClase(Gym* gym, int idCliente, int idClase);
 
 int GymAgregarCliente(Gym* gym, char* nombreCliente, char* generoCliente);
-void GymModificarClienteNombre(Gym* gym, int idCliente, const char* nombreNuevo);
-void GymModificarClienteGenero(Gym* gym, int idCliente, const char* generoNuevo);
-int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
-int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_ID_CLIENTE_SIZE][MAX_NOMBRE_CLASE_SIZE], int* idsClases);
+void GymModificarClienteNombre(Gym* gym, int idCliente, char* nombreNuevo);
+void GymModificarClienteGenero(Gym* gym, int idCliente, char* generoNuevo);
+int GymObtenerClientesNombresIds(Gym* gym, char nombresClientes[][MAX_NOMBRE_TEXT], int* idsClientes);
+int GymObtenerClienteClasesNombresIds(Gym* gym, int idCliente, char nombresClases[MAX_IDS][MAX_NOMBRE_TEXT], int* idsClases);
 void GymObtenerClienteNombre(Gym* gym, int idCliente, char* nombreCliente);
 void GymObtenerClienteGenero(Gym* gym, int idCliente, char* generoCliente);
-void GymMostrarClientes(Gym* gym);
-void GymMostrarCliente(Gym* gym, int idCliente);
 void GymEliminarCliente(Gym* gym, int idCliente);
 void GymExportarClientesArchivoTexto(Gym* gym);
 int GymHayClasesEnCliente(Gym* gym, int idCliente);

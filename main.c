@@ -2,19 +2,15 @@
 #include <stdlib.h>
 
 #include "gym.h"
-#include "archivos.h"
 #include "menu.h"
 
 int main()
 {
 	Gym gym = { 0 };
 
-
-	ArchivoCargarGym(&gym);
+	GymCargarDatos(&gym);
 
 	MenuMostrarMenu(&gym);
-
-	ArchivoGuardarGym(&gym);
 
 	return 0;
 }

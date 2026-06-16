@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "clase.h"
 #include "scanner.h"
 #include "utilidades.h"
@@ -8,6 +10,8 @@ static int ClaseBuscarId(Clase* clases, int size, int idClase, int i);
 static int ClaseBuscarEntrenadorId(Clase* clases, int size, int idEntrenador, int i);
 static int ClaseBuscarSectorId(Clase* clases, int size, int idSector, int i);
 static int ClaseChequearHorarioDuracion(Clase* clase, int idEntrenador, int idSector, Horario horario, Duracion duracion);
+static void ClaseOrdenarClaseNueva(Clase* clases, int size);
+static void ClaseIntercambiarClases(Clase* claseActual, Clase* claseAnterior);
 
 Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int idEntrenador, int idSector, double precio, Horario inicio, Duracion duracion)
 {
@@ -34,6 +38,8 @@ Clase* ClaseAgregarClase(Clase* clases, int size, int idClase, char* nombre, int
 	}
 	
 	aux[size] = nuevo;
+
+	ClaseOrdenarClaseNueva(aux, size);
 
 	return aux;
 }
@@ -144,6 +150,77 @@ void ClaseObtenerClasesNombresIds(Clase* clases, int size, char nombresClases[][
 	}
 }
 
+void ClaseObtenerClasesIds(Clase* clases, int size, int* idsClases)
+{
+	for (int i = 0; i < size; i++)
+	{
+		idsClases[i] = clases[i].id;
+	}
+}
+
+void ClaseObtenerClasesNombres(Clase* clases, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE])
+{
+	for (int i = 0; i < size; i++)
+	{
+		snprintf(nombresClases[i], MAX_NOMBRE_CLASE_SIZE, "%s", clases[i].nombre);
+	}
+}
+
+void ClaseObtenerClasesEntrenadores(Clase* clases, int size, int* idsClasesEntrenadores)
+{
+	for (int i = 0; i < size; i++)
+	{
+		idsClasesEntrenadores[i] = clases[i].idEntrenador;
+	}
+}
+
+void ClaseObtenerClasesSectores(Clase* clases, int size, int* idsClasesSectores)
+{
+	for (int i = 0; i < size; i++)
+	{
+		idsClasesSectores[i] = clases[i].idSector;
+	}
+}
+
+void ClaseObtenerClasesClientes(Clase* clases, int size, int idsClasesClientes[][MAX_ID_CLIENTE_SIZE], int* clasesClientesValidos)
+{
+	for (int i = 0; i < size; i++)
+	{
+		clasesClientesValidos[i] = clases[i].idClientesValidos;
+
+		for (int j = 0; j < clasesClientesValidos[i]; j++)
+		{
+			idsClasesClientes[i][j] = clases[i].idClientes[j];
+		}		
+	}
+}
+
+void ClaseObtenerClasesPrecios(Clase* clases, int size, double* preciosClases)
+{
+	for (int i = 0; i < size; i++)
+	{
+		preciosClases[i] = clases[i].precio;
+	}
+}
+
+void ClaseObtenerClasesHorarios(Clase* clases, int size, int* clasesHorariosHoras, int* clasesHorariosMinutos)
+{
+	for (int i = 0; i < size; i++)
+	{
+		clasesHorariosHoras[i] = clases[i].inicio.horas;
+		clasesHorariosMinutos[i] = clases[i].inicio.minutos;
+	}
+}
+
+void ClaseObtenerClasesDuracion(Clase* clases, int size, int* clasesDuracionHoras, int* clasesDuracionMinutos)
+{
+	for (int i = 0; i < size; i++)
+	{
+		clasesDuracionHoras[i] = clases[i].duracion.horas;
+		clasesDuracionMinutos[i] = clases[i].duracion.minutos;
+	}
+}
+
 int ClaseObtenerEntrenador(Clase* clase)
 {
 	return clase->idEntrenador;
@@ -214,7 +291,6 @@ void ClaseEliminarCliente(Clase* clase, int idCliente)
 
 	clase->idClientesValidos--;
 }
-
 
 void ClaseAsignarEntrenador(Clase* clase, int idEntrenador)
 {
@@ -300,7 +376,7 @@ double ClaseObtenerClasePrecio(Clase* clase)
 	return clase->precio;
 }
 
-int ClaseObtenerClientesEnClase(Clase* clase)
+int ClaseObtenerCantidadClientesEnClase(Clase* clase)
 {
 	return clase->idClientesValidos;
 }
@@ -313,10 +389,15 @@ void ClaseObtenerClaseClientesIds(Clase* clase, int* idsClientes)
 	}
 }
 
-int ClaseChequearClaseHorarioDuracion(Clase* clases, int size, int idEntrenador, int idSector, Horario horario, Duracion duracion)
+int ClaseChequearClaseHorarioDuracion(Clase* clases, int size, int idClase, int idEntrenador, int idSector, Horario horario, Duracion duracion)
 {
 	for (int i = 0; i < size; i++)
 	{
+		if (clases[i].id == idClase)
+		{
+			continue;
+		}
+		
 		if (ClaseChequearHorarioDuracion(&clases[i], idEntrenador, idSector, horario, duracion) == 1)
 		{
 			return 1;
@@ -324,6 +405,34 @@ int ClaseChequearClaseHorarioDuracion(Clase* clases, int size, int idEntrenador,
 	}
 
 	return 0;
+}
+
+void ClaseOrdenarClases(Clase* clases, int size)
+{
+	if (size <= 1)
+	{
+		return;
+	}
+	
+	int indexMenor = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		indexMenor = i;
+		
+		for (int j = i + 1; j < size; j++)
+		{
+			if (_strcmpi(clases[indexMenor].nombre, clases[j].nombre) > 0)
+			{
+				indexMenor = j;
+			}
+		}
+
+		if (indexMenor != i)
+		{
+			ClaseIntercambiarClases(&clases[indexMenor], &clases[i]);
+		}
+	}
 }
 
 static int ClaseBuscarId(Clase* clases, int size, int idClase, int i)
@@ -396,4 +505,27 @@ static int ClaseChequearHorarioDuracion(Clase* clase, int idEntrenador, int idSe
 	}
 
 	return 0;
+}
+
+static void ClaseOrdenarClaseNueva(Clase* clases, int size)
+{
+	if (size < 1)
+	{
+		return;
+	}
+
+	if (_strcmpi(clases[size - 1].nombre, clases[size].nombre) > 0)
+	{
+		ClaseIntercambiarClases(&clases[size], &clases[size - 1]);
+	}
+
+	ClaseOrdenarClaseNueva(clases, size - 1);
+}
+
+static void ClaseIntercambiarClases(Clase* claseActual, Clase* claseAnterior)
+{
+	Clase aux = *claseActual;
+
+	*claseActual = *claseAnterior;
+	*claseAnterior = aux;
 }

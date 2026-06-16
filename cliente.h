@@ -18,8 +18,6 @@ typedef struct Cliente
 } Cliente;
 
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char *nombre, char *genero);
-void ClienteMostrarClientes(Cliente* clientes, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
-void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize);
 int ClienteBuscarClienteId(Cliente* clientes, int size, int idCliente);
 Cliente* ClienteEliminarCliente(Cliente* clientes, int size, int idCliente);
 
@@ -31,9 +29,11 @@ void ClienteObtenerClienteNombre(Cliente* cliente, char* nombreCliente);
 void ClienteObtenerClienteGenero(Cliente* cliente, char* generoCliente);
 void ClienteObtenerClientesNombresIds(Cliente* clientes, int size, char nombresClientes[][MAX_NOMBRE_CLIENTE_SIZE], int* idsClientes);
 void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases);
-int ClienteObtenerClasesEnCliente(Cliente* cliente);
+int ClienteObtenerCantidadClasesEnCliente(Cliente* cliente);
 
 void ClienteModificarClienteNombre(Cliente* clientes, int size, int idCliente, char* nombreNuevo);
 void ClienteModificarClienteGenero(Cliente* clientes, int size, int idCliente, char* generoNuevo);
+
+void ClienteOrdenarClientes(Cliente* cliente, int size);
 
 #endif

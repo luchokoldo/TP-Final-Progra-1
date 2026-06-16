@@ -14,8 +14,6 @@ typedef struct Entrenador
 } Entrenador;
 
 Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int id, char* nombre, char* genero);
-void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size);
-void EntrenadorMostrarEntrenador(Entrenador* entrenador);
 int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id);
 Entrenador* EntrenadorEliminarEntrenador(Entrenador* entrenadores, int size, int id);
 
@@ -26,5 +24,7 @@ void EntrenadorObtenerEntrenadoresNombresIds(Entrenador* entrenadores, int size,
 
 void EntrenadorModificarEntrenadorNombre(Entrenador* entrenadores, int size, int id, char* nombreNuevo);
 void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int id, char* generoNuevo);
+
+void EntrenadorOrdenarEntrenadores(Entrenador* entrenadores, int size);
 
 #endif // _ENTRENADOR_INCLUDED

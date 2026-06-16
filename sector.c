@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "sector.h"
 #include "scanner.h"
 #include "utilidades.h"
 
 static int SectorBuscarId(Sector* sectores, int size, int id, int i);
+static void SectorOrdenarSectorNuevo(Sector* sectores, int size);
+static void SectorIntercambiarSectores(Sector* sectorActual, Sector* sectorAnterior);
 
 Sector* SectorAgregarSector(Sector* sectores, int size, int id, char *nombre)
 {
@@ -28,30 +32,10 @@ Sector* SectorAgregarSector(Sector* sectores, int size, int id, char *nombre)
 	
 	aux[size] = nuevo;
 
+	SectorOrdenarSectorNuevo(aux, size);
+
 	return aux;
 
-}
-void SectorMostrarSectores(Sector* sectores, int size)
-{
-	if (size <= 0)
-	{
-		return;
-	}
-
-	SectorMostrarSectores(sectores, size - 1);
-
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", sectores[size - 1].id);
-	printf("Nombre: %s\n", sectores[size - 1].nombre);
-	printf("\n--------------------------------------\n");
-}
-
-void SectorMostrarSector(Sector* sector)
-{
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", sector->id);
-	printf("Nombre: %s\n", sector->nombre);
-	printf("\n--------------------------------------\n");
 }
 
 int SectorBuscarSectorId(Sector* sectores, int size, int id)
@@ -101,6 +85,7 @@ Sector *SectorEliminarSector(Sector* sectores, int size, int id)
 
 	return aux;
 }
+
 Sector* SectorObtenerSector(Sector* sectores, int size, int id)
 {
 	int index = SectorBuscarSectorId(sectores, size, id);
@@ -143,6 +128,34 @@ void SectorModificarSectorNombre(Sector* sectores, int size, int id, char* nombr
 	snprintf(sectores[index].nombre, MAX_NOMBRE_SECTOR_SIZE, "%s", nombreNuevo);
 }
 
+void SectorOrdenarSectores(Sector* sectores, int size)
+{
+	if (size <= 1)
+	{
+		return;
+	}
+
+	int indexMenor = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		indexMenor = i;
+
+		for (int j = i + 1; j < size; j++)
+		{
+			if (_strcmpi(sectores[indexMenor].nombre, sectores[j].nombre) > 0)
+			{
+				indexMenor = j;
+			}
+		}
+
+		if (indexMenor != i)
+		{
+			SectorIntercambiarSectores(&sectores[indexMenor], &sectores[i]);
+		}
+	}
+}
+
 static int SectorBuscarId(Sector* sectores, int size, int id, int i)
 {
 	if (i == size)
@@ -158,4 +171,27 @@ static int SectorBuscarId(Sector* sectores, int size, int id, int i)
 	i++;
 
 	return SectorBuscarId(sectores, size, id, i);
+}
+
+static void SectorOrdenarSectorNuevo(Sector* sectores, int size)
+{
+	if (size < 1)
+	{
+		return;
+	}
+
+	if (_strcmpi(sectores[size - 1].nombre, sectores[size].nombre) > 0)
+	{
+		SectorIntercambiarSectores(&sectores[size], &sectores[size - 1]);
+	}
+
+	SectorOrdenarSectorNuevo(sectores, size - 1);
+}
+
+static void SectorIntercambiarSectores(Sector* sectorActual, Sector* sectorAnterior)
+{
+	Sector aux = *sectorActual;
+
+	*sectorActual = *sectorAnterior;
+	*sectorAnterior = aux;
 }

@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "cliente.h"
 #include "scanner.h"
 #include "utilidades.h"
 
 
 static int ClienteBuscarId(Cliente* clientes, int size, int idCliente, int i);
+static void ClienteOrdenarClienteNuevo(Cliente* cliente, int size);
+static void ClienteIntercambiarClientes(Cliente* clienteActual, Cliente* clienteAnterior);
 
 Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char* nombre, char* genero)
 {
@@ -30,58 +34,9 @@ Cliente* ClienteAgregarCliente(Cliente* clientes, int size, int idCliente, char*
 
 	aux[size] = nuevo;
 
+	ClienteOrdenarClienteNuevo(aux, size);
+
 	return aux;
-}
-
-void ClienteMostrarClientes(Cliente* clientes, int size, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize)
-{
-	if (size <= 0)
-	{
-		return;
-	}
-
-	ClienteMostrarClientes(clientes, size - 1, nombresClases, idsClases, clasesSize);
-
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", clientes[size - 1].id);
-	printf("Nombre: %s\n", clientes[size - 1].nombre);
-	printf("Genero: %s\n", clientes[size - 1].genero);
-	printf("Clases: ");
-
-	if (clientes[size - 1].idClasesValidos > 0)
-	{
-		for (int j = 0; j < clientes[size - 1].idClasesValidos; j++)
-		{
-			int idClaseActual = clientes[size - 1].idClases[j];
-			int index = -1;
-
-			for (int k = 0; k < clasesSize; k++)
-			{
-				if (idsClases[k] == idClaseActual)
-				{
-					index = k;
-					break;
-				}
-			}
-
-			if (index != -1)
-			{
-				printf("%s, ", nombresClases[index]);
-			}
-			else
-			{
-				printf("%d, ", idClaseActual);
-			}
-		}
-
-		printf("\b\b. \n");
-	}
-	else
-	{
-		printf("Sin clases asignadas.\n");
-	}
-
-	printf("\n--------------------------------------\n");
 }
 
 int ClienteBuscarClienteId(Cliente* clientes, int size, int idCliente)
@@ -228,7 +183,7 @@ void ClienteObtenerClienteClasesIds(Cliente* cliente, int* idsClases)
 	}
 }
 
-int ClienteObtenerClasesEnCliente(Cliente* cliente)
+int ClienteObtenerCantidadClasesEnCliente(Cliente* cliente)
 {
 	return cliente->idClasesValidos;
 }
@@ -261,55 +216,32 @@ void ClienteModificarClienteGenero(Cliente* clientes, int size, int idCliente, c
 	snprintf(clientes[index].genero, MAX_GENERO_CLIENTE_SIZE, "%s", generoNuevo);
 }
 
-void ClienteMostrarCliente(Cliente* cliente, char nombresClases[][MAX_NOMBRE_CLASE_SIZE], int* idsClases, int clasesSize)
+void ClienteOrdenarClientes(Cliente* cliente, int size)
 {
-	if (cliente == NULL)
+	if (size <= 1)
 	{
 		return;
 	}
 
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", cliente->id);
-	printf("Nombre: %s\n", cliente->nombre);
-	printf("Genero: %s\n", cliente->genero);
-	printf("Clases: ");
+	int indexMenor = 0;
 
-	if (cliente->idClasesValidos > 0)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < cliente->idClasesValidos; j++)
+		indexMenor = i;
+
+		for (int j = i + 1; j < size; j++)
 		{
-			int idClaseActual = cliente->idClases[j];
-			int index = -1;
-
-			for (int k = 0; k < clasesSize; k++)
+			if (_strcmpi(cliente[indexMenor].nombre, cliente[j].nombre) > 0)
 			{
-				if (idsClases[k] == idClaseActual)
-				{
-					index = k;
-
-					break;
-				}
+				indexMenor = j;
 			}
-
-			if (index != -1)
-			{
-				printf("%s, ", nombresClases[index]);
-			}
-			else
-			{
-				printf("%d, ", idClaseActual);
-			}
-
 		}
 
-		printf("\b\b. \n");
+		if (indexMenor != i)
+		{
+			ClienteIntercambiarClientes(&cliente[indexMenor], &cliente[i]);
+		}
 	}
-	else
-	{
-		printf("Sin clases asignadas.\n");
-	}
-
-	printf("\n--------------------------------------\n");
 }
 
 static int ClienteBuscarId(Cliente* clientes, int size, int idCliente, int i)
@@ -329,4 +261,27 @@ static int ClienteBuscarId(Cliente* clientes, int size, int idCliente, int i)
 	i++;
 
 	return ClienteBuscarId(clientes, size, idCliente, i);
+}
+
+static void ClienteOrdenarClienteNuevo(Cliente* clientes, int size)
+{
+	if (size < 1)
+	{
+		return;
+	}
+
+	if (_strcmpi(clientes[size - 1].nombre, clientes[size].nombre) > 0)
+	{
+		ClienteIntercambiarClientes(&clientes[size], &clientes[size - 1]);
+	}
+
+	ClienteOrdenarClienteNuevo(clientes, size - 1);
+}
+
+static void ClienteIntercambiarClientes(Cliente* clienteActual, Cliente* clienteAnterior)
+{
+	Cliente aux = *clienteActual;
+
+	*clienteActual = *clienteAnterior;
+	*clienteAnterior = aux;
 }

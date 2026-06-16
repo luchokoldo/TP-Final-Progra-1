@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include "entrenador.h"
 #include "scanner.h"
 #include "utilidades.h"
 
 static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i);
+static void EntrenadorOrdenarEntrenadorNuevo(Entrenador* entrenadores, int size);
+static void EntrenadorIntercambiarEntrenadores(Entrenador* entrenadorActual, Entrenador* entrenadorAnterior);
 
 Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int id, char* nombre, char* genero)
 {
@@ -28,32 +32,9 @@ Entrenador* EntrenadorAgregarEntrenador(Entrenador* entrenadores, int size, int 
 
 	aux[size] = nuevo;
 
+	EntrenadorOrdenarEntrenadorNuevo(aux, size);
+
 	return aux;
-}
-
-void EntrenadorMostrarEntrenadores(Entrenador* entrenadores, int size)
-{
-	if (size <= 0)
-	{
-		return;
-	}
-
-	EntrenadorMostrarEntrenadores(entrenadores, size - 1);
-
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", entrenadores[size - 1].id);
-	printf("Nombre: %s\n", entrenadores[size - 1].nombre);
-	printf("Genero: %s\n", entrenadores[size - 1].genero);
-	printf("\n--------------------------------------\n");
-}
-
-void EntrenadorMostrarEntrenador(Entrenador* entrenador)
-{
-	printf("\n--------------------------------------\n\n");
-	printf("ID: %d\n", entrenador->id);
-	printf("Nombre: %s\n", entrenador->nombre);
-	printf("Genero: %s\n", entrenador->genero);
-	printf("\n--------------------------------------\n");
 }
 
 int EntrenadorBuscarEntrenadorId(Entrenador* entrenadores, int size, int id)
@@ -166,6 +147,34 @@ void EntrenadorModificarEntrenadorGenero(Entrenador* entrenadores, int size, int
 	snprintf(entrenadores[index].genero, MAX_GENERO_ENTRENADOR_SIZE, "%s", generoNuevo);
 }
 
+void EntrenadorOrdenarEntrenadores(Entrenador* entrenadores, int size)
+{
+	if (size <= 1)
+	{
+		return;
+	}
+
+	int indexMenor = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		indexMenor = i;
+
+		for (int j = i + 1; j < size; j++)
+		{
+			if (_strcmpi(entrenadores[indexMenor].nombre, entrenadores[j].nombre) > 0)
+			{
+				indexMenor = j;
+			}
+		}
+
+		if (indexMenor != i)
+		{
+			EntrenadorIntercambiarEntrenadores(&entrenadores[indexMenor], &entrenadores[i]);
+		}
+	}
+}
+
 static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
 {
 	if (i == size)
@@ -181,4 +190,27 @@ static int EntrenadorBuscarId(Entrenador* entrenadores, int size, int id, int i)
 	i++;
 
 	return EntrenadorBuscarId(entrenadores, size, id, i);
+}
+
+static void EntrenadorOrdenarEntrenadorNuevo(Entrenador* entrenadores, int size)
+{
+	if (size < 1)
+	{
+		return;
+	}
+
+	if (_strcmpi(entrenadores[size - 1].nombre, entrenadores[size].nombre) > 0)
+	{
+		EntrenadorIntercambiarEntrenadores(&entrenadores[size], &entrenadores[size - 1]);
+	}
+
+	EntrenadorOrdenarEntrenadorNuevo(entrenadores, size - 1);
+}
+
+static void EntrenadorIntercambiarEntrenadores(Entrenador* entrenadorActual, Entrenador* entrenadorAnterior)
+{
+	Entrenador aux = *entrenadorActual;
+
+	*entrenadorActual = *entrenadorAnterior;
+	*entrenadorAnterior = aux;
 }

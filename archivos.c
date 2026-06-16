@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+
+#include "constgym.h"
 #include "archivos.h"
 
 #define ARCHIVO_ENTRENADORES		"Entrenadores.bin"
@@ -610,7 +612,10 @@ void ArchivoExportarSectores(Sector* sectores, int size)
 	fclose(f);
 }
 
-void ArchivoExportarClases(Clase* clases, int size)
+void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_TEXT], char nombresEntrenadores[][MAX_NOMBRE_TEXT],
+							char nombresSectores[][MAX_NOMBRE_TEXT], int idsClasesClientes[][MAX_IDS], int clientesSize, int* idsClientes, 
+							char nombresClientes[][MAX_NOMBRE_TEXT], int* clasesClientesValidos, double* preciosClases, int* inicioHorasClases, 
+							int* inicioMinutosClases, int* duracionHorasClases, int* duracionMinutosClases)
 {
 	time_t now = time(NULL);
 	struct tm* tm = localtime(&now);
@@ -645,31 +650,56 @@ void ArchivoExportarClases(Clase* clases, int size)
 
 	fprintf(f, "\t%s\n", ARCHIVO_CLASES_TXT);
 
-	for (int i = 0; i < size; i++)
-	{
-		fprintf(f, "\n-------------------------------------\n\n");
-		fprintf(f, "Id de la clase: %d\n", clases[i].id);
-		fprintf(f, "Clase: %s\n", clases[i].nombre);
-		fprintf(f, "Id entrenador: %d\n", clases[i].idEntrenador);
-		fprintf(f, "Id sector: %d\n", clases[i].idSector);
+	fprintf(f, "\n-------------------------------------\n\n");
+
+	int index = 0;
+
+	for (int i = 0; i < clasesSize; i++)
+	{	
+		fprintf(f, "Id de la clase: %d\n", idsClases[i]);
+		fprintf(f, "Clase: %s\n", nombresClases[i]);
+		fprintf(f, "Entrenador: %s\n", nombresEntrenadores[i]);
+		fprintf(f, "Sector: %s\n", nombresSectores[i]);
 		fprintf(f, "Clientes: ");
 
-		if (clases[i].idClientesValidos > 0)
+		if (clasesClientesValidos[i] > 0)
 		{
-			for (int j = 0; j < clases[i].idClientesValidos; j++)
+			for (index = 0; index < clientesSize; index++)
 			{
-				fprintf(f, "%d, ", clases[i].idClientes[j]);
+				if (idsClasesClientes[i][0] == idsClientes[index])
+				{
+					break;
+				}
+			}
+			
+			fprintf(f, "%s", nombresClientes[index]);
+			
+			for (int j = 1; j < clasesClientesValidos[i]; j++)
+			{
+				for (index = 0; index < clientesSize; index++)
+				{
+					if (idsClasesClientes[i][j] == idsClientes[index])
+					{
+						break;
+					}
+				}
+				
+				fprintf(f, ", %s", nombresClientes[index]);
 			}
 
-			fprintf(f, "\b\b.\n");
+			fprintf(f, ".\n");
 		}
 		else
 		{
-			printf("Sin clientes asignados.\n");
+			fprintf(f, "Sin clientes asignados.\n");
 		}
 
-		fprintf(f, "\n--------------------------------------\n");
+		fprintf(f, "Precio: $%.2f\n", preciosClases[i]);
+		fprintf(f, "Hora de inicio: %02d:%02d\n", inicioHorasClases[i], inicioMinutosClases[i]);
+		fprintf(f, "Duracion: %02d:%02d\n\n", duracionHorasClases[i], duracionMinutosClases[i]);
 	}
+
+	fprintf(f, "--------------------------------------\n");
 
 	fclose(f);
 }
@@ -708,31 +738,34 @@ void ArchivoExportarClientes(Cliente* clientes, int size)
 	}
 
 	fprintf(f, "\t%s\n", ARCHIVO_CLIENTES_TXT);
-
+	fprintf(f, "\n--------------------------------------\n\n");
+	
 	for (int i = 0; i < size; i++)
 	{
-		fprintf(f, "\n--------------------------------------\n\n");
-		fprintf(f, "ID: %d\n", clientes[size - 1].id);
-		fprintf(f, "Nombre: %s\n", clientes[size - 1].nombre);
-		fprintf(f, "Genero: %s\n", clientes[size - 1].genero);
+		
+		fprintf(f, "ID: %d\n", clientes[i].id);
+		fprintf(f, "Nombre: %s\n", clientes[i].nombre);
+		fprintf(f, "Genero: %s\n", clientes[i].genero);
 		fprintf(f, "Clases: ");
 		
 		if (clientes[i].idClasesValidos > 0)
 		{
-			for (int j = 0; j < clientes[i].idClasesValidos; j++)
+			fprintf(f, "%d", clientes[i].idClases[0]);
+			
+			for (int j = 1; j < clientes[i].idClasesValidos; j++)
 			{
-				fprintf(f, "%d, ", clientes[i].idClases[j]);
+				fprintf(f, ", %d", clientes[i].idClases[j]);
 			}
 
-			fprintf(f, "\b\b.\n");
+			fprintf(f, ".\n");
 		}
 		else
 		{
 			fprintf(f, "Sin clases asignadas.\n");
 		}
-		
-		fprintf(f, "\n--------------------------------------\n");
 	}
+
+	fprintf(f, "\n--------------------------------------\n");
 
 	fclose(f);
 }
