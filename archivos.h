@@ -22,7 +22,7 @@ void ArchivoBorrarSector(int idSector);
 void ArchivoBorrarClase(int idClase);
 void ArchivoBorrarCliente(int idCliente);
 
-void ArchivoExportarEntrenadores(Entrenador* entrenadores, int size);
+void ArchivoExportarEntrenadores(int entrenadoresSize, int* idsEntrenadores, char nombresEntrenadores[][MAX_NOMBRE_TEXT], char generosEntrenadores[][MAX_GENERO_TEXT]);
 void ArchivoExportarSectores(Sector* sectores, int size);
 void ArchivoExportarClases(int clasesSize, int* idsClases, char nombresClases[][MAX_NOMBRE_TEXT], char nombresEntrenadores[][MAX_NOMBRE_TEXT],
 	char nombresSectores[][MAX_NOMBRE_TEXT], int idsClasesClientes[][MAX_IDS], int clientesSize, int* idsClientes,

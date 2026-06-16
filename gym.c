@@ -201,7 +201,15 @@ void GymEliminarEntrenador(Gym* gym, int idEntrenador)
 
 void GymExportarEntrenadoresArchivoTexto(Gym* gym)
 {
-	ArchivoExportarEntrenadores(gym->entrenadores, gym->entrenadoresSize);
+	int entrenadoresSize = gym->entrenadoresSize;
+	int idsEntrenadores[MAX_ARRAY_SIZE] = { 0 };
+	char nombresEntrenadores[MAX_ARRAY_SIZE][MAX_NOMBRE_TEXT] = { 0 };
+	char generoEntrenadores[MAX_ARRAY_SIZE][MAX_GENERO_TEXT] = { 0 };
+
+	EntrenadorObtenerEntrenadoresNombresIds(gym->entrenadores, gym->entrenadoresSize, nombresEntrenadores, idsEntrenadores);
+	EntrenadorObtenerEntrenadoresGeneros(gym->entrenadores, gym->entrenadoresSize, generoEntrenadores);
+
+	ArchivoExportarEntrenadores(entrenadoresSize, idsEntrenadores, nombresEntrenadores, generoEntrenadores);
 }
 
 int GymHayEntrenadores(Gym* gym)
