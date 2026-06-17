@@ -381,8 +381,8 @@ int GymHaySectores(Gym* gym)
 
 int GymAgregarClase(Gym* gym, char* nombreClase, int idEntrenador, int idSector, int horaHorario, int minutosHorario, int horaDuracion, int minutosDuracion, double precio)
 {
-	Horario inicio = { .horas = horaHorario, .minutos = minutosHorario };
-	Duracion duracion = { .horas = horaDuracion, .minutos = minutosDuracion };	
+	Horario inicio = ClaseCrearHorario(horaHorario, minutosHorario);
+	Duracion duracion = ClaseCrearDuracion(horaDuracion, minutosDuracion);
 
 	if (ClaseChequearClaseHorarioDuracion(gym->clases, gym->clasesSize, gym->ids.clase + 1, idEntrenador, idSector, inicio, duracion) == 1)
 	{
@@ -391,8 +391,8 @@ int GymAgregarClase(Gym* gym, char* nombreClase, int idEntrenador, int idSector,
 		return ID_INVALIDO;
 	}
 
-	inicio.esValido = 1;
-	duracion.esValido = 1;
+	ClaseHorarioValido(&inicio);
+	ClaseDuracionValido(&duracion);
 
 	Clase* temp = ClaseAgregarClase(gym->clases, gym->clasesSize, gym->ids.clase + 1, nombreClase, idEntrenador, idSector, precio, inicio, duracion);
 
@@ -485,6 +485,8 @@ int GymModificarClaseHorario(Gym* gym, int idClase, int horasHorario, int minuto
 		return ID_INVALIDO;
 	}
 
+	ClaseHorarioValido(&horarioNuevo);
+
 	ClaseModificarClaseHorario(clase, horarioNuevo);
 
 	ArchivoModificarClase(clase);
@@ -516,6 +518,8 @@ int GymModificarClaseDuracion(Gym* gym, int idClase, int horasDuracion, int minu
 
 		return ID_INVALIDO;
 	}
+
+	ClaseDuracionValido(&duracionNuevo);
 
 	ClaseModificarClaseDuracion(clase, duracionNuevo);
 

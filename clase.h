@@ -77,5 +77,7 @@ void ClaseOrdenarClases(Clase* clases, int size);
 
 Horario ClaseCrearHorario(int horasHorario, int minutosHorario);
 Duracion ClaseCrearDuracion(int horasDuracion, int minutosDuracion);
+void ClaseHorarioValido(Horario* horario);
+void ClaseDuracionValido(Duracion* duracion);
 
 #endif
