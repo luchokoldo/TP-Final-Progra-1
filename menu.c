@@ -1761,12 +1761,29 @@ static void MenuMostrarClases(Gym* gym)
 		printf("Clase: %s\n", nombresClases[i]);
 
 		idEntrenador = GymObtenerClaseEntrenadorId(gym, idsClases[i]);
-		GymObtenerEntrenadorNombre(gym, idEntrenador, nombreEntrenador);
+
+		if (idEntrenador != ID_INVALIDO)
+		{
+			GymObtenerEntrenadorNombre(gym, idEntrenador, nombreEntrenador);
+		}
+		else
+		{
+			snprintf(nombreEntrenador, MAX_NOMBRE_SIZE, "Sin asignar.");
+		}
 
 		printf("Entrenador: %s\n", nombreEntrenador);
 		
 		idSector = GymObtenerClaseSectorId(gym, idsClases[i]);
-		GymObtenerSectorNombre(gym, idSector, nombreSector);
+
+		if (idSector != ID_INVALIDO)
+		{
+			GymObtenerSectorNombre(gym, idSector, nombreSector);
+		}
+		else
+		{
+			snprintf(nombreSector, MAX_NOMBRE_SIZE, "Sin asignar.");
+		}
+
 
 		printf("Sector: %s\n", nombreSector);
 		printf("Clientes: ");

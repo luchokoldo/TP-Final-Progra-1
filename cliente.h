@@ -3,7 +3,6 @@
 
 #include "constgym.h"
 
-
 typedef struct Cliente
 {
     int id;

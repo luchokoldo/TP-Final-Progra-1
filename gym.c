@@ -44,7 +44,6 @@ void GymCargarDatos(Gym* gym)
 	{
 		ClienteOrdenarClientes(gym->clientes, gym->clientesSize);
 	}
-
 }
 
 int GymAgregarEntrenador(Gym* gym, char* nombreEntrenador, char* generoEntrenador)
