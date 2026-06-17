@@ -6,7 +6,6 @@
 #include "scanner.h"
 #include "utilidades.h"
 
-#define MAX_ARRAY_SIZE	256
 #define MAX_MENU_TEXT_SIZE	64
 #define MAX_MENU_ITEMS		7
 
@@ -21,7 +20,7 @@ static void MenuSecundarioAccionCliente(Gym* gym, char* textoAccion, int accion)
 static void MenuSecundarioAccionEntrenador(Gym* gym, char* textoAccion, int accion);
 static void MenuSecundarioAccionSector(Gym* gym, char* textoAccion, int accion);
 static void MenuSecundarioAccionClase(Gym* gym, char* textoAccion, int accion);
-static int MenuListaCrearMenu(const char* titulo, char texto[][64], int textoSize, int pagina);
+static int MenuListaCrearMenu(const char* titulo, char texto[][MAX_MENU_TEXT_SIZE], int textoSize, int pagina);
 static int MenuListaObtenerOpcionValida(int size, int pagina);
 static void MenuListaAgregarVolver(int pagina);
 static void MenuListaAgregarSiguiente(int size, int pagina);
@@ -73,8 +72,8 @@ void MenuMostrarMenu(Gym* gym)
 	do
 	{
 		system("cls");
-
-		opcion = MenuListaCrearMenu("Sistema de Gestion", texto, GET_CHARSMAX(texto), 1);
+		
+		opcion = MenuListaCrearMenu("\033[31mSistema de Gestion\033[0m", texto, GET_CHARSMAX(texto), 1);
 
 		if (opcion != MENU_EXIT_VALUE)
 		{
@@ -1285,7 +1284,7 @@ static int MenuListaObtenerOpcionValida(int size, int pagina)
 	return MenuListaObtenerOpcionValida(size, pagina);
 }
 
-static int MenuListaCrearMenu(const char* titulo, char texto[][64], int textoSize, int pagina)
+static int MenuListaCrearMenu(const char* titulo, char texto[][MAX_MENU_TEXT_SIZE], int textoSize, int pagina)
 {
 	printf("\n\t%s (Pagina %d)\n\n", titulo, pagina);
 

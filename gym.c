@@ -584,57 +584,55 @@ int GymObtenerClasesDelDia(Gym* gym, int idSector, char nombresClases[][MAX_NOMB
 		size++;
 	}
 
-	if (size <= 1)
+	if (size > 1)
 	{
-		return size;
-	}
-
-	for (int i = 0; i < size - 1; i++)
-	{
-		int indexMenor = i;
-
-		for (int j = i + 1; j < size; j++)
+		for (int i = 0; i < size - 1; i++)
 		{
-			if (COMPARAR_HORARIO(horasHorario[indexMenor], minutosHorario[indexMenor], horasHorario[j], minutosHorario[j]) > 0)
+			int indexMenor = i;
+
+			for (int j = i + 1; j < size; j++)
 			{
-				indexMenor = j;
+				if (COMPARAR_HORARIO(horasHorario[indexMenor], minutosHorario[indexMenor], horasHorario[j], minutosHorario[j]) > 0)
+				{
+					indexMenor = j;
+				}
 			}
+
+			if (indexMenor == i)
+			{
+				continue;
+			}
+
+			char nombreAux[MAX_NOMBRE_SIZE] = { 0 };
+
+			snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresClases[i]);
+			snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", nombresClases[indexMenor]);
+			snprintf(nombresClases[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
+
+			snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[i]);
+			snprintf(nombresEntrenadores[i], MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[indexMenor]);
+			snprintf(nombresEntrenadores[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
+
+			int valorAux = horasHorario[i];
+
+			horasHorario[i] = horasHorario[indexMenor];
+			horasHorario[indexMenor] = valorAux;
+
+			valorAux = minutosHorario[i];
+
+			minutosHorario[i] = minutosHorario[indexMenor];
+			minutosHorario[indexMenor] = valorAux;
+
+			valorAux = horasDuracion[i];
+
+			horasDuracion[i] = horasDuracion[indexMenor];
+			horasDuracion[indexMenor] = valorAux;
+
+			valorAux = minutosDuracion[i];
+
+			minutosDuracion[i] = minutosDuracion[indexMenor];
+			minutosDuracion[indexMenor] = valorAux;
 		}
-
-		if (indexMenor == i)
-		{
-			continue;
-		}
-
-		char nombreAux[MAX_NOMBRE_SIZE] = { 0 };
-
-		snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresClases[i]);
-		snprintf(nombresClases[i], MAX_NOMBRE_SIZE, "%s", nombresClases[indexMenor]);
-		snprintf(nombresClases[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
-
-		snprintf(nombreAux, MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[i]);
-		snprintf(nombresEntrenadores[i], MAX_NOMBRE_SIZE, "%s", nombresEntrenadores[indexMenor]);
-		snprintf(nombresEntrenadores[indexMenor], MAX_NOMBRE_SIZE, "%s", nombreAux);
-
-		int valorAux = horasHorario[i];
-
-		horasHorario[i] = horasHorario[indexMenor];
-		horasHorario[indexMenor] = valorAux;
-
-		valorAux = minutosHorario[i];
-
-		minutosHorario[i] = minutosHorario[indexMenor];
-		minutosHorario[indexMenor] = valorAux;
-
-		valorAux = horasDuracion[i];
-
-		horasDuracion[i] = horasDuracion[indexMenor];
-		horasDuracion[indexMenor] = valorAux;
-
-		valorAux = minutosDuracion[i];
-
-		minutosDuracion[i] = minutosDuracion[indexMenor];
-		minutosDuracion[indexMenor] = valorAux;
 	}
 
 	for (int i = 0; i < size; i++)
